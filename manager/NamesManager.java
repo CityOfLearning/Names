@@ -16,26 +16,26 @@ public class NamesManager {
 
 	public static void addUsername(String mc_name, String dyn_name) {
 
-		System.out.println("Syncing Minecraft name " + mc_name + " with Dyn Name " + dyn_name);
+		// System.out.println("Syncing Minecraft name " + mc_name + " with Dyn
+		// Name " + dyn_name);
 		// this one should be unique so we can overwrite the previous value
 		Minecraft2DYNUsername.put(mc_name, dyn_name);
 		// this one is trickier since we can have duplicates
-		if (DYN2MinecraftUsername.containsKey(dyn_name)) {
-			/*
-			 * we need some way of validating whether or not a new user is a
-			 * returning user say that a user logs on twice with different
-			 * minecraft usernames but the same dyn name in the same session
-			 */
-			if (DYN2MinecraftUsername.get(dyn_name).equals(mc_name)) {
-				// name is the same we should probably do nothing but a put is
-				// harmless here
-				DYN2MinecraftUsername.put(dyn_name, mc_name);
-			} else {
-				// how do we figure out who is what here
-			}
-		} else {
-			DYN2MinecraftUsername.put(dyn_name, mc_name);
-		}
+		/*
+		 * if (DYN2MinecraftUsername.containsKey(dyn_name)) {
+		 * 
+		 * we need some way of validating whether or not a new user is a
+		 * returning user say that a user logs on twice with different minecraft
+		 * usernames but the same dyn name in the same session
+		 * 
+		 * if (DYN2MinecraftUsername.get(dyn_name).equals(mc_name)) { // name is
+		 * the same we should probably do nothing but a put is // harmless here
+		 * DYN2MinecraftUsername.put(dyn_name, mc_name); } else { // how do we
+		 * figure out who is what here } } else {
+		 */
+		// alright this is how its goona be
+		DYN2MinecraftUsername.put(dyn_name, mc_name);
+		// }
 	}
 
 	public static boolean containsDynName(String dyn_name) {

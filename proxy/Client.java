@@ -87,7 +87,7 @@ public class Client implements Proxy {
 		FMLCommonHandler.instance().bus().register(this);
 
 		MinecraftForge.EVENT_BUS.register(this);
-		
+
 		NamesManager.init();
 	}
 
@@ -100,7 +100,7 @@ public class Client implements Proxy {
 				float f = event.entity.isSneaking() ? RendererLivingEntity.NAME_TAG_RANGE_SNEAK
 						: RendererLivingEntity.NAME_TAG_RANGE;
 
-				if (d3 < f * f) {
+				if (d3 < (f * f)) {
 					String s = event.entity.getDisplayName().getFormattedText();
 					if ((NamesManager.getDYNUsername(event.entity.getName()) != null)
 							&& !NamesManager.getDYNUsername(event.entity.getName()).isEmpty()) {
@@ -161,7 +161,7 @@ public class Client implements Proxy {
 	private void renderLivingLabel(RenderManager renderManager, Entity entity, String s, double x, double y, double z) {
 		double d3 = entity.getDistanceSqToEntity(renderManager.livingPlayer);
 
-		if (d3 <= 64 * 64) {
+		if (d3 <= (64 * 64)) {
 			FontRenderer fontrenderer = renderManager.getFontRenderer();
 			float f = 1.6F;
 			float f1 = 0.016666668F * f;
