@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,7 +63,7 @@ public class Client implements Proxy {
 			Team team1 = entityplayersp.getTeam();
 
 			if (team != null) {
-				Team.EnumVisible enumvisible = team.func_178770_i();
+				Team.EnumVisible enumvisible = team.getNameTagVisibility();
 
 				switch (DYNSwitchEnumVisible.playerVisibleEnum[enumvisible.ordinal()]) {
 				case 1:
@@ -96,8 +97,8 @@ public class Client implements Proxy {
 	public void NameRenderEvent(Specials.Pre event) {
 		if (event.entity instanceof EntityPlayer) {
 			event.setCanceled(true);
-			if (canRenderName(event.renderer.func_177068_d(), event.entity)) {
-				double d3 = event.entity.getDistanceSqToEntity(event.renderer.func_177068_d().livingPlayer);
+			if (canRenderName(event.renderer.getRenderManager(), event.entity)) {
+				double d3 = event.entity.getDistanceSqToEntity(event.renderer.getRenderManager().livingPlayer);
 				float f = event.entity.isSneaking() ? RendererLivingEntity.NAME_TAG_RANGE_SNEAK
 						: RendererLivingEntity.NAME_TAG_RANGE;
 
@@ -120,8 +121,8 @@ public class Client implements Proxy {
 										- (event.entity.isChild() ? event.entity.height / 2.0F : 0.0F),
 								(float) event.z);
 						GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-						GlStateManager.rotate(-event.renderer.func_177068_d().playerViewY, 0.0F, 1.0F, 0.0F);
-						GlStateManager.rotate(event.renderer.func_177068_d().playerViewX, 1.0F, 0.0F, 0.0F);
+						GlStateManager.rotate(-event.renderer.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+						GlStateManager.rotate(event.renderer.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
 						GlStateManager.scale(-0.02666667F, -0.02666667F, 0.02666667F);
 						GlStateManager.translate(0.0F, 9.374999F, 0.0F);
 						GlStateManager.disableLighting();
@@ -129,15 +130,15 @@ public class Client implements Proxy {
 						GlStateManager.enableBlend();
 						GlStateManager.disableTexture2D();
 						GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+						int i = fontrenderer.getStringWidth(s) / 2;
 						Tessellator tessellator = Tessellator.getInstance();
 						WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-						worldrenderer.startDrawingQuads();
-						int i = fontrenderer.getStringWidth(s) / 2;
-						worldrenderer.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
-						worldrenderer.addVertex(-i - 1, -1.0D, 0.0D);
-						worldrenderer.addVertex(-i - 1, 8.0D, 0.0D);
-						worldrenderer.addVertex(i + 1, 8.0D, 0.0D);
-						worldrenderer.addVertex(i + 1, -1.0D, 0.0D);
+						worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+						worldrenderer.pos((double) (-i - 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos((double) (-i - 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos((double) (i + 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos((double) (i + 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						tessellator.draw();
 						tessellator.draw();
 						GlStateManager.enableTexture2D();
 						GlStateManager.depthMask(true);
@@ -147,7 +148,7 @@ public class Client implements Proxy {
 						GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 						GlStateManager.popMatrix();
 					} else {
-						renderLivingLabel(event.renderer.func_177068_d(), event.entity, s, event.x,
+						renderLivingLabel(event.renderer.getRenderManager(), event.entity, s, event.x,
 								event.y - (event.entity.isChild() ? (double) (event.entity.height / 2.0F) : 0.0D),
 								event.z);
 					}
@@ -182,26 +183,20 @@ public class Client implements Proxy {
 			GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 			Tessellator tessellator = Tessellator.getInstance();
 			WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-			byte b0 = 0;
-
-			if (s.equals("deadmau5")) {
-				b0 = -10;
-			}
-
-			GlStateManager.disableTexture2D();
-			worldrenderer.startDrawingQuads();
+			int i = 0;
 			int j = fontrenderer.getStringWidth(s) / 2;
-			worldrenderer.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
-			worldrenderer.addVertex(-j - 1, -1 + b0, 0.0D);
-			worldrenderer.addVertex(-j - 1, 8 + b0, 0.0D);
-			worldrenderer.addVertex(j + 1, 8 + b0, 0.0D);
-			worldrenderer.addVertex(j + 1, -1 + b0, 0.0D);
+			GlStateManager.disableTexture2D();
+			worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+			worldrenderer.pos((double) (-j - 1), (double) (-1 + i), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+			worldrenderer.pos((double) (-j - 1), (double) (8 + i), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+			worldrenderer.pos((double) (j + 1), (double) (8 + i), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+			worldrenderer.pos((double) (j + 1), (double) (-1 + i), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 			tessellator.draw();
 			GlStateManager.enableTexture2D();
-			fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, b0, 553648127);
+			fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, i, 553648127);
 			GlStateManager.enableDepth();
 			GlStateManager.depthMask(true);
-			fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, b0, -1);
+			fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, i, -1);
 			GlStateManager.enableLighting();
 			GlStateManager.disableBlend();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
