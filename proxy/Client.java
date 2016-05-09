@@ -3,6 +3,7 @@ package com.dyn.names.proxy;
 import org.lwjgl.opengl.GL11;
 
 import com.dyn.names.manager.NamesManager;
+import com.dyn.server.database.DBManager;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -102,8 +103,11 @@ public class Client implements Proxy {
 
 				if (d3 < (f * f)) {
 					String s = event.entity.getDisplayName().getFormattedText();
-					if ((NamesManager.getDYNUsername(event.entity.getName()) != null)
-							&& !NamesManager.getDYNUsername(event.entity.getName()).isEmpty()) {
+					// if its null we havent grabbed the name yet
+					if (NamesManager.getDYNUsername(event.entity.getName()) == null) {
+						NamesManager.addUsername(event.entity.getName(),
+								DBManager.getNameFromMCUsername(event.entity.getName()));
+					} else if (!NamesManager.getDYNUsername(event.entity.getName()).isEmpty()) {
 						s = s.replace(event.entity.getName(), NamesManager.getDYNUsername(event.entity.getName()));
 					}
 					GlStateManager.alphaFunc(516, 0.1F);
