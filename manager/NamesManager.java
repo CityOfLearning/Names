@@ -10,46 +10,54 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 public class NamesManager {
-	private static Map<String, String> Minecraft2DYNUsername = new HashMap<String, String>();
-	private static Map<String, String> DYN2MinecraftUsername = new HashMap<String, String>();
-
-	public static void addUsername(String mc_name, String dyn_name) {
-
-		// System.out.println("Syncing Minecraft name " + mc_name + " with Dyn
-		// Name " + dyn_name);
-		// this one should be unique so we can overwrite the previous value
-		Minecraft2DYNUsername.put(mc_name, dyn_name);
-		// this one is trickier since we can have duplicates
-		/*
-		 * if (DYN2MinecraftUsername.containsKey(dyn_name)) {
-		 * 
-		 * we need some way of validating whether or not a new user is a
-		 * returning user say that a user logs on twice with different minecraft
-		 * usernames but the same dyn name in the same session
-		 * 
-		 * if (DYN2MinecraftUsername.get(dyn_name).equals(mc_name)) { // name is
-		 * the same we should probably do nothing but a put is // harmless here
-		 * DYN2MinecraftUsername.put(dyn_name, mc_name); } else { // how do we
-		 * figure out who is what here } } else {
-		 */
-		// alright this is how its goona be
-		DYN2MinecraftUsername.put(dyn_name, mc_name);
-		// }
+	// key is minecraft username and value is dyn hash code
+	private static Map<String, Integer> Minecraft2DYNUsername = new HashMap<String, Integer>();
+	// key is dyn hash code and value is dyn username
+	private static Map<Integer, String> DYNHashCode2DYNUser = new HashMap<Integer, String>();
+	// key is dyn hash code and value is minecraft username
+	private static Map<Integer, String> DYN2MinecraftUsername = new HashMap<Integer, String>();
+	
+	
+	// generates a hash code by combining the hash code of the dyn username and
+	// the hash code of the dyn password.  Hash code is used a key to look up dyn username
+	// and minecraft username
+	public static Integer getDYNHashKey(String dyn_user, String dyn_pass) {
+		if ((dyn_user == null || dyn_user.isEmpty()) || 
+			(dyn_pass == null || dyn_pass.isEmpty())) { 
+				throw new IllegalArgumentException(); 
+		}
+		return dyn_user.hashCode() + dyn_pass.hashCode();
+	}
+	
+	public static void addUsername(String mc_name, String dyn_name, Integer dyn_hashkey) {
+		
+		// minecraft username is used as key to get dyn hash code 
+		// dyn hash code is used as key to get dyn username from DYNHashCode2DYNUser map
+		Minecraft2DYNUsername.put(mc_name, dyn_hashkey);
+		DYNHashCode2DYNUser.put(dyn_hashkey, dyn_name);
+		// this should provide minecraft username
+		DYN2MinecraftUsername.put(dyn_hashkey, mc_name);
 	}
 
-	public static boolean containsDynName(String dyn_name) {
-		return DYN2MinecraftUsername.containsKey(dyn_name);
-	}
+	/***  dyn username not used as key anymore
+	* public static boolean containsDynName(String dyn_name) {
+	*	 return DYN2MinecraftUsername.containsKey(dyn_name);
+	* }
+	***/
 
 	public static String getDYNUsername(String mc_name) {
 		// can return null so its unsafe to assume non null
-		return Minecraft2DYNUsername.get(mc_name);
+		if(mc_name == null || mc_name.isEmpty()) throw new NullPointerException();
+		Integer dyn_hashkey = Minecraft2DYNUsername.get(mc_name);
+		return DYNHashCode2DYNUser.get(dyn_hashkey);
 	}
 
-	public static String getMCUsername(String dyn_name) {
+	public static String getMCUsername(Integer dyn_hashkey) {
 		// can return null so its unsafe to assume non null
-		return DYN2MinecraftUsername.get(dyn_name);
+		if(dyn_hashkey == null || dyn_hashkey.equals(0)) throw new NullPointerException();
+		return DYN2MinecraftUsername.get(dyn_hashkey);
 	}
 
 	public static void init() {
@@ -64,8 +72,11 @@ public class NamesManager {
 				// use comma as separator
 				String[] line = lines.split(",");
 
-				if ((line.length > 4) && (line[0].trim() != null) && !line[0].trim().isEmpty()) {
-					addUsername(line[4].trim(), line[0].trim());
+				if ((line.length > 4) && 
+					(line[0].trim() != null) && !line[0].trim().isEmpty() &&
+					(line[1].trim() != null) && !line[1].trim().isEmpty())   {
+						Integer dyn_hashkey = getDYNHashKey(line[0].trim(), line[1].trim());
+						addUsername(line[4].trim(), line[0].trim(), dyn_hashkey);
 				}
 			}
 
@@ -90,8 +101,11 @@ public class NamesManager {
 						// use comma as separator
 						String[] line = lines.split(",");
 
-						if ((line.length > 4) && (line[0].trim() != null) && !line[0].trim().isEmpty()) {
-							NamesManager.addUsername(line[4].trim(), line[0].trim());
+						if ((line.length > 4) && 
+							(line[0].trim() != null) && !line[0].trim().isEmpty() &&
+							(line[1].trim() != null) && !line[1].trim().isEmpty())   {
+								Integer dyn_hashkey = getDYNHashKey(line[0].trim(), line[1].trim());
+								addUsername(line[4].trim(), line[0].trim(), dyn_hashkey);
 						}
 					}
 
