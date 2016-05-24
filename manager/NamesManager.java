@@ -50,6 +50,6 @@ public class NamesManager {
 		}
 
 		public static void init() {
-			
+
 		}
 }
