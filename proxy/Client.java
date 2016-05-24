@@ -20,7 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.Team;
 import net.minecraftforge.client.event.RenderLivingEvent.Specials;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class Client implements Proxy {
@@ -86,8 +85,6 @@ public class Client implements Proxy {
 
 	@Override
 	public void init() {
-		FMLCommonHandler.instance().bus().register(this);
-
 		MinecraftForge.EVENT_BUS.register(this);
 
 		NamesManager.init();
@@ -134,11 +131,10 @@ public class Client implements Proxy {
 						Tessellator tessellator = Tessellator.getInstance();
 						WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 						worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-						worldrenderer.pos((double) (-i - 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-						worldrenderer.pos((double) (-i - 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-						worldrenderer.pos((double) (i + 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-						worldrenderer.pos((double) (i + 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-						tessellator.draw();
+						worldrenderer.pos(-i - 1, -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos(-i - 1, 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos(i + 1, 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos(i + 1, -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 						tessellator.draw();
 						GlStateManager.enableTexture2D();
 						GlStateManager.depthMask(true);
@@ -187,10 +183,10 @@ public class Client implements Proxy {
 			int j = fontrenderer.getStringWidth(s) / 2;
 			GlStateManager.disableTexture2D();
 			worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-			worldrenderer.pos((double) (-j - 1), (double) (-1 + i), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-			worldrenderer.pos((double) (-j - 1), (double) (8 + i), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-			worldrenderer.pos((double) (j + 1), (double) (8 + i), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-			worldrenderer.pos((double) (j + 1), (double) (-1 + i), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+			worldrenderer.pos(-j - 1, -1 + i, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+			worldrenderer.pos(-j - 1, 8 + i, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+			worldrenderer.pos(j + 1, 8 + i, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+			worldrenderer.pos(j + 1, -1 + i, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 			tessellator.draw();
 			GlStateManager.enableTexture2D();
 			fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, i, 553648127);

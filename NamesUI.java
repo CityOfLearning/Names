@@ -1,7 +1,6 @@
 package com.dyn.names;
 
-import org.apache.logging.log4j.Logger;
-
+import com.dyn.DYNServerMod;
 import com.dyn.names.proxy.Proxy;
 import com.dyn.names.reference.MetaData;
 import com.dyn.names.reference.Reference;
@@ -21,8 +20,6 @@ public class NamesUI {
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static Proxy proxy;
 
-	public static Logger logger;
-
 	@Mod.Metadata(Reference.MOD_ID)
 	public ModMetadata metadata;
 
@@ -35,13 +32,11 @@ public class NamesUI {
 	public void preInit(FMLPreInitializationEvent event) {
 		metadata = MetaData.init(metadata);
 
-		logger = event.getModLog();
-
 		Configuration configs = new Configuration(event.getSuggestedConfigurationFile());
 		try {
 			configs.load();
 		} catch (RuntimeException e) {
-			logger.warn(e);
+			DYNServerMod.logger.warn(e);
 		}
 
 		proxy.init();
