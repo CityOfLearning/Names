@@ -1,11 +1,9 @@
 package com.dyn.names;
 
-import com.dyn.DYNServerMod;
 import com.dyn.names.proxy.Proxy;
 import com.dyn.names.reference.MetaData;
 import com.dyn.names.reference.Reference;
 
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -31,13 +29,6 @@ public class NamesUI {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		metadata = MetaData.init(metadata);
-
-		Configuration configs = new Configuration(event.getSuggestedConfigurationFile());
-		try {
-			configs.load();
-		} catch (RuntimeException e) {
-			DYNServerMod.logger.warn(e);
-		}
 
 		proxy.init();
 	}
