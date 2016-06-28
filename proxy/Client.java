@@ -104,7 +104,7 @@ public class Client implements Proxy {
 					// if its null we havent grabbed the name yet
 					if (NamesManager.getDYNUsername(event.entity.getName()) == null) {
 						NamesManager.addUsername(event.entity.getName(),
-								DBManager.getNameFromMCUsername(event.entity.getName()));
+								DBManager.getDisplayNameFromMCUsername(event.entity.getName()));
 					} else if (!NamesManager.getDYNUsername(event.entity.getName()).isEmpty()) {
 						s = s.replace(event.entity.getName(), NamesManager.getDYNUsername(event.entity.getName()));
 					}
