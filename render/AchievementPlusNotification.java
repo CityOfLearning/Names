@@ -2,8 +2,8 @@ package com.dyn.render.render;
 
 import org.lwjgl.opengl.GL11;
 
-import com.dyn.achievements.AchievementsMod;
 import com.dyn.achievements.handlers.AchievementManager;
+import com.dyn.render.manager.NotificationsManager;
 import com.rabbit.gui.utils.TextureHelper;
 
 import net.minecraft.client.Minecraft;
@@ -80,7 +80,7 @@ public class AchievementPlusNotification extends Gui implements INotification {
 
 			}
 		} else {
-			AchievementsMod.proxy.getNotificationsManager().removeNotification(this);
+			NotificationsManager.removeNotification(this);
 		}
 
 	}

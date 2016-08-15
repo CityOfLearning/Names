@@ -10,25 +10,21 @@ import com.dyn.render.render.RequirementNotification;
 import net.minecraft.client.Minecraft;
 
 public class NotificationsManager {
-	private final List<INotification> notificationList = new ArrayList<INotification>();
+	private static final List<INotification> notificationList = new ArrayList<INotification>();
 
-	public NotificationsManager() {
-
-	}
-
-	public void addAchievementNotification(String title, String subTitle) {
+	public static void addAchievementNotification(String title, String subTitle) {
 		notificationList.add(new AchievementPlusNotification(Minecraft.getMinecraft(), title, subTitle));
 	}
 
-	public void addRequirementNotification(String title, String subTitle) {
+	public static void addRequirementNotification(String title, String subTitle) {
 		notificationList.add(new RequirementNotification(Minecraft.getMinecraft(), title, subTitle));
 	}
 
-	public void removeNotification(INotification notification) {
+	public static void removeNotification(INotification notification) {
 		notificationList.remove(notification);
 	}
 
-	public void renderNotifications() {
+	public static void renderNotifications() {
 		for (int i = 0; i < notificationList.size(); i++) {
 			notificationList.get(i).drawNotification(i);
 		}

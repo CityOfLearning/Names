@@ -1,6 +1,6 @@
 package com.dyn.render.render;
 
-import com.dyn.achievements.AchievementsMod;
+import com.dyn.render.manager.NotificationsManager;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -71,7 +71,7 @@ public class RequirementNotification extends Gui implements INotification {
 				GlStateManager.enableDepth();
 			}
 		} else {
-			AchievementsMod.proxy.getNotificationsManager().removeNotification(this);
+			NotificationsManager.removeNotification(this);
 		}
 	}
 
