@@ -1,4 +1,4 @@
-package com.dyn.names.proxy;
+package com.dyn.render.proxy;
 
 public interface Proxy {
 

@@ -1,4 +1,4 @@
-package com.dyn.names.manager;
+package com.dyn.render.manager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +46,22 @@ public class NamesManager {
 		return HashKey2MinecraftUsername.get(dyn_hashkey);
 	}
 
-	public static void init() {
+	public static void setUsername(String mc_name, String dyn_name) {
+		if (Minecraft2HashKey.containsKey(mc_name)) {
+			int hashkey = Minecraft2HashKey.get(mc_name);
+			// remove the old entries
+			HashKey2DYNUser.remove(hashkey);
+			HashKey2MinecraftUsername.remove(hashkey);
+
+			hashkey = generateHashKey(dyn_name, mc_name);
+			// replace the old key
+			Minecraft2HashKey.replace(mc_name, hashkey);
+			// add the new key
+			HashKey2DYNUser.put(hashkey, dyn_name);
+			HashKey2MinecraftUsername.put(hashkey, mc_name);
+		} else {
+			addUsername(mc_name, dyn_name);
+		}
 
 	}
 }

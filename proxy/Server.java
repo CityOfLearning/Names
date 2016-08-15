@@ -1,12 +1,10 @@
-package com.dyn.names.proxy;
-
-import com.dyn.names.manager.NamesManager;
+package com.dyn.render.proxy;
 
 public class Server implements Proxy {
 
 	@Override
 	public void init() {
-		NamesManager.init();
+
 	}
 
 	@Override
