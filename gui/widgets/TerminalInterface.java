@@ -166,7 +166,7 @@ public class TerminalInterface extends GuiWidget {
 					}
 					queueEvent("key", new Object[] { Integer.valueOf(key), Boolean.valueOf(repeat) });
 				}
-				if (((ch >= ' ') && (ch <= '~')) || ((ch >= ' ') && (ch <= 'ÿ'))) {
+				if (((ch >= ' ') && (ch <= '~'))) {
 					queueEvent("char", new Object[] { Character.toString(ch) });
 				}
 			}
