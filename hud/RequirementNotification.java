@@ -1,21 +1,17 @@
-package com.dyn.render.render;
+package com.dyn.render.hud;
 
-import org.lwjgl.opengl.GL11;
-
-import com.dyn.achievements.handlers.AchievementManager;
 import com.dyn.render.manager.NotificationsManager;
-import com.rabbit.gui.utils.TextureHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 
-public class AchievementPlusNotification extends Gui implements INotification {
+public class RequirementNotification extends Gui implements INotification {
+	private static final ResourceLocation guiTexture = new ResourceLocation(
+			"textures/gui/achievement/achievement_background.png");
 	private final Minecraft mc;
 	private final String notificationTitle;
 	private final String notificationText;
@@ -23,7 +19,7 @@ public class AchievementPlusNotification extends Gui implements INotification {
 	private int windowHeight;
 	private long notificationTime;
 
-	public AchievementPlusNotification(Minecraft mc, String notificationTitle, String notificationText) {
+	public RequirementNotification(Minecraft mc, String notificationTitle, String notificationText) {
 		this.mc = mc;
 		this.notificationTitle = notificationTitle;
 		this.notificationText = notificationText;
@@ -71,29 +67,12 @@ public class AchievementPlusNotification extends Gui implements INotification {
 				GlStateManager.disableLighting();
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.enableColorMaterial();
-				GlStateManager.enableLighting();
-				TextureHelper.bindTexture(AchievementManager.findAchievementByName(notificationTitle).getTextureId());
-				drawScaledTexturedRect(i + 2, j + 7, 100, 16, 16);
-				GlStateManager.disableLighting();
 				GlStateManager.depthMask(true);
 				GlStateManager.enableDepth();
-
 			}
 		} else {
 			NotificationsManager.removeNotification(this);
 		}
-
-	}
-
-	private void drawScaledTexturedRect(int x, int y, int z, int width, int height) {
-		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer renderer = tessellator.getWorldRenderer();
-		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		renderer.pos(x + width, y + height, z).tex(1, 1).endVertex();
-		renderer.pos(x + width, y, z).tex(1, 0).endVertex();
-		renderer.pos(x, y, z).tex(0, 0).endVertex();
-		renderer.pos(x, y + height, z).tex(0, 1).endVertex();
-		tessellator.draw();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.dyn.render.render;
+package com.dyn.render.hud;
 
 import org.lwjgl.opengl.GL11;
 

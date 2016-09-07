@@ -13,4 +13,10 @@ public class Server implements Proxy {
 
 	}
 
+	@Override
+	public void toggleRenderProgramInterface(boolean state) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

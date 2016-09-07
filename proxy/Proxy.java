@@ -5,4 +5,6 @@ public interface Proxy {
 	public void init();
 
 	public void renderGUI();
+
+	public void toggleRenderProgramInterface(boolean state);
 }

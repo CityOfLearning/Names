@@ -1,4 +1,4 @@
-package com.dyn.render.render;
+package com.dyn.render.hud;
 
 import net.minecraft.util.ResourceLocation;
 
