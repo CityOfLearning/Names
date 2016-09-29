@@ -3,9 +3,9 @@ package com.dyn.render.manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dyn.render.hud.AchievementPlusNotification;
-import com.dyn.render.hud.INotification;
-import com.dyn.render.hud.RequirementNotification;
+import com.dyn.render.hud.notifications.AchievementPlusNotification;
+import com.dyn.render.hud.notifications.INotification;
+import com.dyn.render.hud.notifications.RequirementNotification;
 
 import net.minecraft.client.Minecraft;
 

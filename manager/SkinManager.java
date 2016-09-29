@@ -78,6 +78,14 @@ public class SkinManager {
 		return dynPlayerSkin.containsKey(player);
 	}
 
+	public static void removeSkinTexture(EntityPlayer player) {
+		dynPlayerSkin.remove(player.getName());
+	}
+
+	public static void removeSkinTexture(String player) {
+		dynPlayerSkin.remove(player);
+	}
+
 	public static void setSkinTexture(EntityPlayer player, String skin) {
 		if (dynPlayerSkin.containsKey(player.getDisplayNameString())) {
 			UUID textureId = UUID.randomUUID();
