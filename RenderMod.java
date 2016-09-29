@@ -1,8 +1,15 @@
 package com.dyn.render;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.dyn.DYNServerMod;
+import com.dyn.admin.AdminUI;
+import com.dyn.mentor.MentorUI;
 import com.dyn.render.proxy.Proxy;
 import com.dyn.render.reference.MetaData;
 import com.dyn.render.reference.Reference;
+import com.dyn.student.StudentUI;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -16,6 +23,38 @@ public class RenderMod {
 
 	@SidedProxy(modId = Reference.MOD_ID, clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static Proxy proxy;
+
+	public <T> Map<String, T> getKeyBindings() {
+		Map<String, T> keys = new HashMap();
+		Map<String, T> tempMap = (Map<String, T>) proxy.getKeyBindings();
+		for (String key : tempMap.keySet()) {
+			keys.put(key, tempMap.get(key));
+		}
+		switch (DYNServerMod.status) {
+		case ADMIN:
+			tempMap = (Map<String, T>) AdminUI.proxy.getKeyBindings();
+			for (String key : tempMap.keySet()) {
+				keys.put(key, tempMap.get(key));
+			}
+			break;
+		case MENTOR:
+			tempMap = (Map<String, T>) MentorUI.proxy.getKeyBindings();
+			for (String key : tempMap.keySet()) {
+				keys.put(key, tempMap.get(key));
+			}
+			break;
+		case STUDENT:
+			tempMap = (Map<String, T>) StudentUI.proxy.getKeyBindings();
+			for (String key : tempMap.keySet()) {
+				keys.put(key, tempMap.get(key));
+			}
+			break;
+		default:
+			break;
+		}
+
+		return keys;
+	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
