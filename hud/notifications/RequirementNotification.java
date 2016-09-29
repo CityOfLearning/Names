@@ -1,4 +1,4 @@
-package com.dyn.render.hud;
+package com.dyn.render.hud.notifications;
 
 import com.dyn.render.manager.NotificationsManager;
 

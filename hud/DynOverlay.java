@@ -1,66 +1,27 @@
 package com.dyn.render.hud;
 
-import org.lwjgl.opengl.GL11;
+import java.util.Map;
+
+import org.lwjgl.input.Keyboard;
 
 import com.dyn.DYNServerMod;
+import com.dyn.render.RenderMod;
 import com.dyn.utils.PlayerLevel;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 
-public class DynOverlay {
+public class DynOverlay extends Hud {
 
 	private static final ResourceLocation TABS = new ResourceLocation("dyn", "textures/gui/sm_notification2.png");
-	private static final ResourceLocation FREEZE = new ResourceLocation("dyn", "textures/gui/frozenBorder.png");
 
-	private final Minecraft mc;
-	private int windowWidth;
-	private int windowHeight;
+	public static boolean isHidden = false;
 
-	public DynOverlay() {
-		mc = Minecraft.getMinecraft();
-	}
-
-	public void drawFrozenOverlay() {
-
+	// this techincally overwrites the super class
+	public static void draw() {
 		updateWindowScale();
-		GlStateManager.disableDepth();
-		GlStateManager.depthMask(false);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.enableTexture2D();
-		GlStateManager.disableLighting();
-
-		mc.getTextureManager().bindTexture(FREEZE);
-		drawScaledTexturedRect(0, 0, -1, windowWidth, windowHeight);
-
-		RenderHelper.enableGUIStandardItemLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.enableColorMaterial();
-		GlStateManager.enableLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.depthMask(true);
-		GlStateManager.enableDepth();
-	}
-
-	private int drawHiddenTab(int xPos, int yPos, String... lines) {
-		int tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[0]) + 8, 35);
-		tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[1]) + 8, tabwidth);
-		tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[2]) + 8, tabwidth);
-		mc.getTextureManager().bindTexture(TABS);
-		drawScaledTexturedRect(xPos, yPos <= 0 ? yPos - 28 : yPos + 28, 1, tabwidth, 32);
-		return tabwidth;
-	}
-
-	public void drawOverlay(boolean hidden) {
-
-		updateWindowScale();
+		Map<String, KeyBinding> keys = RenderMod.instance.getKeyBindings();
 		GlStateManager.disableDepth();
 		GlStateManager.depthMask(false);
 		// int xPos = windowWidth - 120;
@@ -71,52 +32,54 @@ public class DynOverlay {
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableLighting();
 
-		if (!hidden) {
-			xPos += drawTab(xPos, yPos, "Achiev", "ements", "(N)");
+		if (!isHidden) {
+			xPos += drawTab(xPos, yPos, "Achiev", "ements",
+					"(" + Keyboard.getKeyName(keys.get("achievement").getKeyCode()) + ")");
 			if (DYNServerMod.status == PlayerLevel.ADMIN) {
-				xPos += drawTab(xPos, yPos, "Admin", "GUI", "(M)");
+				xPos += drawTab(xPos, yPos, "Admin", "GUI",
+						"(" + Keyboard.getKeyName(keys.get("admin").getKeyCode()) + ")");
 			} else if (DYNServerMod.status == PlayerLevel.MENTOR) {
-				xPos += drawTab(xPos, yPos, "Mentor", "GUI", "(M)");
+				xPos += drawTab(xPos, yPos, "Mentor", "GUI",
+						"(" + Keyboard.getKeyName(keys.get("mentor").getKeyCode()) + ")");
 			} else if (DYNServerMod.status == PlayerLevel.STUDENT) {
-				xPos += drawTab(xPos, yPos, "Student", "GUI", "(M)");
+				xPos += drawTab(xPos, yPos, "Student", "GUI",
+						"(" + Keyboard.getKeyName(keys.get("student").getKeyCode()) + ")");
 			}
-			xPos += drawTab(xPos, yPos, "Select", "Skin", "(B)");
-			drawTab(xPos, yPos, "Hide", "GUI", "(H)");
+			xPos += drawTab(xPos, yPos, "Select", "Skin",
+					"(" + Keyboard.getKeyName(keys.get("skin").getKeyCode()) + ")");
+			drawTab(xPos, yPos, "Hide", "GUI", "(" + Keyboard.getKeyName(keys.get("hide").getKeyCode()) + ")");
 		} else {
-			xPos += drawHiddenTab(xPos, yPos, "Achiev", "ements", "(N)");
+			xPos += drawHiddenTab(xPos, yPos, "Achiev", "ements",
+					"(" + Keyboard.getKeyName(keys.get("achievement").getKeyCode()) + ")");
 			if (DYNServerMod.status == PlayerLevel.ADMIN) {
-				xPos += drawHiddenTab(xPos, yPos, "Admin", "GUI", "(M)");
+				xPos += drawHiddenTab(xPos, yPos, "Admin", "GUI",
+						"(" + Keyboard.getKeyName(keys.get("admin").getKeyCode()) + ")");
 			} else if (DYNServerMod.status == PlayerLevel.MENTOR) {
-				xPos += drawHiddenTab(xPos, yPos, "Mentor", "GUI", "(M)");
+				xPos += drawHiddenTab(xPos, yPos, "Mentor", "GUI",
+						"(" + Keyboard.getKeyName(keys.get("mentor").getKeyCode()) + ")");
 			} else if (DYNServerMod.status == PlayerLevel.STUDENT) {
-				xPos += drawHiddenTab(xPos, yPos, "Student", "GUI", "(M)");
+				xPos += drawHiddenTab(xPos, yPos, "Student", "GUI",
+						"(" + Keyboard.getKeyName(keys.get("student").getKeyCode()) + ")");
 			}
-			xPos += drawHiddenTab(xPos, yPos, "Select", "Skin", "(B)");
-			drawHiddenTab(xPos, yPos, "Hide", "GUI", "(H)");
+			xPos += drawHiddenTab(xPos, yPos, "Select", "Skin",
+					"(" + Keyboard.getKeyName(keys.get("skin").getKeyCode()) + ")");
+			drawHiddenTab(xPos, yPos, "Hide", "GUI", "(" + Keyboard.getKeyName(keys.get("hide").getKeyCode()) + ")");
 		}
-
-		RenderHelper.enableGUIStandardItemLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.enableColorMaterial();
-		GlStateManager.enableLighting();
 		GlStateManager.disableLighting();
 		GlStateManager.depthMask(true);
 		GlStateManager.enableDepth();
 	}
 
-	private void drawScaledTexturedRect(int x, int y, int z, int width, int height) {
-		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer renderer = tessellator.getWorldRenderer();
-		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		renderer.pos(x + width, y + height, z).tex(1, 1).endVertex();
-		renderer.pos(x + width, y, z).tex(1, 0).endVertex();
-		renderer.pos(x, y, z).tex(0, 0).endVertex();
-		renderer.pos(x, y + height, z).tex(0, 1).endVertex();
-		tessellator.draw();
+	private static int drawHiddenTab(int xPos, int yPos, String... lines) {
+		int tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[0]) + 8, 35);
+		tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[1]) + 8, tabwidth);
+		tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[2]) + 8, tabwidth);
+		mc.getTextureManager().bindTexture(TABS);
+		drawScaledTexturedRect(xPos, yPos <= 0 ? yPos - 28 : yPos + 28, 1, tabwidth, 32);
+		return tabwidth;
 	}
 
-	private int drawTab(int xPos, int yPos, String... lines) {
+	private static int drawTab(int xPos, int yPos, String... lines) {
 		int tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[0]) + 8, 35);
 		tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[1]) + 8, tabwidth);
 		tabwidth = Math.max(mc.fontRendererObj.getStringWidth(lines[2]) + 8, tabwidth);
@@ -131,25 +94,5 @@ public class DynOverlay {
 		mc.fontRendererObj.drawString(lines[2],
 				(int) (xPos + ((tabwidth / 2.0) - (mc.fontRendererObj.getStringWidth(lines[2]) / 2.0))), yPos + 19, -1);
 		return tabwidth;
-	}
-
-	private void updateWindowScale() {
-		GlStateManager.viewport(0, 0, mc.displayWidth, mc.displayHeight);
-		GlStateManager.matrixMode(5889);
-		GlStateManager.loadIdentity();
-		GlStateManager.matrixMode(5888);
-		GlStateManager.loadIdentity();
-		windowWidth = mc.displayWidth;
-		windowHeight = mc.displayHeight;
-		ScaledResolution scaledresolution = new ScaledResolution(mc);
-		windowWidth = scaledresolution.getScaledWidth();
-		windowHeight = scaledresolution.getScaledHeight();
-		GlStateManager.clear(256);
-		GlStateManager.matrixMode(5889);
-		GlStateManager.loadIdentity();
-		GlStateManager.ortho(0.0D, windowWidth, windowHeight, 0.0D, 1000.0D, 3000.0D);
-		GlStateManager.matrixMode(5888);
-		GlStateManager.loadIdentity();
-		GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 	}
 }
