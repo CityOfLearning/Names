@@ -1,6 +1,17 @@
 package com.dyn.render.proxy;
 
+import java.util.Collections;
+import java.util.Map;
+
+//import com.dyn.render.gui.turtle.ProgrammingInterface;
+//import com.dyn.robot.entity.EntityRobot;
+
 public class Server implements Proxy {
+
+	@Override
+	public Map<String, ?> getKeyBindings() {
+		return Collections.EMPTY_MAP;
+	}
 
 	@Override
 	public void init() {
@@ -18,5 +29,23 @@ public class Server implements Proxy {
 		// TODO Auto-generated method stub
 
 	}
+//
+//	@Override
+//	public ProgrammingInterface getProgrammingInterface() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public void createNewProgrammingInterface(EntityRobot robot) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void openRobotInterface() {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 }

@@ -1,5 +1,8 @@
 package com.dyn.render.proxy;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.lwjgl.input.Keyboard;
 
 import com.dyn.DYNServerMod;
@@ -9,21 +12,30 @@ import com.dyn.render.gui.SkinSelect;
 import com.dyn.render.gui.achievement.Search;
 import com.dyn.render.gui.turtle.ProgrammingInterface;
 import com.dyn.render.hud.DynOverlay;
-import com.dyn.render.hud.PlayerRenderer;
+import com.dyn.render.hud.builder.BuildUI;
+import com.dyn.render.hud.frozen.Freeze;
 import com.dyn.render.manager.NotificationsManager;
+import com.dyn.render.player.PlayerModel;
+import com.dyn.render.player.PlayerRenderer;
 import com.dyn.render.reference.Reference;
+//import com.dyn.robot.entity.EntityRobot;
 import com.dyn.student.StudentUI;
+import com.dyn.student.gui.Requests;
 import com.dyn.utils.PlayerLevel;
 import com.rabbit.gui.RabbitGui;
 
+import api.player.model.ModelPlayerAPI;
 import api.player.render.RenderPlayerAPI;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiCommandBlock;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -36,24 +48,35 @@ public class Client implements Proxy {
 	private KeyBinding skinKey;
 	private KeyBinding hideGuiKey;
 	private KeyBinding achievementKey;
+	private KeyBinding buildKey;
 	private ProgrammingInterface programInterface = new ProgrammingInterface();
 
-	private boolean hideGui = false;
 	private boolean showTurtleProgrammer = false;
 
-	private final DynOverlay hudOverlay = new DynOverlay();
+	@Override
+	public Map<String, ?> getKeyBindings() {
+		Map<String, KeyBinding> keys = new HashMap();
+		keys.put("achievement", achievementKey);
+		keys.put("skin", skinKey);
+		keys.put("hide", hideGuiKey);
+		keys.put("build", buildKey);
+		return keys;
+	}
 
 	@Override
 	public void init() {
 		RenderPlayerAPI.register(Reference.MOD_ID, PlayerRenderer.class);
+		ModelPlayerAPI.register(Reference.MOD_ID, PlayerModel.class);
 		MinecraftForge.EVENT_BUS.register(this);
-		skinKey = new KeyBinding("key.toggle.skinui", Keyboard.KEY_B, "key.categories.toggle");
+		skinKey = new KeyBinding("key.toggle.skinui", Keyboard.KEY_J, "key.categories.toggle");
 		hideGuiKey = new KeyBinding("key.toggle.achievementgui", Keyboard.KEY_H, "key.categories.toggle");
-		achievementKey = new KeyBinding("key.toggle.achievementui", Keyboard.KEY_N, "key.categories.toggle");
+		achievementKey = new KeyBinding("key.toggle.hideui", Keyboard.KEY_N, "key.categories.toggle");
+		buildKey = new KeyBinding("key.toggle.buildui", Keyboard.KEY_B, "key.categories.toggle");
 
 		ClientRegistry.registerKeyBinding(achievementKey);
 		ClientRegistry.registerKeyBinding(hideGuiKey);
 		ClientRegistry.registerKeyBinding(skinKey);
+		ClientRegistry.registerKeyBinding(buildKey);
 	}
 
 	@SubscribeEvent
@@ -63,15 +86,6 @@ public class Client implements Proxy {
 			event.setCanceled(true);
 			return;
 		}
-
-		// a work in progress
-		/*
-		 * if (event.gui instanceof
-		 * dan200.computercraftedu.client.gui.GuiTurtleRemote) { // annoyingly
-		 * this will spit out a bunch of NPE's because of the // closed
-		 * container event.setCanceled(true); // use the same interface
-		 * RabbitGui.proxy.display(programInterface); }
-		 */
 
 		if (event.gui instanceof GuiAchievements) {
 			event.setCanceled(true);
@@ -99,23 +113,101 @@ public class Client implements Proxy {
 			RabbitGui.proxy.display(new Search());
 		}
 
+		if ((DYNServerMod.status == PlayerLevel.ADMIN) && buildKey.isPressed() && !Keyboard.isRepeatEvent()) {
+			DYNServerMod.logger.info("Build Gui Opened");
+			BuildUI.isOpen = !BuildUI.isOpen;
+		}
+
+		if (BuildUI.isOpen) {
+			EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+			String type = BuildUI.expandArea ? "expand" : "contract";
+			Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+			EnumFacing enumfacing = entity.getHorizontalFacing();
+			String dirf = "";
+			String dirb = "";
+			String dirl = "";
+			String dirr = "";
+			switch (enumfacing) {
+			case NORTH:
+				dirf = "n";
+				dirb = "s";
+				dirl = "w";
+				dirr = "e";
+				break;
+			case SOUTH:
+				dirf = "s";
+				dirb = "n";
+				dirl = "e";
+				dirr = "w";
+				break;
+			case WEST:
+				dirf = "e";
+				dirb = "w";
+				dirl = "n";
+				dirr = "s";
+				break;
+			case EAST:
+				dirf = "w";
+				dirb = "e";
+				dirl = "s";
+				dirr = "n";
+			}
+
+			if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+				player.sendChatMessage(String.format("//%s %d %s", type, BuildUI.expandSize, dirf));
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+				player.sendChatMessage(String.format("//%s %d %s", type, BuildUI.expandSize, dirb));
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+				player.sendChatMessage(String.format("//%s %d %s", type, BuildUI.expandSize, dirl));
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+				player.sendChatMessage(String.format("//%s %d %s", type, BuildUI.expandSize, dirr));
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_PRIOR)) {
+				player.sendChatMessage(String.format("//%s %d u", type, BuildUI.expandSize));
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_NEXT)) {
+				player.sendChatMessage(String.format("//%s %d d", type, BuildUI.expandSize));
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_HOME)) {
+				player.sendChatMessage("//pos1");
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_END)) {
+				player.sendChatMessage("//pos2");
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_TAB)) {
+				BuildUI.expandArea = !BuildUI.expandArea;
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_EQUALS)) {
+				BuildUI.expandSize++;
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_MINUS)) {
+				if (BuildUI.expandSize > 1) {
+					BuildUI.expandSize--;
+				}
+			}
+		}
+
 		if (hideGuiKey.isPressed()) {
-			hideGui = !hideGui;
+			DYNServerMod.logger.info("Gui Toggled");
+			DynOverlay.isHidden = !DynOverlay.isHidden;
 		}
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			showTurtleProgrammer = false;
+			BuildUI.isOpen = false;
 		}
 	}
+
+	// @SubscribeEvent
+	// public void renderPass(RenderGameOverlayEvent event) {
+	// // need to determine when the game renders an achievement overlay...
+	// // we might have to mixin this since it's not actively bussed
+	// }
 
 	@SubscribeEvent
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
 		if (Minecraft.getMinecraft().inGameHasFocus || ((RabbitGui.proxy.getCurrentStage() != null)
 				&& (RabbitGui.proxy.getCurrentStage().getShow() instanceof ProgrammingInterface))) {
 			if (StudentUI.frozen.getFlag()) {
-				hudOverlay.drawFrozenOverlay();
+				Freeze.draw();
 			}
-			hudOverlay.drawOverlay(hideGui);
+
+			BuildUI.draw();
+
+			DynOverlay.draw();
 
 			if (Minecraft.getMinecraft().inGameHasFocus && showTurtleProgrammer) {
 				programInterface.onDraw(0, 0, event.renderTickTime);
@@ -125,12 +217,6 @@ public class Client implements Proxy {
 			NotificationsManager.renderNotifications();
 		}
 	}
-
-	// @SubscribeEvent
-	// public void renderPass(RenderGameOverlayEvent event) {
-	// // need to determine when the game renders an achievement overlay...
-	// // we might have to mixin this since it's not actively bussed
-	// }
 
 	@Override
 	public void renderGUI() {
@@ -142,5 +228,20 @@ public class Client implements Proxy {
 	public void toggleRenderProgramInterface(boolean state) {
 		showTurtleProgrammer = state;
 	}
+//
+//	@Override
+//	public ProgrammingInterface getProgrammingInterface() {
+//		return programInterface;
+//	}
+//
+//	@Override
+//	public void createNewProgrammingInterface(EntityRobot robot) {
+//		programInterface = new ProgrammingInterface(robot);
+//	}
+//
+//	@Override
+//	public void openRobotInterface() {
+//		RabbitGui.proxy.display(programInterface);
+//	}
 
 }
