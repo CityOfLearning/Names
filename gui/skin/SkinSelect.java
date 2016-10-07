@@ -1,11 +1,10 @@
-package com.dyn.render.gui;
+package com.dyn.render.gui.skin;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Vector;
 
-import com.dyn.render.manager.SkinManager;
 import com.dyn.server.database.DBManager;
 import com.dyn.server.packets.PacketDispatcher;
 import com.dyn.server.packets.server.SyncSkinsServerMessage;
@@ -22,6 +21,7 @@ import com.rabbit.gui.component.list.entries.SelectStringEntry;
 import com.rabbit.gui.component.list.entries.StringEntry;
 import com.rabbit.gui.render.TextAlignment;
 import com.rabbit.gui.show.Show;
+import com.rabbit.gui.utils.SkinManager;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -66,6 +66,7 @@ public class SkinSelect extends Show {
 	@Override
 	public void onClose() {
 		entity.setDead();
+		super.onClose();
 	}
 
 	@Override
