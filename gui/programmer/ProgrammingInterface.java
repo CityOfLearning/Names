@@ -6,8 +6,6 @@ import java.util.regex.Pattern;
 
 import com.dyn.DYNServerMod;
 import com.dyn.render.RenderMod;
-import com.dyn.robot.RobotMod;
-import com.dyn.robot.entity.EntityRobot;
 import com.dyn.utils.FileUtils;
 import com.rabbit.gui.component.control.Button;
 import com.rabbit.gui.component.control.MultiTextbox;
