@@ -3,9 +3,6 @@ package com.dyn.render.proxy;
 import java.util.Collections;
 import java.util.Map;
 
-import com.dyn.robot.entity.EntityRobot;
-import com.dyn.robot.gui.RobotProgrammingInterface;
-
 public class Server implements Proxy {
 
 	@Override

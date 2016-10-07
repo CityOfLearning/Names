@@ -18,7 +18,6 @@ import com.dyn.render.manager.NotificationsManager;
 import com.dyn.render.player.PlayerModel;
 import com.dyn.render.player.PlayerRenderer;
 import com.dyn.render.reference.Reference;
-import com.dyn.robot.gui.RobotProgrammingInterface;
 import com.dyn.student.StudentUI;
 import com.dyn.utils.PlayerLevel;
 import com.rabbit.gui.RabbitGui;

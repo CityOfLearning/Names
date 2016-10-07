@@ -2,9 +2,6 @@ package com.dyn.render.proxy;
 
 import java.util.Map;
 
-import com.dyn.robot.entity.EntityRobot;
-import com.dyn.robot.gui.RobotProgrammingInterface;
-
 public interface Proxy {
 
 	public Map<String, ?> getKeyBindings();
