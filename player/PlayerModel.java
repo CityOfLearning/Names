@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.dyn.render.manager.SkinManager;
 import com.google.common.collect.Maps;
+import com.rabbit.gui.utils.SkinManager;
 
 import api.player.model.ModelPlayerAPI;
 import api.player.model.ModelPlayerBase;

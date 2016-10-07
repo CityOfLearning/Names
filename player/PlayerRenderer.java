@@ -3,8 +3,8 @@ package com.dyn.render.player;
 import org.lwjgl.opengl.GL11;
 
 import com.dyn.render.manager.NamesManager;
-import com.dyn.render.manager.SkinManager;
 import com.dyn.server.database.DBManager;
+import com.rabbit.gui.utils.SkinManager;
 
 import api.player.render.RenderPlayerAPI;
 import api.player.render.RenderPlayerBase;
@@ -31,7 +31,7 @@ public class PlayerRenderer extends RenderPlayerBase {
 			Runnable task = () -> {
 				// this blocks and so we gotta thread it
 				String texture = DBManager.getPlayerSkin(player.getDisplayNameString());
-				if (!texture.isEmpty()) {
+				if ((texture != null) && !texture.isEmpty()) {
 					SkinManager.setSkinTexture(player, texture);
 				}
 
