@@ -2,8 +2,8 @@ package com.dyn.render.proxy;
 
 import java.util.Map;
 
-//import com.dyn.render.gui.turtle.ProgrammingInterface;
-//import com.dyn.robot.entity.EntityRobot;
+import com.dyn.robot.entity.EntityRobot;
+import com.dyn.robot.gui.RobotProgrammingInterface;
 
 public interface Proxy {
 
@@ -13,11 +13,6 @@ public interface Proxy {
 
 	public void renderGUI();
 
-	public void toggleRenderProgramInterface(boolean state);
-//	
-//	public ProgrammingInterface getProgrammingInterface();
-//	
-//	public void createNewProgrammingInterface(EntityRobot robot);
-//	
-//	public void openRobotInterface();
+	void toggleRenderProgramInterface(boolean state);
+
 }

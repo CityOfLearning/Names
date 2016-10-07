@@ -8,9 +8,9 @@ import org.lwjgl.input.Keyboard;
 import com.dyn.DYNServerMod;
 import com.dyn.betterachievements.gui.GuiBetterAchievements;
 import com.dyn.betterachievements.handler.GuiOpenHandler;
-import com.dyn.render.gui.SkinSelect;
 import com.dyn.render.gui.achievement.Search;
-import com.dyn.render.gui.turtle.ProgrammingInterface;
+import com.dyn.render.gui.programmer.ProgrammingInterface;
+import com.dyn.render.gui.skin.SkinSelect;
 import com.dyn.render.hud.DynOverlay;
 import com.dyn.render.hud.builder.BuildUI;
 import com.dyn.render.hud.frozen.Freeze;
@@ -18,9 +18,8 @@ import com.dyn.render.manager.NotificationsManager;
 import com.dyn.render.player.PlayerModel;
 import com.dyn.render.player.PlayerRenderer;
 import com.dyn.render.reference.Reference;
-//import com.dyn.robot.entity.EntityRobot;
+import com.dyn.robot.gui.RobotProgrammingInterface;
 import com.dyn.student.StudentUI;
-import com.dyn.student.gui.Requests;
 import com.dyn.utils.PlayerLevel;
 import com.rabbit.gui.RabbitGui;
 
@@ -45,13 +44,15 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class Client implements Proxy {
 
+	private ProgrammingInterface programInterface = new ProgrammingInterface();
+
+	private boolean showProgrammer = false;
+	
 	private KeyBinding skinKey;
 	private KeyBinding hideGuiKey;
 	private KeyBinding achievementKey;
+	private KeyBinding scriptKey;
 	private KeyBinding buildKey;
-	private ProgrammingInterface programInterface = new ProgrammingInterface();
-
-	private boolean showTurtleProgrammer = false;
 
 	@Override
 	public Map<String, ?> getKeyBindings() {
@@ -60,6 +61,7 @@ public class Client implements Proxy {
 		keys.put("skin", skinKey);
 		keys.put("hide", hideGuiKey);
 		keys.put("build", buildKey);
+		keys.put("script", scriptKey);
 		return keys;
 	}
 
@@ -72,12 +74,20 @@ public class Client implements Proxy {
 		hideGuiKey = new KeyBinding("key.toggle.achievementgui", Keyboard.KEY_H, "key.categories.toggle");
 		achievementKey = new KeyBinding("key.toggle.hideui", Keyboard.KEY_N, "key.categories.toggle");
 		buildKey = new KeyBinding("key.toggle.buildui", Keyboard.KEY_B, "key.categories.toggle");
+		scriptKey = new KeyBinding("key.toggle.scriptui", Keyboard.KEY_P, "key.categories.toggle");
 
 		ClientRegistry.registerKeyBinding(achievementKey);
 		ClientRegistry.registerKeyBinding(hideGuiKey);
 		ClientRegistry.registerKeyBinding(skinKey);
 		ClientRegistry.registerKeyBinding(buildKey);
+		ClientRegistry.registerKeyBinding(scriptKey);
 	}
+
+	// @SubscribeEvent
+	// public void renderPass(RenderGameOverlayEvent event) {
+	// // need to determine when the game renders an achievement overlay...
+	// // we might have to mixin this since it's not actively bussed
+	// }
 
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event) {
@@ -184,18 +194,17 @@ public class Client implements Proxy {
 			DYNServerMod.logger.info("Gui Toggled");
 			DynOverlay.isHidden = !DynOverlay.isHidden;
 		}
-
+		
+		if (scriptKey.isPressed()) {
+			DYNServerMod.logger.info("Program Gui Toggled");
+			RabbitGui.proxy.display(programInterface);
+		}
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-			showTurtleProgrammer = false;
+			showProgrammer = false;
 			BuildUI.isOpen = false;
 		}
 	}
-
-	// @SubscribeEvent
-	// public void renderPass(RenderGameOverlayEvent event) {
-	// // need to determine when the game renders an achievement overlay...
-	// // we might have to mixin this since it's not actively bussed
-	// }
 
 	@SubscribeEvent
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
@@ -208,8 +217,8 @@ public class Client implements Proxy {
 			BuildUI.draw();
 
 			DynOverlay.draw();
-
-			if (Minecraft.getMinecraft().inGameHasFocus && showTurtleProgrammer) {
+			
+			if (Minecraft.getMinecraft().inGameHasFocus && showProgrammer) {
 				programInterface.onDraw(0, 0, event.renderTickTime);
 			}
 		}
@@ -217,6 +226,8 @@ public class Client implements Proxy {
 			NotificationsManager.renderNotifications();
 		}
 	}
+
+	
 
 	@Override
 	public void renderGUI() {
@@ -226,22 +237,8 @@ public class Client implements Proxy {
 
 	@Override
 	public void toggleRenderProgramInterface(boolean state) {
-		showTurtleProgrammer = state;
+		showProgrammer = state;
 	}
-//
-//	@Override
-//	public ProgrammingInterface getProgrammingInterface() {
-//		return programInterface;
-//	}
-//
-//	@Override
-//	public void createNewProgrammingInterface(EntityRobot robot) {
-//		programInterface = new ProgrammingInterface(robot);
-//	}
-//
-//	@Override
-//	public void openRobotInterface() {
-//		RabbitGui.proxy.display(programInterface);
-//	}
+	
 
 }
