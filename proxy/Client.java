@@ -8,11 +8,14 @@ import org.lwjgl.input.Keyboard;
 import com.dyn.DYNServerMod;
 import com.dyn.betterachievements.gui.GuiBetterAchievements;
 import com.dyn.betterachievements.handler.GuiOpenHandler;
+import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.render.gui.achievement.Search;
+import com.dyn.render.gui.dialog.EditDialogBlock;
 import com.dyn.render.gui.programmer.ProgrammingInterface;
 import com.dyn.render.gui.skin.SkinSelect;
 import com.dyn.render.hud.DynOverlay;
 import com.dyn.render.hud.builder.BuildUI;
+import com.dyn.render.hud.dialog.DialogHud;
 import com.dyn.render.hud.frozen.Freeze;
 import com.dyn.render.manager.NotificationsManager;
 import com.dyn.render.player.PlayerModel;
@@ -24,6 +27,8 @@ import com.rabbit.gui.RabbitGui;
 
 import api.player.model.ModelPlayerAPI;
 import api.player.render.RenderPlayerAPI;
+import mobi.omegacentauri.raspberryjammod.RaspberryJamMod;
+import mobi.omegacentauri.raspberryjammod.network.CodeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
@@ -43,15 +48,26 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class Client implements Proxy {
 
-	private ProgrammingInterface programInterface = new ProgrammingInterface();
+	private ProgrammingInterface programInterface;
+	private DialogHud dialog;
 
 	private boolean showProgrammer = false;
-	
+	private boolean showDialog = false;
+	private boolean hasShown = false;
+
 	private KeyBinding skinKey;
 	private KeyBinding hideGuiKey;
 	private KeyBinding achievementKey;
 	private KeyBinding scriptKey;
 	private KeyBinding buildKey;
+	private int dialogDuration = 0;
+
+	@SubscribeEvent
+	public void codeError(CodeEvent.ErrorEvent event) {
+		if (showProgrammer) {
+			programInterface.handleErrorMessage(event);
+		}
+	}
 
 	@Override
 	public Map<String, ?> getKeyBindings() {
@@ -64,11 +80,20 @@ public class Client implements Proxy {
 		return keys;
 	}
 
+	// @SubscribeEvent
+	// public void renderPass(RenderGameOverlayEvent event) {
+	// // need to determine when the game renders an achievement overlay...
+	// // we might have to mixin this since it's not actively bussed
+	// }
+
 	@Override
 	public void init() {
+		programInterface = new ProgrammingInterface();
+		dialog = new DialogHud();
 		RenderPlayerAPI.register(Reference.MOD_ID, PlayerRenderer.class);
 		ModelPlayerAPI.register(Reference.MOD_ID, PlayerModel.class);
 		MinecraftForge.EVENT_BUS.register(this);
+		RaspberryJamMod.EVENT_BUS.register(this);
 		skinKey = new KeyBinding("key.toggle.skinui", Keyboard.KEY_J, "key.categories.toggle");
 		hideGuiKey = new KeyBinding("key.toggle.achievementgui", Keyboard.KEY_H, "key.categories.toggle");
 		achievementKey = new KeyBinding("key.toggle.hideui", Keyboard.KEY_N, "key.categories.toggle");
@@ -82,16 +107,15 @@ public class Client implements Proxy {
 		ClientRegistry.registerKeyBinding(scriptKey);
 	}
 
-	// @SubscribeEvent
-	// public void renderPass(RenderGameOverlayEvent event) {
-	// // need to determine when the game renders an achievement overlay...
-	// // we might have to mixin this since it's not actively bussed
-	// }
+	@Override
+	public boolean isDialogInterfaceOpen() {
+		return showDialog;
+	}
 
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event) {
 		// stop unintended command block manipulations
-		if ((event.gui instanceof GuiCommandBlock) && !(DYNServerMod.status == PlayerLevel.ADMIN)) {
+		if ((event.gui instanceof GuiCommandBlock) && !(DYNServerMod.accessLevel == PlayerLevel.ADMIN)) {
 			event.setCanceled(true);
 			return;
 		}
@@ -122,7 +146,7 @@ public class Client implements Proxy {
 			RabbitGui.proxy.display(new Search());
 		}
 
-		if ((DYNServerMod.status == PlayerLevel.ADMIN) && buildKey.isPressed() && !Keyboard.isRepeatEvent()) {
+		if ((DYNServerMod.accessLevel == PlayerLevel.ADMIN) && buildKey.isPressed() && !Keyboard.isRepeatEvent()) {
 			DYNServerMod.logger.info("Build Gui Opened");
 			BuildUI.isOpen = !BuildUI.isOpen;
 		}
@@ -193,12 +217,12 @@ public class Client implements Proxy {
 			DYNServerMod.logger.info("Gui Toggled");
 			DynOverlay.isHidden = !DynOverlay.isHidden;
 		}
-		
+
 		if (scriptKey.isPressed()) {
 			DYNServerMod.logger.info("Program Gui Toggled");
 			RabbitGui.proxy.display(programInterface);
 		}
-		
+
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			showProgrammer = false;
 			BuildUI.isOpen = false;
@@ -207,8 +231,7 @@ public class Client implements Proxy {
 
 	@SubscribeEvent
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
-		if (Minecraft.getMinecraft().inGameHasFocus || ((RabbitGui.proxy.getCurrentStage() != null)
-				&& (RabbitGui.proxy.getCurrentStage().getShow() instanceof ProgrammingInterface))) {
+		if (Minecraft.getMinecraft().inGameHasFocus) {
 			if (StudentUI.frozen.getFlag()) {
 				Freeze.draw();
 			}
@@ -216,8 +239,18 @@ public class Client implements Proxy {
 			BuildUI.draw();
 
 			DynOverlay.draw();
-			
-			if (Minecraft.getMinecraft().inGameHasFocus && showProgrammer) {
+
+			if (showDialog) {
+				if (dialogDuration <= 0) {
+					dialogDuration = 0;
+					showDialog = false;
+				} else {
+					dialog.onDraw(0, 0, event.renderTickTime);
+					dialogDuration--;
+				}
+			}
+
+			if (showProgrammer) {
 				programInterface.onDraw(0, 0, event.renderTickTime);
 			}
 		}
@@ -226,11 +259,23 @@ public class Client implements Proxy {
 		}
 	}
 
-	
+	@Override
+	public void openEditDialogInterface(DialogBlockTileEntity block) {
+		RabbitGui.proxy.display(new EditDialogBlock(block));
+	}
 
 	@Override
-	public void renderGUI() {
-		// TODO Auto-generated method stub
+	public void toggleDialogHud(boolean state, String text, int duration) {
+		showDialog = state;
+		if (state) {
+			if (!hasShown) {
+				RabbitGui.proxy.display(dialog = new DialogHud());
+				RabbitGui.proxy.getCurrentStage().close();
+				hasShown = true;
+			}
+			dialog.setRenderText(text);
+			dialogDuration = duration;
+		}
 
 	}
 
@@ -238,6 +283,5 @@ public class Client implements Proxy {
 	public void toggleRenderProgramInterface(boolean state) {
 		showProgrammer = state;
 	}
-	
 
 }

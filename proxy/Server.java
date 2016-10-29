@@ -3,6 +3,8 @@ package com.dyn.render.proxy;
 import java.util.Collections;
 import java.util.Map;
 
+import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
+
 public class Server implements Proxy {
 
 	@Override
@@ -16,7 +18,18 @@ public class Server implements Proxy {
 	}
 
 	@Override
-	public void renderGUI() {
+	public boolean isDialogInterfaceOpen() {
+		return false;
+	}
+
+	@Override
+	public void openEditDialogInterface(DialogBlockTileEntity block) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void toggleDialogHud(boolean state, String text, int duration) {
 		// TODO Auto-generated method stub
 
 	}
@@ -24,7 +37,7 @@ public class Server implements Proxy {
 	@Override
 	public void toggleRenderProgramInterface(boolean state) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
