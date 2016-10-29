@@ -35,13 +35,13 @@ public class DynOverlay extends Hud {
 		if (!isHidden) {
 			xPos += drawTab(xPos, yPos, "Achiev", "ements",
 					"(" + Keyboard.getKeyName(keys.get("achievement").getKeyCode()) + ")");
-			if (DYNServerMod.status == PlayerLevel.ADMIN) {
+			if (DYNServerMod.accessLevel == PlayerLevel.ADMIN) {
 				xPos += drawTab(xPos, yPos, "Admin", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("admin").getKeyCode()) + ")");
-			} else if (DYNServerMod.status == PlayerLevel.MENTOR) {
+			} else if (DYNServerMod.accessLevel == PlayerLevel.MENTOR) {
 				xPos += drawTab(xPos, yPos, "Mentor", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("mentor").getKeyCode()) + ")");
-			} else if (DYNServerMod.status == PlayerLevel.STUDENT) {
+			} else if (DYNServerMod.accessLevel == PlayerLevel.STUDENT) {
 				xPos += drawTab(xPos, yPos, "Student", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("student").getKeyCode()) + ")");
 			}
@@ -51,13 +51,13 @@ public class DynOverlay extends Hud {
 		} else {
 			xPos += drawHiddenTab(xPos, yPos, "Achiev", "ements",
 					"(" + Keyboard.getKeyName(keys.get("achievement").getKeyCode()) + ")");
-			if (DYNServerMod.status == PlayerLevel.ADMIN) {
+			if (DYNServerMod.accessLevel == PlayerLevel.ADMIN) {
 				xPos += drawHiddenTab(xPos, yPos, "Admin", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("admin").getKeyCode()) + ")");
-			} else if (DYNServerMod.status == PlayerLevel.MENTOR) {
+			} else if (DYNServerMod.accessLevel == PlayerLevel.MENTOR) {
 				xPos += drawHiddenTab(xPos, yPos, "Mentor", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("mentor").getKeyCode()) + ")");
-			} else if (DYNServerMod.status == PlayerLevel.STUDENT) {
+			} else if (DYNServerMod.accessLevel == PlayerLevel.STUDENT) {
 				xPos += drawHiddenTab(xPos, yPos, "Student", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("student").getKeyCode()) + ")");
 			}

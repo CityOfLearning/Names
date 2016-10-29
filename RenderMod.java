@@ -30,7 +30,7 @@ public class RenderMod {
 		for (String key : tempMap.keySet()) {
 			keys.put(key, tempMap.get(key));
 		}
-		switch (DYNServerMod.status) {
+		switch (DYNServerMod.accessLevel) {
 		case ADMIN:
 			tempMap = (Map<String, T>) AdminUI.proxy.getKeyBindings();
 			for (String key : tempMap.keySet()) {
