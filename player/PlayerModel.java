@@ -95,39 +95,6 @@ public class PlayerModel extends ModelPlayerBase {
 					}
 				}
 			}
-			// the npc entity render wont wor
-			// } else if (paramEntity instanceof EntityCustomNpc) {
-			// InputStream inputstream = null;
-			// try {
-			// IResource iresource =
-			// Minecraft.getMinecraft().getResourceManager()
-			// .getResource(new ResourceLocation(((EntityCustomNpc)
-			// paramEntity).display.getSkinTexture()));
-			// inputstream = iresource.getInputStream();
-			// BufferedImage bufferedimage =
-			// TextureUtil.readBufferedImage(inputstream);
-			// if (bufferedimage.getHeight() == 32) {
-			// bipedModel.render(paramEntity, paramFloat1, paramFloat2,
-			// paramFloat3, paramFloat4, paramFloat5,
-			// paramFloat6);
-			// } else {
-			// super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3,
-			// paramFloat4, paramFloat5,
-			// paramFloat6);
-			// }
-			// } catch (IOException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// } finally {
-			// if (inputstream != null) {
-			// try {
-			// inputstream.close();
-			// } catch (IOException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-			// }
-			// }
 		} else {
 			super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4, paramFloat5, paramFloat6);
 		}

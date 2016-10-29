@@ -30,7 +30,7 @@ public class PlayerRenderer extends RenderPlayerBase {
 		} else {
 			Runnable task = () -> {
 				// this blocks and so we gotta thread it
-				String texture = DBManager.getPlayerSkin(player.getDisplayNameString());
+				String texture = DBManager.getPlayerSkin(player.getDisplayNameString()).trim();
 				if ((texture != null) && !texture.isEmpty()) {
 					SkinManager.setSkinTexture(player, texture);
 				}
