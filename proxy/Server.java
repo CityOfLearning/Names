@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 
+import net.minecraft.entity.EntityLivingBase;
+
 public class Server implements Proxy {
 
 	@Override
@@ -29,7 +31,7 @@ public class Server implements Proxy {
 	}
 
 	@Override
-	public void toggleDialogHud(boolean state, String text, int duration) {
+	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration) {
 		// TODO Auto-generated method stub
 
 	}

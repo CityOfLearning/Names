@@ -38,6 +38,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -58,7 +59,6 @@ public class Client implements Proxy {
 	private KeyBinding skinKey;
 	private KeyBinding hideGuiKey;
 	private KeyBinding achievementKey;
-	private KeyBinding scriptKey;
 	private KeyBinding buildKey;
 	private int dialogDuration = 0;
 
@@ -76,7 +76,7 @@ public class Client implements Proxy {
 		keys.put("skin", skinKey);
 		keys.put("hide", hideGuiKey);
 		keys.put("build", buildKey);
-		keys.put("script", scriptKey);
+		// keys.put("script", scriptKey);
 		return keys;
 	}
 
@@ -98,13 +98,11 @@ public class Client implements Proxy {
 		hideGuiKey = new KeyBinding("key.toggle.achievementgui", Keyboard.KEY_H, "key.categories.toggle");
 		achievementKey = new KeyBinding("key.toggle.hideui", Keyboard.KEY_N, "key.categories.toggle");
 		buildKey = new KeyBinding("key.toggle.buildui", Keyboard.KEY_B, "key.categories.toggle");
-		scriptKey = new KeyBinding("key.toggle.scriptui", Keyboard.KEY_P, "key.categories.toggle");
 
 		ClientRegistry.registerKeyBinding(achievementKey);
 		ClientRegistry.registerKeyBinding(hideGuiKey);
 		ClientRegistry.registerKeyBinding(skinKey);
 		ClientRegistry.registerKeyBinding(buildKey);
-		ClientRegistry.registerKeyBinding(scriptKey);
 	}
 
 	@Override
@@ -218,11 +216,6 @@ public class Client implements Proxy {
 			DynOverlay.isHidden = !DynOverlay.isHidden;
 		}
 
-		if (scriptKey.isPressed()) {
-			DYNServerMod.logger.info("Program Gui Toggled");
-			RabbitGui.proxy.display(programInterface);
-		}
-
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			showProgrammer = false;
 			BuildUI.isOpen = false;
@@ -265,15 +258,20 @@ public class Client implements Proxy {
 	}
 
 	@Override
-	public void toggleDialogHud(boolean state, String text, int duration) {
+	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration) {
 		showDialog = state;
 		if (state) {
 			if (!hasShown) {
-				RabbitGui.proxy.display(dialog = new DialogHud());
+				if(entity == null){
+					RabbitGui.proxy.display(dialog = new DialogHud());
+				} else {
+					RabbitGui.proxy.display(dialog = new DialogHud(entity));
+				}
 				RabbitGui.proxy.getCurrentStage().close();
 				hasShown = true;
 			}
 			dialog.setRenderText(text);
+			dialog.setEntity(entity);
 			dialogDuration = duration;
 		}
 
