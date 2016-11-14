@@ -7,7 +7,7 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 
 import com.dyn.fixins.blocks.cmdblock.StudentCommandBlockLogic;
-import com.dyn.server.network.NetworkDispatcher;
+import com.dyn.server.network.NetworkManager;
 import com.dyn.server.network.packets.server.StudentCommandBlockMessage;
 
 import net.minecraft.client.gui.GuiButton;
@@ -51,7 +51,7 @@ public class StudentComamndGui extends GuiScreen {
 			} else if (button.id == 0) {
 				String[] split = commandTextField.getText().split("\\s+");
 				if (approvedCommands.contains(split[0])) {
-					NetworkDispatcher.sendToServer(new StudentCommandBlockMessage(localCommandBlock.shouldTrackOutput(),
+					NetworkManager.sendToServer(new StudentCommandBlockMessage(localCommandBlock.shouldTrackOutput(),
 							localCommandBlock.getPosition(), commandTextField.getText()));
 
 					if (!localCommandBlock.shouldTrackOutput()) {

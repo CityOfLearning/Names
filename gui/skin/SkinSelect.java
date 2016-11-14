@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Vector;
 
 import com.dyn.server.database.DBManager;
-import com.dyn.server.network.NetworkDispatcher;
+import com.dyn.server.network.NetworkManager;
 import com.dyn.server.network.packets.server.SyncSkinsServerMessage;
 import com.rabbit.gui.background.DefaultBackground;
 import com.rabbit.gui.component.control.Button;
@@ -107,7 +107,7 @@ public class SkinSelect extends Show {
 							if ((selectedEntry != null) && !selectedEntry.getTitle().isEmpty()) {
 								SkinManager.setSkinTexture(Minecraft.getMinecraft().thePlayer,
 										assets.getAsset(selectedEntry.getTitle()));
-								NetworkDispatcher.sendToServer(
+								NetworkManager.sendToServer(
 										new SyncSkinsServerMessage(Minecraft.getMinecraft().thePlayer.getName(),
 												assets.getAsset(selectedEntry.getTitle())));
 								DBManager.setPlayerSkin(Minecraft.getMinecraft().thePlayer.getDisplayNameString(),
@@ -119,9 +119,9 @@ public class SkinSelect extends Show {
 				new Button((int) (width * .38), (int) (height * .8), 60, 20, "Reset Skin").setClickListener(btn -> {
 					entity.setTexture(playerSkin);
 					SkinManager.removeSkinTexture(Minecraft.getMinecraft().thePlayer);
-					NetworkDispatcher.sendToServer(
+					NetworkManager.sendToServer(
 							new SyncSkinsServerMessage(Minecraft.getMinecraft().thePlayer.getName(), "reset"));
-					DBManager.setPlayerSkin(Minecraft.getMinecraft().thePlayer.getDisplayNameString(), " ");
+					DBManager.setPlayerSkin(Minecraft.getMinecraft().thePlayer.getDisplayNameString(), "");
 				}));
 
 		registerComponent(

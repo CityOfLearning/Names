@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 
 import com.dyn.DYNServerMod;
 import com.dyn.render.RenderMod;
-import com.dyn.server.network.NetworkDispatcher;
+import com.dyn.server.network.NetworkManager;
 import com.dyn.server.network.messages.MessageRunPythonScript;
 import com.dyn.utils.FileUtils;
+import com.rabbit.gui.component.code.CodeInterface;
 import com.rabbit.gui.component.control.Button;
-import com.rabbit.gui.component.control.CodeInterface;
 import com.rabbit.gui.component.control.PictureButton;
 import com.rabbit.gui.component.control.TextBox;
 import com.rabbit.gui.component.display.Panel;
@@ -243,7 +243,7 @@ public class ProgrammingInterface extends Show {
 				.setClickListener(btn -> {
 					codeWindow.clearError();
 					errorPanel.setVisible(false);
-					NetworkDispatcher.sendToServer(new MessageRunPythonScript(termText));
+					NetworkManager.sendToServer(new MessageRunPythonScript(termText));
 				}));
 
 		panel.registerComponent(new PictureButton(panel.getWidth() - 15, 0, 15, 15,
