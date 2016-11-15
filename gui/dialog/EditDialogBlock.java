@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.Vector;
 
 import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.server.network.NetworkManager;
@@ -17,18 +15,12 @@ import com.rabbit.gui.component.control.MultiTextbox;
 import com.rabbit.gui.component.control.TextBox;
 import com.rabbit.gui.component.display.Picture;
 import com.rabbit.gui.component.display.TextLabel;
-import com.rabbit.gui.component.display.entity.DisplayEntity;
-import com.rabbit.gui.component.display.entity.DisplayEntityHead;
 import com.rabbit.gui.show.Show;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.EntityRegistry.EntityRegistration;
 import noppes.npcs.client.AssetsBrowser;
 
 public class EditDialogBlock extends Show {
@@ -37,8 +29,8 @@ public class EditDialogBlock extends Show {
 	String text;
 	String entity = "";
 	String entitySkin = "";
-	
-	private int x1, y1, z1, x2, y2,z2;
+
+	private int x1, y1, z1, x2, y2, z2;
 
 	DropDown<String> textureList;
 	DropDown<Integer> entityTypes;
@@ -68,11 +60,10 @@ public class EditDialogBlock extends Show {
 		registerComponent(
 				new TextLabel((int) (width * .625), (int) (height * .1), 100, 15, Color.black, "Display Entity:"));
 
-		
 		registerComponent(entityTypes = new DropDown<Integer>((int) (width * .625), (int) (height * .15), 90, 15,
 				block.getEntity() != null ? block.getEntity().getName() : "").setDrawUnicode(true)
 						.setItemSelectedListener((DropDown<Integer> dropdown, String selected) -> {
-							if(dropdown.getElement(selected).getValue() != 90){
+							if (dropdown.getElement(selected).getValue() != 90) {
 								entity = "" + dropdown.getElement(selected).getValue();
 							} else {
 								entity = selected;
@@ -82,21 +73,21 @@ public class EditDialogBlock extends Show {
 		for (String entityname : EntityList.getEntityNameList()) {
 			// we probably dont want npc characters since they don't play by the
 			// same rules
-			if (!entityname.contains("npc") && !entityname.contains("LightningBolt") && !entityname.contains("ArmorStand")) {
+			if (!entityname.contains("npc") && !entityname.contains("LightningBolt")
+					&& !entityname.contains("ArmorStand")) {
 				if (EntityLivingBase.class
 						.isAssignableFrom(EntityList.getClassFromID(EntityList.getIDFromString(entityname)))) {
 					entityTypes.add(entityname, EntityList.getIDFromString(entityname));
 				}
 			}
 		}
-		
+
 		entityTypes.add("DisplayEntity", 90);
 		entityTypes.add("DisplayHead", 90);
-		
+
 		registerComponent(
 				new TextLabel((int) (width * .625), (int) (height * .25), 100, 15, Color.black, "Display Skin:"));
 
-		
 		registerComponent(textureList = new DropDown<String>((int) (width * .625), (int) (height * .3), 90, 15)
 				.setDrawUnicode(true).setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
 					entitySkin = assets.getAsset(selected);
@@ -115,73 +106,80 @@ public class EditDialogBlock extends Show {
 		}
 
 		registerComponent(new TextLabel((int) (width * .14), (int) (height * .1), 170, 60, Color.black,
-				"Set Block Area:\n\n X:              Y:              Z:\n\n\nX2:             Y2:            Z2:").setMultilined(true));
+				"Set Block Area:\n\n X:              Y:              Z:\n\n\nX2:             Y2:            Z2:")
+						.setMultilined(true));
 
-		registerComponent(new TextBox((int) (width * .18), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getX())
-				.setTextChangedListener((TextBox textbox, String previousText) -> {
-					if (!previousText.isEmpty()) {
-						try {
-							x1 = Integer.parseInt(previousText);
-						} catch (Exception e) {
-							textbox.setText("" + x1);
-						}
-					}
-				}));
+		registerComponent(
+				new TextBox((int) (width * .18), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getX())
+						.setTextChangedListener((TextBox textbox, String previousText) -> {
+							if (!previousText.isEmpty()) {
+								try {
+									x1 = Integer.parseInt(previousText);
+								} catch (Exception e) {
+									textbox.setText("" + x1);
+								}
+							}
+						}));
 
-		registerComponent(new TextBox((int) (width * .33), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getY())
-				.setTextChangedListener((TextBox textbox, String previousText) -> {
-					if (!previousText.isEmpty()) {
-						try {
-							y1 = Integer.parseInt(previousText);
-						} catch (Exception e) {
-							textbox.setText("" + y1);
-						}
-					}
-				}));
+		registerComponent(
+				new TextBox((int) (width * .33), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getY())
+						.setTextChangedListener((TextBox textbox, String previousText) -> {
+							if (!previousText.isEmpty()) {
+								try {
+									y1 = Integer.parseInt(previousText);
+								} catch (Exception e) {
+									textbox.setText("" + y1);
+								}
+							}
+						}));
 
-		registerComponent(new TextBox((int) (width * .48), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getZ())
-				.setTextChangedListener((TextBox textbox, String previousText) -> {
-					if (!previousText.isEmpty()) {
-						try {
-							z1 = Integer.parseInt(previousText);
-						} catch (Exception e) {
-							textbox.setText("" + z1);
-						}
-					}
-				}));
-		
-		registerComponent(new TextBox((int) (width * .18), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getX())
-				.setTextChangedListener((TextBox textbox, String previousText) -> {
-					if (!previousText.isEmpty()) {
-						try {
-							x2 = Integer.parseInt(previousText);
-						} catch (Exception e) {
-							textbox.setText("" + x2);
-						}
-					}
-				}));
+		registerComponent(
+				new TextBox((int) (width * .48), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getZ())
+						.setTextChangedListener((TextBox textbox, String previousText) -> {
+							if (!previousText.isEmpty()) {
+								try {
+									z1 = Integer.parseInt(previousText);
+								} catch (Exception e) {
+									textbox.setText("" + z1);
+								}
+							}
+						}));
 
-		registerComponent(new TextBox((int) (width * .33), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getY())
-				.setTextChangedListener((TextBox textbox, String previousText) -> {
-					if (!previousText.isEmpty()) {
-						try {
-							y2 = Integer.parseInt(previousText);
-						} catch (Exception e) {
-							textbox.setText("" + y2);
-						}
-					}
-				}));
+		registerComponent(
+				new TextBox((int) (width * .18), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getX())
+						.setTextChangedListener((TextBox textbox, String previousText) -> {
+							if (!previousText.isEmpty()) {
+								try {
+									x2 = Integer.parseInt(previousText);
+								} catch (Exception e) {
+									textbox.setText("" + x2);
+								}
+							}
+						}));
 
-		registerComponent(new TextBox((int) (width * .48), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getZ())
-				.setTextChangedListener((TextBox textbox, String previousText) -> {
-					if (!previousText.isEmpty()) {
-						try {
-							z2 = Integer.parseInt(previousText);
-						} catch (Exception e) {
-							textbox.setText("" + z2);
-						}
-					}
-				}));
+		registerComponent(
+				new TextBox((int) (width * .33), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getY())
+						.setTextChangedListener((TextBox textbox, String previousText) -> {
+							if (!previousText.isEmpty()) {
+								try {
+									y2 = Integer.parseInt(previousText);
+								} catch (Exception e) {
+									textbox.setText("" + y2);
+								}
+							}
+						}));
+
+		registerComponent(
+				new TextBox((int) (width * .48), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getZ())
+						.setTextChangedListener((TextBox textbox, String previousText) -> {
+							if (!previousText.isEmpty()) {
+								try {
+									z2 = Integer.parseInt(previousText);
+								} catch (Exception e) {
+									textbox.setText("" + z2);
+								}
+							}
+						}));
 
 		registerComponent(
 				new TextLabel((int) (width * .15), (int) (height * .375), 100, 15, Color.black, "Set Block Dialog:"));
@@ -194,12 +192,12 @@ public class EditDialogBlock extends Show {
 
 		registerComponent(new Button((int) (width * .5), (int) (height * .8125), 120, 20, "Update Dialog Block")
 				.setClickListener(btn -> {
-					NetworkManager.sendToServer(
-							new MessageDialogUpdate(entity, entitySkin, block.getPos(), text, new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2)));
+					NetworkManager.sendToServer(new MessageDialogUpdate(entity, entitySkin, block.getPos(), text,
+							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2)));
 					getStage().close();
 				}));
 		// The background
-		registerComponent(new Picture((int) (width *.1125), (int) (height * .05), (int) (width * (6.0 / 8.0)), (int) (height * .9),
-				new ResourceLocation("dyn", "textures/gui/background.png")));
+		registerComponent(new Picture((int) (width * .1125), (int) (height * .05), (int) (width * (6.0 / 8.0)),
+				(int) (height * .9), new ResourceLocation("dyn", "textures/gui/background.png")));
 	}
 }

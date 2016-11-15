@@ -12,7 +12,6 @@ import com.rabbit.gui.show.Show;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ResourceLocation;
 
 public class DialogHud extends Show {
 
@@ -28,10 +27,6 @@ public class DialogHud extends Show {
 		this.entity = entity;
 	}
 
-	public void setRenderText(String renderText) {
-		textArea.setText(renderText);
-	}
-
 	public void setEntity(EntityLivingBase entity) {
 		if (entity != null) {
 			this.entity = entity;
@@ -40,23 +35,27 @@ public class DialogHud extends Show {
 				entityElement.setZoom(4.5f);
 				((DisplayEntity) entityElement.getEntity()).setTexture(((DisplayEntity) entity).getTexture());
 			} else {
-				entityElement.setZoom(1 * (2f/entity.height));
+				entityElement.setZoom(1 * (2f / entity.height));
 			}
 		}
+	}
+
+	public void setRenderText(String renderText) {
+		textArea.setText(renderText);
 	}
 
 	@Override
 	public void setup() {
 		super.setup();
-		
+
 		float zoom = 1;
 		if (entity instanceof DisplayEntityHead) {
 			zoom = 4.5f;
 		} else {
-			zoom = 1 * (1.6f/entity.height);
+			zoom = 1 * (1.6f / entity.height);
 		}
-		registerComponent(entityElement = 
-				new EntityComponent((int) (width * .1), (int) (height * .975), width / 3, 100, entity, 0, zoom, false));
+		registerComponent(entityElement = new EntityComponent((int) (width * .1), (int) (height * .975), width / 3, 100,
+				entity, 0, zoom, false));
 
 		registerComponent(textArea = new TextLabel(width / 3, (int) (height * .7), (int) (width * .6),
 				(int) (height * .2), "This is a test of the dialog renderer").setMultilined(true));
