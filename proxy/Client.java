@@ -27,8 +27,6 @@ import com.rabbit.gui.RabbitGui;
 
 import api.player.model.ModelPlayerAPI;
 import api.player.render.RenderPlayerAPI;
-import mobi.omegacentauri.raspberryjammod.RaspberryJamMod;
-import mobi.omegacentauri.raspberryjammod.network.CodeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
@@ -62,13 +60,6 @@ public class Client implements Proxy {
 	private KeyBinding buildKey;
 	private int dialogDuration = 0;
 
-	@SubscribeEvent
-	public void codeError(CodeEvent.ErrorEvent event) {
-		if (showProgrammer) {
-			programInterface.handleErrorMessage(event);
-		}
-	}
-
 	@Override
 	public Map<String, ?> getKeyBindings() {
 		Map<String, KeyBinding> keys = new HashMap();
@@ -87,13 +78,19 @@ public class Client implements Proxy {
 	// }
 
 	@Override
+	public void handleErrorMessage(String error, String code, int line) {
+		if (showProgrammer) {
+			programInterface.handleErrorMessage(error, code, line);
+		}
+	}
+
+	@Override
 	public void init() {
 		programInterface = new ProgrammingInterface();
 		dialog = new DialogHud();
 		RenderPlayerAPI.register(Reference.MOD_ID, PlayerRenderer.class);
 		ModelPlayerAPI.register(Reference.MOD_ID, PlayerModel.class);
 		MinecraftForge.EVENT_BUS.register(this);
-		RaspberryJamMod.EVENT_BUS.register(this);
 		skinKey = new KeyBinding("key.toggle.skinui", Keyboard.KEY_J, "key.categories.toggle");
 		hideGuiKey = new KeyBinding("key.toggle.achievementgui", Keyboard.KEY_H, "key.categories.toggle");
 		achievementKey = new KeyBinding("key.toggle.hideui", Keyboard.KEY_N, "key.categories.toggle");
@@ -262,7 +259,7 @@ public class Client implements Proxy {
 		showDialog = state;
 		if (state) {
 			if (!hasShown) {
-				if(entity == null){
+				if (entity == null) {
 					RabbitGui.proxy.display(dialog = new DialogHud());
 				} else {
 					RabbitGui.proxy.display(dialog = new DialogHud(entity));
