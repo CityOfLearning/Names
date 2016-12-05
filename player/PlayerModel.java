@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import com.dyn.DYNServerMod;
 import com.google.common.collect.Maps;
 import com.rabbit.gui.utils.SkinManager;
 
@@ -81,15 +82,13 @@ public class PlayerModel extends ModelPlayerBase {
 						}
 
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						DYNServerMod.logger.error("Failed during player render", e);
 					} finally {
 						if (inputstream != null) {
 							try {
 								inputstream.close();
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								DYNServerMod.logger.error("Failed during player render, could not close inputstream", e);
 							}
 						}
 					}
