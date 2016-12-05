@@ -26,22 +26,29 @@ public class PlayerRenderer extends RenderPlayerBase {
 	public boolean bindEntityTexture(AbstractClientPlayer player) {
 		if (SkinManager.hasSkinTexture(player)) {
 			// attach our texture
+			if(SkinManager.getSkinTexture(player) != null || SkinManager.getSkinTexture(player) != ""){
 			return SkinManager.bindSkinTexture(player);
+			} else {
+				return renderPlayerAPI.localBindEntityTexture(player);
+			}
 		} else {
 			Runnable task = () -> {
 				// this blocks and so we gotta thread it
 				String texture = DBManager.getPlayerSkin(player.getDisplayNameString()).trim();
 				if ((texture != null) && !texture.isEmpty()) {
 					SkinManager.setSkinTexture(player, texture);
+				} else {
+					SkinManager.setSkinTexture(player, null);
 				}
 
 			};
 			// set it to the current texture the thread will run and overwrite
 			// this if it isn't empty
-			SkinManager.setSkinTexture(player, renderPlayerAPI.localGetEntityTexture(player).toString());
+//			SkinManager.setSkinTexture(player, renderPlayerAPI.localGetEntityTexture(player).toString());
+			SkinManager.setSkinTexture(player, "");
 
 			new Thread(task).start();
-			return super.bindEntityTexture(player);
+			return renderPlayerAPI.localBindEntityTexture(player);
 		}
 	}
 
