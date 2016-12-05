@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
+import com.dyn.fixins.blocks.redstone.proximity.ProximityBlockTileEntity;
+import com.dyn.fixins.blocks.redstone.timer.TimerBlockTileEntity;
 
 import net.minecraft.entity.EntityLivingBase;
 
@@ -32,6 +34,18 @@ public class Server implements Proxy {
 
 	@Override
 	public void openEditDialogInterface(DialogBlockTileEntity block) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void openSetProximityInterface(ProximityBlockTileEntity block) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void openSetTimerInterface(TimerBlockTileEntity block) {
 		// TODO Auto-generated method stub
 
 	}

@@ -9,9 +9,13 @@ import com.dyn.DYNServerMod;
 import com.dyn.betterachievements.gui.GuiBetterAchievements;
 import com.dyn.betterachievements.handler.GuiOpenHandler;
 import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
+import com.dyn.fixins.blocks.redstone.proximity.ProximityBlockTileEntity;
+import com.dyn.fixins.blocks.redstone.timer.TimerBlockTileEntity;
 import com.dyn.render.gui.achievement.Search;
 import com.dyn.render.gui.dialog.EditDialogBlock;
 import com.dyn.render.gui.programmer.ProgrammingInterface;
+import com.dyn.render.gui.redstone.SetProximityBlock;
+import com.dyn.render.gui.redstone.SetTimerBlock;
 import com.dyn.render.gui.skin.SkinSelect;
 import com.dyn.render.hud.DynOverlay;
 import com.dyn.render.hud.builder.BuildUI;
@@ -252,6 +256,16 @@ public class Client implements Proxy {
 	@Override
 	public void openEditDialogInterface(DialogBlockTileEntity block) {
 		RabbitGui.proxy.display(new EditDialogBlock(block));
+	}
+
+	@Override
+	public void openSetProximityInterface(ProximityBlockTileEntity block) {
+		RabbitGui.proxy.display(new SetProximityBlock(block));
+	}
+
+	@Override
+	public void openSetTimerInterface(TimerBlockTileEntity block) {
+		RabbitGui.proxy.display(new SetTimerBlock(block));
 	}
 
 	@Override
