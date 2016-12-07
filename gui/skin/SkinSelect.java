@@ -121,11 +121,11 @@ public class SkinSelect extends Show {
 					SkinManager.removeSkinTexture(Minecraft.getMinecraft().thePlayer);
 					NetworkManager.sendToServer(
 							new SyncSkinsServerMessage(Minecraft.getMinecraft().thePlayer.getName(), "reset"));
-					DBManager.setPlayerSkin(Minecraft.getMinecraft().thePlayer.getDisplayNameString(), "");
+					DBManager.setPlayerSkin(Minecraft.getMinecraft().thePlayer.getDisplayNameString(),
+							playerSkin.toString());
 				}));
 
-		registerComponent(
-				new EntityComponent((int) (width * .7), (int) (height * .85), width / 3, 100, entity, 0, 2.75f));
+		registerComponent(new EntityComponent((int) (width * .585), (int) (height * .2), 0, 0, entity, 0, 2.75f));
 
 		// The background
 		registerComponent(new Picture(width / 8, (int) (height * .05), (int) (width * (6.0 / 8.0)), (int) (height * .9),

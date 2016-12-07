@@ -8,6 +8,7 @@ import com.rabbit.gui.utils.SkinManager;
 
 import api.player.render.RenderPlayerAPI;
 import api.player.render.RenderPlayerBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -26,10 +27,10 @@ public class PlayerRenderer extends RenderPlayerBase {
 	public boolean bindEntityTexture(AbstractClientPlayer player) {
 		if (SkinManager.hasSkinTexture(player)) {
 			// attach our texture
-			if(SkinManager.getSkinTexture(player) != null || SkinManager.getSkinTexture(player) != ""){
-			return SkinManager.bindSkinTexture(player);
+			if ((SkinManager.getSkinTexture(player) != null) || (SkinManager.getSkinTexture(player) != "")) {
+				return SkinManager.bindSkinTexture(player);
 			} else {
-				return renderPlayerAPI.localBindEntityTexture(player);
+				return super.bindEntityTexture(player);
 			}
 		} else {
 			Runnable task = () -> {
@@ -37,18 +38,18 @@ public class PlayerRenderer extends RenderPlayerBase {
 				String texture = DBManager.getPlayerSkin(player.getDisplayNameString()).trim();
 				if ((texture != null) && !texture.isEmpty()) {
 					SkinManager.setSkinTexture(player, texture);
-				} else {
-					SkinManager.setSkinTexture(player, null);
-				}
-
+				} 
 			};
 			// set it to the current texture the thread will run and overwrite
 			// this if it isn't empty
-//			SkinManager.setSkinTexture(player, renderPlayerAPI.localGetEntityTexture(player).toString());
-			SkinManager.setSkinTexture(player, "");
+			// SkinManager.setSkinTexture(player,
+			// renderPlayerAPI.localGetEntityTexture(player).toString());
+			// SkinManager.setSkinTexture(player, "");
+			SkinManager.setSkinTexture(player, Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName())
+					.getLocationSkin().toString());
 
 			new Thread(task).start();
-			return renderPlayerAPI.localBindEntityTexture(player);
+			return super.bindEntityTexture(player);
 		}
 	}
 
