@@ -239,6 +239,7 @@ public class Client implements Proxy {
 					dialogDuration = 0;
 					showDialog = false;
 				} else {
+					dialog.onUpdate();
 					dialog.onDraw(0, 0, event.renderTickTime);
 					dialogDuration--;
 				}

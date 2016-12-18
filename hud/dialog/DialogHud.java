@@ -12,6 +12,8 @@ import com.rabbit.gui.component.display.entity.EntityComponent;
 import com.rabbit.gui.show.Show;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 
 public class DialogHud extends Show {
@@ -19,6 +21,7 @@ public class DialogHud extends Show {
 	private TextLabel textArea;
 	private EntityLivingBase entity;
 	private EntityComponent entityElement;
+	private Shape bg;
 
 	public DialogHud() {
 		entity = new DisplayEntityHead(Minecraft.getMinecraft().theWorld);
@@ -31,11 +34,8 @@ public class DialogHud extends Show {
 	public void setEntity(EntityLivingBase entity) {
 		if (entity != null) {
 			this.entity = entity;
-			this.entity.renderYawOffset = (float) ((-Math.PI / 4) * 20.0F);
-			this.entity.rotationYaw = (float) ((-Math.PI / 4) * 40.0F);
-			this.entity.rotationYawHead = this.entity.rotationYaw;
-			this.entity.prevRotationYawHead = this.entity.rotationYaw;
 			entityElement.setEntity(this.entity);
+			entityElement.setRotation((float) ((Math.PI / 4) * 40.0F));
 			if (entity instanceof DisplayEntityHead) {
 				entityElement.setZoom(4.5f);
 				((DisplayEntity) entityElement.getEntity()).setTexture(((DisplayEntity) entity).getTexture());
@@ -72,19 +72,35 @@ public class DialogHud extends Show {
 			zoom = 1.5f;
 		}
 
-		entity.renderYawOffset = (float) ((-Math.PI / 4) * 20.0F);
-		entity.rotationYaw = (float) ((-Math.PI / 4) * 40.0F);
-		entity.rotationYawHead = entity.rotationYaw;
-		entity.prevRotationYawHead = entity.rotationYaw;
-
 		registerComponent(entityElement = new EntityComponent((int) (width * .1), (int) (height * .685), 0, 0, entity,
 				0, zoom, false));
 
+		entityElement.setRotation((float) ((Math.PI / 4) * 40.0F));
+		
 		registerComponent(textArea = new TextLabel(width / 3, (int) (height * .7), (int) (width * .6),
 				(int) (height * .2), "This is a test of the dialog renderer").setMultilined(true));
 
-		registerComponent(new Shape(0, (int) (height * .66), width, (int) (height * .33), ShapeType.RECT,
+		registerComponent(bg = new Shape(0, (int) (height * .66), width, (int) (height * .33), ShapeType.RECT,
 				new Color(40, 40, 55, 150)));
+	}
+	
+	@Override
+	public void onUpdate() {
+		ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+		width = scaledresolution.getScaledWidth();
+		height = scaledresolution.getScaledHeight();
+		
+		entityElement.setX((int) (width * .1));
+		entityElement.setY((int) (height * .685));
+		
+		bg.setY((int) (height * .66));
+		bg.setWidth(width);
+		bg.setHeight((int) (height * .33));
+		
+		textArea.setX(width / 3);
+		textArea.setY((int) (height * .7));
+		textArea.setWidth((int) (width * .6));
+		textArea.setHeight((int) (height * .2));
 	}
 
 }
