@@ -180,16 +180,16 @@ public class RenderChatBubble {
 			// either a new message or an old message expired
 			prevMessages = robotmessages;
 			formattedMessages.clear();
-			for (String message : robotmessages.values()) {
-				formattedMessages.add(formatText(message, boxLength * 4, true));
+			for (Long key : robotmessages.keySet()) {
+				formattedMessages.add(formatText(robotmessages.get(key), boxLength * 4, true));
 			}
 		} else if ((prevMessages.size() > 0)
 				&& (robotmessages.keySet().iterator().next() != prevMessages.keySet().iterator().next())) {
 			// the time tag doesnt match it must be out of sync
 			prevMessages = robotmessages;
 			formattedMessages.clear();
-			for (String message : robotmessages.values()) {
-				formattedMessages.add(formatText(message, boxLength * 4, true));
+			for (Long key : robotmessages.keySet()) {
+				formattedMessages.add(formatText(robotmessages.get(key), boxLength * 4, true));
 			}
 		}
 
