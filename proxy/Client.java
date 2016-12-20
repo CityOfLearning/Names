@@ -21,10 +21,12 @@ import com.dyn.render.hud.DynOverlay;
 import com.dyn.render.hud.builder.BuildUI;
 import com.dyn.render.hud.dialog.DialogHud;
 import com.dyn.render.hud.frozen.Freeze;
+//import com.dyn.render.hud.path.EntityPathRenderer;
 import com.dyn.render.manager.NotificationsManager;
 import com.dyn.render.player.PlayerModel;
 import com.dyn.render.player.PlayerRenderer;
 import com.dyn.render.reference.Reference;
+import com.dyn.robot.RobotMod;
 import com.dyn.student.StudentUI;
 import com.dyn.utils.PlayerLevel;
 import com.rabbit.gui.RabbitGui;
@@ -43,6 +45,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -268,6 +271,15 @@ public class Client implements Proxy {
 	public void openSetTimerInterface(TimerBlockTileEntity block) {
 		RabbitGui.proxy.display(new SetTimerBlock(block));
 	}
+
+//	@SubscribeEvent
+//	public void render(RenderWorldLastEvent event) {
+//		if (RobotMod.currentRobot != null) {
+//			EntityPathRenderer.renderPath(RobotMod.currentRobot);
+//		}
+//
+//		EntityPathRenderer.renderEntityPaths();
+//	}
 
 	@Override
 	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration) {
