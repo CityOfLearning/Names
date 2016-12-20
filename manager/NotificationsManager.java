@@ -10,7 +10,7 @@ import com.dyn.render.hud.notifications.RequirementNotification;
 import net.minecraft.client.Minecraft;
 
 public class NotificationsManager {
-	private static final List<INotification> notificationList = new ArrayList<INotification>();
+	private static final List<INotification> notificationList = new ArrayList<>();
 
 	public static void addAchievementNotification(String title, String subTitle) {
 		notificationList.add(new AchievementPlusNotification(Minecraft.getMinecraft(), title, subTitle));

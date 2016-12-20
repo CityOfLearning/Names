@@ -93,7 +93,7 @@ public class EditDialogBlock extends Show {
 					entitySkin = assets.getAsset(selected);
 				}));
 
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		for (String texture : assets.files) {
 			list.add(texture);
 		}
@@ -105,8 +105,8 @@ public class EditDialogBlock extends Show {
 			textureList.add(skin);
 		}
 
-		registerComponent(new TextLabel((int) (width * .14), (int) (height * .1), 100, 60, Color.black,
-				"Set Block Area:"));
+		registerComponent(
+				new TextLabel((int) (width * .14), (int) (height * .1), 100, 60, Color.black, "Set Block Area:"));
 
 		registerComponent(
 				new TextBox((int) (width * .18), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getX())
@@ -119,9 +119,8 @@ public class EditDialogBlock extends Show {
 								}
 							}
 						}));
-		
-		registerComponent(new TextLabel((int) (width * .15), (int) (height * .175), 30, 20, Color.black,
-				"W:"));
+
+		registerComponent(new TextLabel((int) (width * .15), (int) (height * .175), 30, 20, Color.black, "W:"));
 
 		registerComponent(
 				new TextBox((int) (width * .33), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getY())
@@ -134,9 +133,8 @@ public class EditDialogBlock extends Show {
 								}
 							}
 						}));
-		
-		registerComponent(new TextLabel((int) (width * .29), (int) (height * .175), 30, 20, Color.black,
-				"Dn:"));
+
+		registerComponent(new TextLabel((int) (width * .29), (int) (height * .175), 30, 20, Color.black, "Dn:"));
 
 		registerComponent(
 				new TextBox((int) (width * .48), (int) (height * .15), 45, 20).setText("" + block.getCorner1().getZ())
@@ -149,9 +147,9 @@ public class EditDialogBlock extends Show {
 								}
 							}
 						}));
-		
-		registerComponent(new TextLabel((int) (width * .45), (int) (height * .175), 30, 20, Color.black,
-				"N:").setMultilined(false));
+
+		registerComponent(new TextLabel((int) (width * .45), (int) (height * .175), 30, 20, Color.black, "N:")
+				.setMultilined(false));
 
 		registerComponent(
 				new TextBox((int) (width * .18), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getX())
@@ -164,9 +162,8 @@ public class EditDialogBlock extends Show {
 								}
 							}
 						}));
-		
-		registerComponent(new TextLabel((int) (width * .15), (int) (height * .275), 30, 20, Color.black,
-				"E:"));
+
+		registerComponent(new TextLabel((int) (width * .15), (int) (height * .275), 30, 20, Color.black, "E:"));
 
 		registerComponent(
 				new TextBox((int) (width * .33), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getY())
@@ -179,9 +176,8 @@ public class EditDialogBlock extends Show {
 								}
 							}
 						}));
-		
-		registerComponent(new TextLabel((int) (width * .29), (int) (height * .275), 30, 20, Color.black,
-				"Up:"));
+
+		registerComponent(new TextLabel((int) (width * .29), (int) (height * .275), 30, 20, Color.black, "Up:"));
 
 		registerComponent(
 				new TextBox((int) (width * .48), (int) (height * .25), 45, 20).setText("" + block.getCorner2().getZ())
@@ -194,9 +190,8 @@ public class EditDialogBlock extends Show {
 								}
 							}
 						}));
-		
-		registerComponent(new TextLabel((int) (width * .45), (int) (height * .275), 30, 20, Color.black,
-				"S:"));
+
+		registerComponent(new TextLabel((int) (width * .45), (int) (height * .275), 30, 20, Color.black, "S:"));
 
 		registerComponent(
 				new TextLabel((int) (width * .15), (int) (height * .375), 100, 15, Color.black, "Set Block Dialog:"));

@@ -44,10 +44,10 @@ public class Search extends Show {
 						.doesDrawHoverText(true).setClickListener(but -> Minecraft.getMinecraft()
 								.displayGuiScreen(new GuiBetterAchievements(getStage(), 0))));
 
-		List<GridEntry> entries = new ArrayList<GridEntry>();
+		List<GridEntry> entries = new ArrayList<>();
 
 		for (AchievementPlus a : AchievementManager.getAllAchievements()) {
-			List<String> hoverText = new ArrayList<String>();
+			List<String> hoverText = new ArrayList<>();
 			hoverText.add(a.getName());
 			hoverText.add(a.getDescription());
 			if (a.getTextureId() == null) {
@@ -82,7 +82,7 @@ public class Search extends Show {
 			achievementGrid.clear();
 			if (textbox.getText().isEmpty()) {
 				for (AchievementPlus a : AchievementManager.getAllAchievements()) {
-					List<String> hoverText = new ArrayList<String>();
+					List<String> hoverText = new ArrayList<>();
 					hoverText.add(a.getName());
 					hoverText.add(a.getDescription());
 					if (a.getTextureId() == null) {
@@ -100,7 +100,7 @@ public class Search extends Show {
 				}
 			} else {
 				for (AchievementPlus a : AchievementManager.findAchievementsByName(textbox.getText())) {
-					List<String> hoverText = new ArrayList<String>();
+					List<String> hoverText = new ArrayList<>();
 					hoverText.add(a.getName());
 					hoverText.add(a.getDescription());
 					if (a.getTextureId() == null) {

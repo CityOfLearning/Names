@@ -46,7 +46,7 @@ public class Info extends Show {
 			registerComponent(new Picture((int) (width * .15), (int) (height * .15), width / 6, width / 6,
 					new ResourceLocation("minecraft", "textures/items/experience_bottle.png")));
 		}
-		ArrayList<ListEntry> ulist = new ArrayList<ListEntry>();
+		ArrayList<ListEntry> ulist = new ArrayList<>();
 
 		if (achievement.hasRequirementOfType(RequirementType.CRAFT)) {
 			ulist.add(new StringEntry("-Craft-"));

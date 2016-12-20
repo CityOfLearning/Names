@@ -32,7 +32,7 @@ public class StudentComamndGui extends GuiScreen {
 	private boolean trackOutput;
 
 	String[] okCmdList = { "/heal", "/say" };
-	List<String> approvedCommands = new ArrayList<String>();
+	List<String> approvedCommands = new ArrayList<>();
 
 	public StudentComamndGui(StudentCommandBlockLogic logic) {
 		localCommandBlock = logic;

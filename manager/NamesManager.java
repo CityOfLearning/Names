@@ -5,11 +5,11 @@ import java.util.Map;
 
 public class NamesManager {
 	// key is minecraft username and value is dyn hash code
-	private static Map<String, Integer> Minecraft2HashKey = new HashMap<String, Integer>();
+	private static Map<String, Integer> Minecraft2HashKey = new HashMap<>();
 	// key is dyn hash code and value is dyn username
-	private static Map<Integer, String> HashKey2DYNUser = new HashMap<Integer, String>();
+	private static Map<Integer, String> HashKey2DYNUser = new HashMap<>();
 	// key is dyn hash code and value is minecraft username
-	private static Map<Integer, String> HashKey2MinecraftUsername = new HashMap<Integer, String>();
+	private static Map<Integer, String> HashKey2MinecraftUsername = new HashMap<>();
 
 	public static void addUsername(String mc_name, String dyn_name) {
 

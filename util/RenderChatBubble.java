@@ -26,8 +26,8 @@ public class RenderChatBubble {
 	private float scale;
 
 	public RenderChatBubble() {
-		formattedMessages = new ArrayList<List<IChatComponent>>();
-		prevMessages = new TreeMap<Long, String>();
+		formattedMessages = new ArrayList<>();
+		prevMessages = new TreeMap<>();
 		boxLength = 46;
 		scale = 0.5f;
 	}

@@ -40,8 +40,8 @@ public class SkinSelect extends Show {
 
 	public SkinSelect() {
 		setBackground(new DefaultBackground());
-		dataFolder = new HashSet<String>();
-		dataTextures = new HashSet<String>();
+		dataFolder = new HashSet<>();
+		dataTextures = new HashSet<>();
 		root = AssetsBrowser.getRoot("dyn:textures/skins/");
 		assets = new AssetsBrowser(root, new String[] { "png" });
 		title = "Skin Select Gui";
@@ -74,7 +74,7 @@ public class SkinSelect extends Show {
 		super.setup();
 
 		dataFolder.clear();
-		Vector<String> list = new Vector<String>();
+		Vector<String> list = new Vector<>();
 		for (String folder : assets.folders) {
 			list.add("/" + folder);
 			dataFolder.add("/" + folder);
@@ -89,7 +89,7 @@ public class SkinSelect extends Show {
 				"Select A Skin - Click and Drag to Rotate", TextAlignment.CENTER));
 
 		// components
-		ArrayList<ListEntry> skinAssets = new ArrayList<ListEntry>();
+		ArrayList<ListEntry> skinAssets = new ArrayList<>();
 
 		skinAssets.add(new StringEntry("--Available Skins--"));
 		for (String s : list) {
