@@ -13,7 +13,6 @@ import com.rabbit.gui.show.Show;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 
 public class DialogHud extends Show {
@@ -29,6 +28,25 @@ public class DialogHud extends Show {
 
 	public DialogHud(EntityLivingBase entity) {
 		this.entity = entity;
+	}
+
+	@Override
+	public void onUpdate() {
+		ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+		width = scaledresolution.getScaledWidth();
+		height = scaledresolution.getScaledHeight();
+
+		entityElement.setX((int) (width * .1));
+		entityElement.setY((int) (height * .685));
+
+		bg.setY((int) (height * .66));
+		bg.setWidth(width);
+		bg.setHeight((int) (height * .33));
+
+		textArea.setX(width / 3);
+		textArea.setY((int) (height * .7));
+		textArea.setWidth((int) (width * .6));
+		textArea.setHeight((int) (height * .2));
 	}
 
 	public void setEntity(EntityLivingBase entity) {
@@ -76,31 +94,12 @@ public class DialogHud extends Show {
 				0, zoom, false));
 
 		entityElement.setRotation((float) ((Math.PI / 4) * 40.0F));
-		
+
 		registerComponent(textArea = new TextLabel(width / 3, (int) (height * .7), (int) (width * .6),
 				(int) (height * .2), "This is a test of the dialog renderer").setMultilined(true));
 
 		registerComponent(bg = new Shape(0, (int) (height * .66), width, (int) (height * .33), ShapeType.RECT,
 				new Color(40, 40, 55, 150)));
-	}
-	
-	@Override
-	public void onUpdate() {
-		ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
-		width = scaledresolution.getScaledWidth();
-		height = scaledresolution.getScaledHeight();
-		
-		entityElement.setX((int) (width * .1));
-		entityElement.setY((int) (height * .685));
-		
-		bg.setY((int) (height * .66));
-		bg.setWidth(width);
-		bg.setHeight((int) (height * .33));
-		
-		textArea.setX(width / 3);
-		textArea.setY((int) (height * .7));
-		textArea.setWidth((int) (width * .6));
-		textArea.setHeight((int) (height * .2));
 	}
 
 }
