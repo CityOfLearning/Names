@@ -21,12 +21,11 @@ import com.dyn.render.hud.DynOverlay;
 import com.dyn.render.hud.builder.BuildUI;
 import com.dyn.render.hud.dialog.DialogHud;
 import com.dyn.render.hud.frozen.Freeze;
-//import com.dyn.render.hud.path.EntityPathRenderer;
+import com.dyn.render.hud.path.EntityPathRenderer;
 import com.dyn.render.manager.NotificationsManager;
 import com.dyn.render.player.PlayerModel;
 import com.dyn.render.player.PlayerRenderer;
 import com.dyn.render.reference.Reference;
-import com.dyn.robot.RobotMod;
 import com.dyn.student.StudentUI;
 import com.dyn.utils.PlayerLevel;
 import com.rabbit.gui.RabbitGui;
@@ -272,14 +271,14 @@ public class Client implements Proxy {
 		RabbitGui.proxy.display(new SetTimerBlock(block));
 	}
 
-//	@SubscribeEvent
-//	public void render(RenderWorldLastEvent event) {
-//		if (RobotMod.currentRobot != null) {
-//			EntityPathRenderer.renderPath(RobotMod.currentRobot);
-//		}
-//
-//		EntityPathRenderer.renderEntityPaths();
-//	}
+	@SubscribeEvent
+	public void render(RenderWorldLastEvent event) {
+		// if (RobotMod.currentRobot != null) {
+		// EntityPathRenderer.renderPath(RobotMod.currentRobot);
+		// }
+
+		EntityPathRenderer.renderEntityPaths();
+	}
 
 	@Override
 	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration) {
