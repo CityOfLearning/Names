@@ -33,7 +33,7 @@ public class Info extends Show {
 	public void setup() {
 		super.setup();
 
-		registerComponent(new TextLabel(width / 3, (int) (height * .15), width / 3, 20,
+		registerComponent(new TextLabel(width / 3, (int) (height * .15), width / 2, 20,
 				"Name: " + achievement.getName(), TextAlignment.LEFT));
 
 		registerComponent(new ScrollTextLabel(width / 3, (int) (height * .24), width / 2, 35,

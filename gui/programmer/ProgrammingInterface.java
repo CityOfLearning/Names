@@ -198,7 +198,7 @@ public class ProgrammingInterface extends Show {
 							savePanel.setVisible(false);
 						}));
 
-		Panel panel = new Panel((int) (width * .55), 0, (int) (width * .45), height);
+		Panel panel = new Panel((int) (width * .55), 0, (int) (width * .45), height).setFocused(true);
 
 		registerComponent(panel);
 		// The Panel background

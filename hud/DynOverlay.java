@@ -24,8 +24,6 @@ public class DynOverlay extends Hud {
 		Map<String, KeyBinding> keys = RenderMod.instance.getKeyBindings();
 		GlStateManager.disableDepth();
 		GlStateManager.depthMask(false);
-		// int xPos = windowWidth - 120;
-		// int yPos = windowHeight - 32;
 		int xPos = 0;
 		int yPos = 0;
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
