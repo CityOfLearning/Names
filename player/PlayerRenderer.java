@@ -38,7 +38,7 @@ public class PlayerRenderer extends RenderPlayerBase {
 				String texture = DBManager.getPlayerSkin(player.getDisplayNameString()).trim();
 				if ((texture != null) && !texture.isEmpty()) {
 					SkinManager.setSkinTexture(player, texture);
-				} 
+				}
 			};
 			// set it to the current texture the thread will run and overwrite
 			// this if it isn't empty
@@ -75,34 +75,36 @@ public class PlayerRenderer extends RenderPlayerBase {
 				if (player.isSneaking()) {
 					FontRenderer fontrenderer = renderPlayerAPI.localGetFontRendererFromRenderManager();
 					GlStateManager.pushMatrix();
-					GlStateManager.translate((float) d1,
-							((float) d2 + player.height + 0.5F) - (player.isChild() ? player.height / 2.0F : 0.0F),
-							(float) d3);
-					GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-					GlStateManager.rotate(-renderPlayerAPI.localGetRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-					GlStateManager.rotate(renderPlayerAPI.localGetRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-					GlStateManager.scale(-0.02666667F, -0.02666667F, 0.02666667F);
-					GlStateManager.translate(0.0F, 9.374999F, 0.0F);
-					GlStateManager.disableLighting();
-					GlStateManager.depthMask(false);
-					GlStateManager.enableBlend();
-					GlStateManager.disableTexture2D();
-					GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-					int i = fontrenderer.getStringWidth(s) / 2;
-					Tessellator tessellator = Tessellator.getInstance();
-					WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-					worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-					worldrenderer.pos(-i - 1, -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-					worldrenderer.pos(-i - 1, 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-					worldrenderer.pos(i + 1, 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-					worldrenderer.pos(i + 1, -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-					tessellator.draw();
-					GlStateManager.enableTexture2D();
-					GlStateManager.depthMask(true);
-					fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 0, 553648127);
-					GlStateManager.enableLighting();
-					GlStateManager.disableBlend();
-					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+					{
+						GlStateManager.translate((float) d1,
+								((float) d2 + player.height + 0.5F) - (player.isChild() ? player.height / 2.0F : 0.0F),
+								(float) d3);
+						GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+						GlStateManager.rotate(-renderPlayerAPI.localGetRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+						GlStateManager.rotate(renderPlayerAPI.localGetRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+						GlStateManager.scale(-0.02666667F, -0.02666667F, 0.02666667F);
+						GlStateManager.translate(0.0F, 9.374999F, 0.0F);
+						GlStateManager.disableLighting();
+						GlStateManager.depthMask(false);
+						GlStateManager.enableBlend();
+						GlStateManager.disableTexture2D();
+						GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+						int i = fontrenderer.getStringWidth(s) / 2;
+						Tessellator tessellator = Tessellator.getInstance();
+						WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+						worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+						worldrenderer.pos(-i - 1, -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos(-i - 1, 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos(i + 1, 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						worldrenderer.pos(i + 1, -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+						tessellator.draw();
+						GlStateManager.enableTexture2D();
+						GlStateManager.depthMask(true);
+						fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 0, 553648127);
+						GlStateManager.enableLighting();
+						GlStateManager.disableBlend();
+						GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+					}
 					GlStateManager.popMatrix();
 				} else {
 					renderPlayerAPI.localRenderLivingLabel(player, s, d1,

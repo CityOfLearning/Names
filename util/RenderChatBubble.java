@@ -109,65 +109,67 @@ public class RenderChatBubble {
 		float var13 = 1.6f;
 		float var14 = 0.016666668f * var13;
 		GlStateManager.pushMatrix();
-		int size = 0;
-		for (List<IChatComponent> block : formattedMessages) {
-			size += block.size();
-		}
-		Minecraft mc = Minecraft.getMinecraft();
-		int textYSize = (int) (size * font.FONT_HEIGHT * scale);
-		GlStateManager.translate((float) par3 + 0.0f, (float) par5 + (textYSize * textscale * var14), (float) par7);
-		GlStateManager.scale(textscale, textscale, textscale);
-		GL11.glNormal3f(0.0f, 1.0f, 0.0f);
-		GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0f, 1.0f, 0.0f);
-		GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0f, 0.0f, 0.0f);
-		GlStateManager.scale(-var14, -var14, var14);
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-		GlStateManager.depthMask(true);
-		GlStateManager.disableLighting();
-		GlStateManager.enableBlend();
-		if (depth) {
-			GlStateManager.enableDepth();
-		} else {
-			GlStateManager.disableDepth();
-		}
-		int black = depth ? -16777216 : 1426063360;
-		int white = depth ? -1140850689 : 1157627903;
-		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-		GlStateManager.disableTexture2D();
-		drawRect(-boxLength - 2, -2, boxLength + 2, textYSize + 1, white, 0.11);
-		drawRect(-boxLength - 1, -3, boxLength + 1, -2, black, 0.1);
-		drawRect(-boxLength - 1, textYSize + 2, -1, textYSize + 1, black, 0.1);
-		drawRect(3, textYSize + 2, boxLength + 1, textYSize + 1, black, 0.1);
-		drawRect(-boxLength - 3, -1, -boxLength - 2, textYSize, black, 0.1);
-		drawRect(boxLength + 3, -1, boxLength + 2, textYSize, black, 0.1);
-		drawRect(-boxLength - 2, -2, -boxLength - 1, -1, black, 0.1);
-		drawRect(boxLength + 2, -2, boxLength + 1, -1, black, 0.1);
-		drawRect(-boxLength - 2, textYSize + 1, -boxLength - 1, textYSize, black, 0.1);
-		drawRect(boxLength + 2, textYSize + 1, boxLength + 1, textYSize, black, 0.1);
-		drawRect(0, textYSize + 1, 3, textYSize + 4, white, 0.11);
-		drawRect(-1, textYSize + 4, 1, textYSize + 5, white, 0.11);
-		drawRect(-1, textYSize + 1, 0, textYSize + 4, black, 0.1);
-		drawRect(3, textYSize + 1, 4, textYSize + 3, black, 0.1);
-		drawRect(2, textYSize + 3, 3, textYSize + 4, black, 0.1);
-		drawRect(1, textYSize + 4, 2, textYSize + 5, black, 0.1);
-		drawRect(-2, textYSize + 4, -1, textYSize + 5, black, 0.1);
-		drawRect(-2, textYSize + 5, 1, textYSize + 6, black, 0.1);
-		GlStateManager.enableTexture2D();
-		GlStateManager.depthMask(true);
-		GlStateManager.scale(scale, scale, scale);
-		int index = 0;
-		for (List<IChatComponent> block2 : formattedMessages) {
-			for (IChatComponent chat : block2) {
-				String message = chat.getFormattedText();
-				Minecraft.getMinecraft().fontRendererObj.drawString(message, -font.getStringWidth(message) / 2,
-						index * font.FONT_HEIGHT, black, false);
-				++index;
+		{
+			int size = 0;
+			for (List<IChatComponent> block : formattedMessages) {
+				size += block.size();
 			}
+			Minecraft mc = Minecraft.getMinecraft();
+			int textYSize = (int) (size * font.FONT_HEIGHT * scale);
+			GlStateManager.translate((float) par3 + 0.0f, (float) par5 + (textYSize * textscale * var14), (float) par7);
+			GlStateManager.scale(textscale, textscale, textscale);
+			GL11.glNormal3f(0.0f, 1.0f, 0.0f);
+			GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0f, 1.0f, 0.0f);
+			GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0f, 0.0f, 0.0f);
+			GlStateManager.scale(-var14, -var14, var14);
+			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+			GlStateManager.depthMask(true);
+			GlStateManager.disableLighting();
+			GlStateManager.enableBlend();
+			if (depth) {
+				GlStateManager.enableDepth();
+			} else {
+				GlStateManager.disableDepth();
+			}
+			int black = depth ? -16777216 : 1426063360;
+			int white = depth ? -1140850689 : 1157627903;
+			GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+			GlStateManager.disableTexture2D();
+			drawRect(-boxLength - 2, -2, boxLength + 2, textYSize + 1, white, 0.11);
+			drawRect(-boxLength - 1, -3, boxLength + 1, -2, black, 0.1);
+			drawRect(-boxLength - 1, textYSize + 2, -1, textYSize + 1, black, 0.1);
+			drawRect(3, textYSize + 2, boxLength + 1, textYSize + 1, black, 0.1);
+			drawRect(-boxLength - 3, -1, -boxLength - 2, textYSize, black, 0.1);
+			drawRect(boxLength + 3, -1, boxLength + 2, textYSize, black, 0.1);
+			drawRect(-boxLength - 2, -2, -boxLength - 1, -1, black, 0.1);
+			drawRect(boxLength + 2, -2, boxLength + 1, -1, black, 0.1);
+			drawRect(-boxLength - 2, textYSize + 1, -boxLength - 1, textYSize, black, 0.1);
+			drawRect(boxLength + 2, textYSize + 1, boxLength + 1, textYSize, black, 0.1);
+			drawRect(0, textYSize + 1, 3, textYSize + 4, white, 0.11);
+			drawRect(-1, textYSize + 4, 1, textYSize + 5, white, 0.11);
+			drawRect(-1, textYSize + 1, 0, textYSize + 4, black, 0.1);
+			drawRect(3, textYSize + 1, 4, textYSize + 3, black, 0.1);
+			drawRect(2, textYSize + 3, 3, textYSize + 4, black, 0.1);
+			drawRect(1, textYSize + 4, 2, textYSize + 5, black, 0.1);
+			drawRect(-2, textYSize + 4, -1, textYSize + 5, black, 0.1);
+			drawRect(-2, textYSize + 5, 1, textYSize + 6, black, 0.1);
+			GlStateManager.enableTexture2D();
+			GlStateManager.depthMask(true);
+			GlStateManager.scale(scale, scale, scale);
+			int index = 0;
+			for (List<IChatComponent> block2 : formattedMessages) {
+				for (IChatComponent chat : block2) {
+					String message = chat.getFormattedText();
+					Minecraft.getMinecraft().fontRendererObj.drawString(message, -font.getStringWidth(message) / 2,
+							index * font.FONT_HEIGHT, black, false);
+					++index;
+				}
+			}
+			GlStateManager.enableLighting();
+			GlStateManager.disableBlend();
+			GlStateManager.enableDepth();
+			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		}
-		GlStateManager.enableLighting();
-		GlStateManager.disableBlend();
-		GlStateManager.enableDepth();
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		GlStateManager.popMatrix();
 	}
 
