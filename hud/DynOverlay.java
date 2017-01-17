@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.dyn.DYNServerMod;
 import com.dyn.render.RenderMod;
-import com.dyn.utils.PlayerLevel;
+import com.dyn.utils.PlayerAccessLevel;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
@@ -33,13 +33,13 @@ public class DynOverlay extends Hud {
 		if (!isHidden) {
 			xPos += drawTab(xPos, yPos, "Achiev", "ements",
 					"(" + Keyboard.getKeyName(keys.get("achievement").getKeyCode()) + ")");
-			if (DYNServerMod.accessLevel == PlayerLevel.ADMIN) {
+			if (DYNServerMod.accessLevel == PlayerAccessLevel.ADMIN) {
 				xPos += drawTab(xPos, yPos, "Admin", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("admin").getKeyCode()) + ")");
-			} else if (DYNServerMod.accessLevel == PlayerLevel.MENTOR) {
+			} else if (DYNServerMod.accessLevel == PlayerAccessLevel.MENTOR) {
 				xPos += drawTab(xPos, yPos, "Mentor", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("mentor").getKeyCode()) + ")");
-			} else if (DYNServerMod.accessLevel == PlayerLevel.STUDENT) {
+			} else if (DYNServerMod.accessLevel == PlayerAccessLevel.STUDENT) {
 				xPos += drawTab(xPos, yPos, "Student", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("student").getKeyCode()) + ")");
 			}
@@ -49,13 +49,13 @@ public class DynOverlay extends Hud {
 		} else {
 			xPos += drawHiddenTab(xPos, yPos, "Achiev", "ements",
 					"(" + Keyboard.getKeyName(keys.get("achievement").getKeyCode()) + ")");
-			if (DYNServerMod.accessLevel == PlayerLevel.ADMIN) {
+			if (DYNServerMod.accessLevel == PlayerAccessLevel.ADMIN) {
 				xPos += drawHiddenTab(xPos, yPos, "Admin", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("admin").getKeyCode()) + ")");
-			} else if (DYNServerMod.accessLevel == PlayerLevel.MENTOR) {
+			} else if (DYNServerMod.accessLevel == PlayerAccessLevel.MENTOR) {
 				xPos += drawHiddenTab(xPos, yPos, "Mentor", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("mentor").getKeyCode()) + ")");
-			} else if (DYNServerMod.accessLevel == PlayerLevel.STUDENT) {
+			} else if (DYNServerMod.accessLevel == PlayerAccessLevel.STUDENT) {
 				xPos += drawHiddenTab(xPos, yPos, "Student", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("student").getKeyCode()) + ")");
 			}
