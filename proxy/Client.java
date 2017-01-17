@@ -11,6 +11,7 @@ import com.dyn.betterachievements.handler.GuiOpenHandler;
 import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.proximity.ProximityBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.timer.TimerBlockTileEntity;
+import com.dyn.render.RenderMod;
 import com.dyn.render.gui.achievement.Search;
 import com.dyn.render.gui.dialog.EditDialogBlock;
 import com.dyn.render.gui.programmer.ProgrammingInterface;
@@ -26,8 +27,10 @@ import com.dyn.render.manager.NotificationsManager;
 import com.dyn.render.player.PlayerModel;
 import com.dyn.render.player.PlayerRenderer;
 import com.dyn.render.reference.Reference;
+import com.dyn.server.network.NetworkManager;
+import com.dyn.server.network.packets.server.RequestWorldZonesMessage;
 import com.dyn.student.StudentUI;
-import com.dyn.utils.PlayerLevel;
+import com.dyn.utils.PlayerAccessLevel;
 import com.rabbit.gui.RabbitGui;
 
 import api.player.model.ModelPlayerAPI;
@@ -116,7 +119,7 @@ public class Client implements Proxy {
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event) {
 		// stop unintended command block manipulations
-		if ((event.gui instanceof GuiCommandBlock) && !(DYNServerMod.accessLevel == PlayerLevel.ADMIN)) {
+		if ((event.gui instanceof GuiCommandBlock) && !(DYNServerMod.accessLevel == PlayerAccessLevel.ADMIN)) {
 			event.setCanceled(true);
 			return;
 		}
@@ -147,8 +150,13 @@ public class Client implements Proxy {
 			RabbitGui.proxy.display(new Search());
 		}
 
-		if ((DYNServerMod.accessLevel == PlayerLevel.ADMIN) && buildKey.isPressed() && !Keyboard.isRepeatEvent()) {
+		if ((DYNServerMod.accessLevel == PlayerAccessLevel.ADMIN) && buildKey.isPressed()
+				&& !Keyboard.isRepeatEvent()) {
 			DYNServerMod.logger.info("Build Gui Opened");
+			if (!BuildUI.isOpen) {
+				NetworkManager
+						.sendToServer(new RequestWorldZonesMessage(Minecraft.getMinecraft().thePlayer.dimension, true));
+			}
 			BuildUI.isOpen = !BuildUI.isOpen;
 		}
 
@@ -278,6 +286,12 @@ public class Client implements Proxy {
 		// }
 
 		EntityPathRenderer.renderEntityPaths();
+
+		if (BuildUI.isOpen) {
+			for (String key : RenderMod.zoneAreas.keySet()) {
+				BuildUI.drawZone(RenderMod.zoneAreas.get(key), key, event.partialTicks);
+			}
+		}
 	}
 
 	@Override

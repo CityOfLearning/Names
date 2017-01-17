@@ -10,6 +10,9 @@ import com.dyn.render.proxy.Proxy;
 import com.dyn.render.reference.MetaData;
 import com.dyn.render.reference.Reference;
 import com.dyn.student.StudentUI;
+import com.dyn.utils.BooleanListener;
+import com.forgeessentials.commons.selections.AreaBase;
+import com.google.common.collect.Maps;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -23,6 +26,9 @@ public class RenderMod {
 
 	@SidedProxy(modId = Reference.MOD_ID, clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static Proxy proxy;
+
+	public static Map<String, AreaBase> zoneAreas = Maps.newHashMap();
+	public static BooleanListener zoneAreasMessageRecieved = new BooleanListener(false);
 
 	public <T> Map<String, T> getKeyBindings() {
 		Map<String, T> keys = new HashMap();
