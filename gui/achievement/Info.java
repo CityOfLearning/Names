@@ -17,6 +17,7 @@ import com.rabbit.gui.render.TextAlignment;
 import com.rabbit.gui.show.Show;
 import com.rabbit.gui.utils.TextureHelper;
 
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 public class Info extends Show {
@@ -53,11 +54,13 @@ public class Info extends Show {
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.CRAFT)) {
 			if (r.getTotalAquired() == r.getTotalNeeded()) {
-				ulist.add(new StringEntry("\u00a72\u00a7m" + r.getRequirementEntityName() + "\u00a7r - \u00a7a"
+				ulist.add(new StringEntry(EnumChatFormatting.DARK_GREEN + "" + EnumChatFormatting.STRIKETHROUGH
+						+ r.getRequirementEntityName() + EnumChatFormatting.RESET + " - " + EnumChatFormatting.GREEN
 						+ r.getTotalAquired() + "/" + r.getTotalNeeded()));
 			} else {
-				ulist.add(new StringEntry("\u00a76" + r.getRequirementEntityName() + " - \u00a7c" + r.getTotalAquired()
-						+ "\u00a7r/\u00a7a" + r.getTotalNeeded()));
+				ulist.add(new StringEntry(EnumChatFormatting.GOLD + r.getRequirementEntityName() + " - "
+						+ EnumChatFormatting.RED + r.getTotalAquired() + EnumChatFormatting.RESET + "/"
+						+ EnumChatFormatting.GREEN + r.getTotalNeeded()));
 			}
 		}
 
@@ -66,11 +69,13 @@ public class Info extends Show {
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.SMELT)) {
 			if (r.getTotalAquired() == r.getTotalNeeded()) {
-				ulist.add(new StringEntry("\u00a72\u00a7m" + r.getRequirementEntityName() + "\u00a7r - \u00a7a"
+				ulist.add(new StringEntry(EnumChatFormatting.DARK_GREEN + "" + EnumChatFormatting.STRIKETHROUGH
+						+ r.getRequirementEntityName() + EnumChatFormatting.RESET + " - " + EnumChatFormatting.GREEN
 						+ r.getTotalAquired() + "/" + r.getTotalNeeded()));
 			} else {
-				ulist.add(new StringEntry("\u00a76" + r.getRequirementEntityName() + " - \u00a7c" + r.getTotalAquired()
-						+ "\u00a7r/\u00a7a" + r.getTotalNeeded()));
+				ulist.add(new StringEntry(EnumChatFormatting.GOLD + r.getRequirementEntityName() + " - "
+						+ EnumChatFormatting.RED + r.getTotalAquired() + EnumChatFormatting.RESET + "/"
+						+ EnumChatFormatting.GREEN + r.getTotalNeeded()));
 			}
 		}
 
@@ -79,11 +84,13 @@ public class Info extends Show {
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.PICKUP)) {
 			if (r.getTotalAquired() == r.getTotalNeeded()) {
-				ulist.add(new StringEntry("\u00a72\u00a7m" + r.getRequirementEntityName() + "\u00a7r - \u00a7a"
+				ulist.add(new StringEntry(EnumChatFormatting.DARK_GREEN + "" + EnumChatFormatting.STRIKETHROUGH
+						+ r.getRequirementEntityName() + EnumChatFormatting.RESET + " - " + EnumChatFormatting.GREEN
 						+ r.getTotalAquired() + "/" + r.getTotalNeeded()));
 			} else {
-				ulist.add(new StringEntry("\u00a76" + r.getRequirementEntityName() + " - \u00a7c" + r.getTotalAquired()
-						+ "\u00a7r/\u00a7a" + r.getTotalNeeded()));
+				ulist.add(new StringEntry(EnumChatFormatting.GOLD + r.getRequirementEntityName() + " - "
+						+ EnumChatFormatting.RED + r.getTotalAquired() + EnumChatFormatting.RESET + "/"
+						+ EnumChatFormatting.GREEN + r.getTotalNeeded()));
 			}
 		}
 
@@ -92,11 +99,13 @@ public class Info extends Show {
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.STAT)) {
 			if (r.getTotalAquired() == r.getTotalNeeded()) {
-				ulist.add(new StringEntry("\u00a72\u00a7m" + r.getRequirementEntityName() + "\u00a7r - \u00a7a"
+				ulist.add(new StringEntry(EnumChatFormatting.DARK_GREEN + "" + EnumChatFormatting.STRIKETHROUGH
+						+ r.getRequirementEntityName() + EnumChatFormatting.RESET + " - " + EnumChatFormatting.GREEN
 						+ r.getTotalAquired() + "/" + r.getTotalNeeded()));
 			} else {
-				ulist.add(new StringEntry("\u00a76" + r.getRequirementEntityName() + " - \u00a7c" + r.getTotalAquired()
-						+ "\u00a7r/\u00a7a" + r.getTotalNeeded()));
+				ulist.add(new StringEntry(EnumChatFormatting.GOLD + r.getRequirementEntityName() + " - "
+						+ EnumChatFormatting.RED + r.getTotalAquired() + EnumChatFormatting.RESET + "/"
+						+ EnumChatFormatting.GREEN + r.getTotalNeeded()));
 			}
 		}
 
@@ -105,11 +114,13 @@ public class Info extends Show {
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.KILL)) {
 			if (r.getTotalAquired() == r.getTotalNeeded()) {
-				ulist.add(new StringEntry("\u00a72\u00a7m" + r.getRequirementEntityName() + "\u00a7r - \u00a7a"
+				ulist.add(new StringEntry(EnumChatFormatting.DARK_GREEN + "" + EnumChatFormatting.STRIKETHROUGH
+						+ r.getRequirementEntityName() + EnumChatFormatting.RESET + " - " + EnumChatFormatting.GREEN
 						+ r.getTotalAquired() + "/" + r.getTotalNeeded()));
 			} else {
-				ulist.add(new StringEntry("\u00a76" + r.getRequirementEntityName() + " - \u00a7c" + r.getTotalAquired()
-						+ "\u00a7r/\u00a7a" + r.getTotalNeeded()));
+				ulist.add(new StringEntry(EnumChatFormatting.GOLD + r.getRequirementEntityName() + " - "
+						+ EnumChatFormatting.RED + r.getTotalAquired() + EnumChatFormatting.RESET + "/"
+						+ EnumChatFormatting.GREEN + r.getTotalNeeded()));
 			}
 		}
 
@@ -118,11 +129,13 @@ public class Info extends Show {
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.BREW)) {
 			if (r.getTotalAquired() == r.getTotalNeeded()) {
-				ulist.add(new StringEntry("\u00a72\u00a7m" + r.getRequirementEntityName() + "\u00a7r - \u00a7a"
+				ulist.add(new StringEntry(EnumChatFormatting.DARK_GREEN + "" + EnumChatFormatting.STRIKETHROUGH
+						+ r.getRequirementEntityName() + EnumChatFormatting.RESET + " - " + EnumChatFormatting.GREEN
 						+ r.getTotalAquired() + "/" + r.getTotalNeeded()));
 			} else {
-				ulist.add(new StringEntry("\u00a76" + r.getRequirementEntityName() + " - \u00a7c" + r.getTotalAquired()
-						+ "\u00a7r/\u00a7a" + r.getTotalNeeded()));
+				ulist.add(new StringEntry(EnumChatFormatting.GOLD + r.getRequirementEntityName() + " - "
+						+ EnumChatFormatting.RED + r.getTotalAquired() + EnumChatFormatting.RESET + "/"
+						+ EnumChatFormatting.GREEN + r.getTotalNeeded()));
 			}
 		}
 
@@ -131,11 +144,13 @@ public class Info extends Show {
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.PLACE)) {
 			if (r.getTotalAquired() == r.getTotalNeeded()) {
-				ulist.add(new StringEntry("\u00a72\u00a7m" + r.getRequirementEntityName() + "\u00a7r - \u00a7a"
+				ulist.add(new StringEntry(EnumChatFormatting.DARK_GREEN + "" + EnumChatFormatting.STRIKETHROUGH
+						+ r.getRequirementEntityName() + EnumChatFormatting.RESET + " - " + EnumChatFormatting.GREEN
 						+ r.getTotalAquired() + "/" + r.getTotalNeeded()));
 			} else {
-				ulist.add(new StringEntry("\u00a76" + r.getRequirementEntityName() + " - \u00a7c" + r.getTotalAquired()
-						+ "\u00a7r/\u00a7a" + r.getTotalNeeded()));
+				ulist.add(new StringEntry(EnumChatFormatting.GOLD + r.getRequirementEntityName() + " - "
+						+ EnumChatFormatting.RED + r.getTotalAquired() + EnumChatFormatting.RESET + "/"
+						+ EnumChatFormatting.GREEN + r.getTotalNeeded()));
 			}
 		}
 		if (achievement.hasRequirementOfType(RequirementType.BREAK)) {
@@ -143,19 +158,23 @@ public class Info extends Show {
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.BREAK)) {
 			if (r.getTotalAquired() == r.getTotalNeeded()) {
-				ulist.add(new StringEntry("\u00a72\u00a7m" + r.getRequirementEntityName() + "\u00a7r - \u00a7a"
+				ulist.add(new StringEntry(EnumChatFormatting.DARK_GREEN + "" + EnumChatFormatting.STRIKETHROUGH
+						+ r.getRequirementEntityName() + EnumChatFormatting.RESET + " - " + EnumChatFormatting.GREEN
 						+ r.getTotalAquired() + "/" + r.getTotalNeeded()));
 			} else {
-				ulist.add(new StringEntry("\u00a76" + r.getRequirementEntityName() + " - \u00a7c" + r.getTotalAquired()
-						+ "\u00a7r/\u00a7a" + r.getTotalNeeded()));
+				ulist.add(new StringEntry(EnumChatFormatting.GOLD + r.getRequirementEntityName() + " - "
+						+ EnumChatFormatting.RED + r.getTotalAquired() + EnumChatFormatting.RESET + "/"
+						+ EnumChatFormatting.GREEN + r.getTotalNeeded()));
 			}
 		}
 		if (achievement.hasRequirementOfType(RequirementType.LOCATION)) {
 			ulist.add(new StringEntry("-Location-"));
 		}
 		for (BaseRequirement r : achievement.getRequirements().getRequirementsByType(RequirementType.LOCATION)) {
-			ulist.add(new StringEntry((r.getTotalAquired() > 0 ? "[\u00a7aX\u00a7r] - \u00a72" : "[ ] - \u00a7e")
-					+ r.getRequirementEntityName()).setTextAlignment(TextAlignment.LEFT));
+			ulist.add(new StringEntry(
+					(r.getTotalAquired() > 0 ? "[" + EnumChatFormatting.GREEN + "X" + EnumChatFormatting.RESET + "] - "
+							+ EnumChatFormatting.DARK_GREEN : "[ ] - " + EnumChatFormatting.YELLOW)
+							+ r.getRequirementEntityName()).setTextAlignment(TextAlignment.LEFT));
 		}
 		if (achievement.hasRequirementOfType(RequirementType.MENTOR)) {
 			ulist.add(new StringEntry("-Mentor-"));
