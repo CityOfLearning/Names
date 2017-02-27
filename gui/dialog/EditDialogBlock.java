@@ -1,8 +1,10 @@
 package com.dyn.render.gui.dialog;
 
 import java.awt.Color;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.server.network.NetworkManager;
 import com.dyn.server.network.messages.MessageDialogUpdate;
 import com.rabbit.gui.component.control.Button;
+import com.rabbit.gui.component.control.CheckBox;
 import com.rabbit.gui.component.control.DropDown;
 import com.rabbit.gui.component.control.MultiTextbox;
 import com.rabbit.gui.component.control.TextBox;
@@ -17,10 +20,15 @@ import com.rabbit.gui.component.display.Picture;
 import com.rabbit.gui.component.display.TextLabel;
 import com.rabbit.gui.show.Show;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import noppes.npcs.client.AssetsBrowser;
 
 public class EditDialogBlock extends Show {
@@ -38,6 +46,7 @@ public class EditDialogBlock extends Show {
 	private String root;
 	public AssetsBrowser assets;
 	protected HashSet<String> dataTextures;
+	private boolean interupt;
 
 	public EditDialogBlock(DialogBlockTileEntity block) {
 		title = "Edit Dialog Block";
@@ -49,7 +58,8 @@ public class EditDialogBlock extends Show {
 		y2 = block.getCorner2().getY();
 		z2 = block.getCorner2().getZ();
 		text = block.getText();
-
+		interupt = block.doesInterrupt();
+		
 		root = AssetsBrowser.getRoot("dyn:textures/skins/");
 		assets = new AssetsBrowser(root, new String[] { "png" });
 	}
@@ -85,6 +95,26 @@ public class EditDialogBlock extends Show {
 		entityTypes.add("DisplayEntity", 90);
 		entityTypes.add("DisplayHead", 90);
 
+		HashMap<String, Class<? extends EntityLivingBase>> data = new HashMap<String, Class<? extends EntityLivingBase>>();
+		for (String name : EntityList.stringToClassMapping.keySet()) {
+			Class<? extends Entity> c = EntityList.stringToClassMapping.get(name);
+			try {
+				if (!EntityLiving.class.isAssignableFrom(c) || (c.getConstructor(World.class) == null)
+						|| Modifier.isAbstract(c.getModifiers()) || !(Minecraft.getMinecraft().getRenderManager()
+								.getEntityClassRenderObject((Class) c) instanceof RendererLivingEntity)) {
+					continue;
+				}
+				String s = name.toString();
+				if (s.toLowerCase().contains("customnpc")) {
+					continue;
+				}
+				data.put(name.toString(), c.asSubclass(EntityLivingBase.class));
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException ex) {
+			}
+		}
+		
 		registerComponent(
 				new TextLabel((int) (width * .625), (int) (height * .25), 100, 15, Color.black, "Display Skin:"));
 
@@ -205,9 +235,14 @@ public class EditDialogBlock extends Show {
 		registerComponent(new Button((int) (width * .5), (int) (height * .8125), 120, 20, "Update Dialog Block")
 				.setClickListener(btn -> {
 					NetworkManager.sendToServer(new MessageDialogUpdate(entity, entitySkin, block.getPos(), text,
-							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2)));
+							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2), interupt));
 					getStage().close();
 				}));
+		
+		registerComponent(new CheckBox((int) (width * .175), (int) (height * .8125), 15, 15, "Does Interrupt Game", block.doesInterrupt()).setStatusChangedListener(chkbx -> {
+					interupt = chkbx.isChecked();
+				}));
+		
 		// The background
 		registerComponent(new Picture((int) (width * .1125), (int) (height * .05), (int) (width * (6.0 / 8.0)),
 				(int) (height * .9), new ResourceLocation("dyn", "textures/gui/background.png")));

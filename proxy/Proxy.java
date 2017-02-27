@@ -24,7 +24,7 @@ public interface Proxy {
 
 	public void openSetTimerInterface(TimerBlockTileEntity block);
 
-	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration);
+	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration, boolean interupt);
 
 	public void toggleRenderProgramInterface(boolean state);
 }

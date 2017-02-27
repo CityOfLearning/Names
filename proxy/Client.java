@@ -281,10 +281,6 @@ public class Client implements Proxy {
 
 	@SubscribeEvent
 	public void render(RenderWorldLastEvent event) {
-		// if (RobotMod.currentRobot != null) {
-		// EntityPathRenderer.renderPath(RobotMod.currentRobot);
-		// }
-
 		EntityPathRenderer.renderEntityPaths();
 
 		if (BuildUI.isOpen) {
@@ -295,21 +291,29 @@ public class Client implements Proxy {
 	}
 
 	@Override
-	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration) {
-		showDialog = state;
-		if (state) {
-			if (!hasShown) {
-				if (entity == null) {
-					RabbitGui.proxy.display(dialog = new DialogHud());
-				} else {
-					RabbitGui.proxy.display(dialog = new DialogHud(entity));
-				}
-				RabbitGui.proxy.getCurrentStage().close();
-				hasShown = true;
+	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration, boolean interupt) {
+		if (interupt) {
+			if (entity == null) {
+				RabbitGui.proxy.display(new DialogHud(text, true));
+			} else {
+				RabbitGui.proxy.display(new DialogHud(entity, text, true));
 			}
-			dialog.setRenderText(text);
-			dialog.setEntity(entity);
-			dialogDuration = duration;
+		} else {
+			showDialog = state;
+			if (state) {
+				if (!hasShown) {
+					if (entity == null) {
+						RabbitGui.proxy.display(dialog = new DialogHud());
+					} else {
+						RabbitGui.proxy.display(dialog = new DialogHud(entity, false));
+					}
+					RabbitGui.proxy.getCurrentStage().close();
+					hasShown = true;
+				}
+				dialog.setRenderText(text);
+				dialog.setEntity(entity);
+				dialogDuration = duration;
+			}
 		}
 
 	}

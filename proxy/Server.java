@@ -51,7 +51,7 @@ public class Server implements Proxy {
 	}
 
 	@Override
-	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration) {
+	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration, boolean interupt) {
 		// TODO Auto-generated method stub
 
 	}
