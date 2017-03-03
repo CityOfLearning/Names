@@ -1,10 +1,8 @@
 package com.dyn.render.gui.dialog;
 
 import java.awt.Color;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,16 +18,13 @@ import com.rabbit.gui.component.display.Picture;
 import com.rabbit.gui.component.display.TextLabel;
 import com.rabbit.gui.show.Show;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.util.StatCollector;
 import noppes.npcs.client.AssetsBrowser;
+import noppes.npcs.entity.EntityNPCInterface;
 
 public class EditDialogBlock extends Show {
 
@@ -41,7 +36,7 @@ public class EditDialogBlock extends Show {
 	private int x1, y1, z1, x2, y2, z2;
 
 	DropDown<String> textureList;
-	DropDown<Integer> entityTypes;
+	DropDown<String> entityTypes;
 
 	private String root;
 	public AssetsBrowser assets;
@@ -59,7 +54,7 @@ public class EditDialogBlock extends Show {
 		z2 = block.getCorner2().getZ();
 		text = block.getText();
 		interupt = block.doesInterrupt();
-		
+
 		root = AssetsBrowser.getRoot("dyn:textures/skins/");
 		assets = new AssetsBrowser(root, new String[] { "png" });
 	}
@@ -70,51 +65,29 @@ public class EditDialogBlock extends Show {
 		registerComponent(
 				new TextLabel((int) (width * .625), (int) (height * .1), 100, 15, Color.black, "Display Entity:"));
 
-		registerComponent(entityTypes = new DropDown<Integer>((int) (width * .625), (int) (height * .15), 90, 15,
+		registerComponent(entityTypes = new DropDown<String>((int) (width * .625), (int) (height * .15), 90, 15,
 				block.getEntity() != null ? block.getEntity().getName() : "").setDrawUnicode(true)
-						.setItemSelectedListener((DropDown<Integer> dropdown, String selected) -> {
-							if (dropdown.getElement(selected).getValue() != 90) {
-								entity = "" + dropdown.getElement(selected).getValue();
-							} else {
-								entity = selected;
-							}
+						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
+							entity = "" + dropdown.getElement(selected).getValue();
 						}));
 
-		for (String entityname : EntityList.getEntityNameList()) {
-			// we probably dont want npc characters since they don't play by the
-			// same rules
-			if (!entityname.contains("npc") && !entityname.contains("LightningBolt")
-					&& !entityname.contains("ArmorStand")) {
-				if (EntityLivingBase.class
-						.isAssignableFrom(EntityList.getClassFromID(EntityList.getIDFromString(entityname)))) {
-					entityTypes.add(entityname, EntityList.getIDFromString(entityname));
-				}
+		for (String entity : EntityList.stringToClassMapping.keySet()) {
+			Class cl = EntityList.stringToClassMapping.get(entity);
+			if (entity.contains("LightningBolt")) {
+				continue;
 			}
+			if (EntityNPCInterface.class.isAssignableFrom(cl)) {
+				continue;
+			}
+			if (!EntityLivingBase.class.isAssignableFrom(cl)) {
+				continue;
+			}
+			entityTypes.add(StatCollector.translateToLocal("entity." + entity + ".name"), entity);
 		}
 
-		entityTypes.add("DisplayEntity", 90);
-		entityTypes.add("DisplayHead", 90);
+		entityTypes.add("Fake Player", "DisplayEntity");
+		entityTypes.add("Fake Player Head", "DisplayHead");
 
-		HashMap<String, Class<? extends EntityLivingBase>> data = new HashMap<String, Class<? extends EntityLivingBase>>();
-		for (String name : EntityList.stringToClassMapping.keySet()) {
-			Class<? extends Entity> c = EntityList.stringToClassMapping.get(name);
-			try {
-				if (!EntityLiving.class.isAssignableFrom(c) || (c.getConstructor(World.class) == null)
-						|| Modifier.isAbstract(c.getModifiers()) || !(Minecraft.getMinecraft().getRenderManager()
-								.getEntityClassRenderObject((Class) c) instanceof RendererLivingEntity)) {
-					continue;
-				}
-				String s = name.toString();
-				if (s.toLowerCase().contains("customnpc")) {
-					continue;
-				}
-				data.put(name.toString(), c.asSubclass(EntityLivingBase.class));
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (NoSuchMethodException ex) {
-			}
-		}
-		
 		registerComponent(
 				new TextLabel((int) (width * .625), (int) (height * .25), 100, 15, Color.black, "Display Skin:"));
 
@@ -130,8 +103,6 @@ public class EditDialogBlock extends Show {
 		Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
 
 		for (String skin : list) {
-			// we probably dont want npc characters since they don't play by the
-			// same rules
 			textureList.add(skin);
 		}
 
@@ -238,11 +209,12 @@ public class EditDialogBlock extends Show {
 							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2), interupt));
 					getStage().close();
 				}));
-		
-		registerComponent(new CheckBox((int) (width * .175), (int) (height * .8125), 15, 15, "Does Interrupt Game", block.doesInterrupt()).setStatusChangedListener(chkbx -> {
+
+		registerComponent(new CheckBox((int) (width * .175), (int) (height * .8125), 15, 15, "Does Interrupt Game",
+				block.doesInterrupt()).setStatusChangedListener(chkbx -> {
 					interupt = chkbx.isChecked();
 				}));
-		
+
 		// The background
 		registerComponent(new Picture((int) (width * .1125), (int) (height * .05), (int) (width * (6.0 / 8.0)),
 				(int) (height * .9), new ResourceLocation("dyn", "textures/gui/background.png")));
