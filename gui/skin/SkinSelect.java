@@ -49,7 +49,7 @@ public class SkinSelect extends Show {
 		String texture = SkinManager.getSkinTexture(Minecraft.getMinecraft().thePlayer);
 		playerSkin = Minecraft.getMinecraft().getNetHandler()
 				.getPlayerInfo(Minecraft.getMinecraft().thePlayer.getName()).getLocationSkin();
-		if (texture != null) {
+		if ((texture != null) && !texture.isEmpty()) {
 			entity.setTexture(new ResourceLocation(texture));
 		} else {
 			entity.setTexture(playerSkin);

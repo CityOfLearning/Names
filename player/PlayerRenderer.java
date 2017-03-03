@@ -27,8 +27,13 @@ public class PlayerRenderer extends RenderPlayerBase {
 	public boolean bindEntityTexture(AbstractClientPlayer player) {
 		if (SkinManager.hasSkinTexture(player)) {
 			// attach our texture
-			if ((SkinManager.getSkinTexture(player) != null) || (SkinManager.getSkinTexture(player) != "")) {
-				return SkinManager.bindSkinTexture(player);
+			if ((SkinManager.getSkinTexture(player) != null) && !(SkinManager.getSkinTexture(player).isEmpty())) {
+				if (SkinManager.bindSkinTexture(player)) {
+					return true;
+				} else {
+					return super.bindEntityTexture(player);
+				}
+
 			} else {
 				return super.bindEntityTexture(player);
 			}
@@ -43,10 +48,9 @@ public class PlayerRenderer extends RenderPlayerBase {
 			// set it to the current texture the thread will run and overwrite
 			// this if it isn't empty
 			// SkinManager.setSkinTexture(player,
-			// renderPlayerAPI.localGetEntityTexture(player).toString());
 			// SkinManager.setSkinTexture(player, "");
-			SkinManager.setSkinTexture(player, Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName())
-					.getLocationSkin().toString());
+			SkinManager.setSkinTexture(player,
+					Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getLocationSkin());
 
 			new Thread(task).start();
 			return super.bindEntityTexture(player);

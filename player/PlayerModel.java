@@ -45,7 +45,8 @@ public class PlayerModel extends ModelPlayerBase {
 	public void render(Entity paramEntity, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4,
 			float paramFloat5, float paramFloat6) {
 		if (paramEntity instanceof EntityPlayer) {
-			if (SkinManager.hasSkinTexture((EntityPlayer) paramEntity)) {
+			if (SkinManager.hasSkinTexture((EntityPlayer) paramEntity)
+					&& !SkinManager.getSkinTexture((EntityPlayer) paramEntity).isEmpty()) {
 				if (SkinManager.getSkinTexture((EntityPlayer) paramEntity) == textureName.get(paramEntity)) {
 					if ((textureSize.get(paramEntity) != null) && (textureSize.get(paramEntity) == 32)) {
 						bipedModel.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4, paramFloat5,
