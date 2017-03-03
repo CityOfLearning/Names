@@ -35,21 +35,21 @@ public class DialogHud extends Show {
 		entity = new DisplayEntityHead(Minecraft.getMinecraft().theWorld);
 	}
 
-	public DialogHud(String text, boolean interupt) {
-		entity = new DisplayEntityHead(Minecraft.getMinecraft().theWorld);
-		this.text = text;
-		this.doesInterupt = interupt;
-	}
-
 	public DialogHud(EntityLivingBase entity, boolean interupt) {
 		this.entity = entity;
-		this.doesInterupt = interupt;
+		doesInterupt = interupt;
 	}
 
 	public DialogHud(EntityLivingBase entity, String text, boolean interupt) {
 		this.entity = entity;
 		this.text = text;
-		this.doesInterupt = interupt;
+		doesInterupt = interupt;
+	}
+
+	public DialogHud(String text, boolean interupt) {
+		entity = new DisplayEntityHead(Minecraft.getMinecraft().theWorld);
+		this.text = text;
+		doesInterupt = interupt;
 	}
 
 	@Override
@@ -127,8 +127,8 @@ public class DialogHud extends Show {
 				entheight = .5;
 				entwidth = .1;
 			}
-			
-			if (entity instanceof EntityRobot){
+
+			if (entity instanceof EntityRobot) {
 				entwidth = .175;
 			}
 
@@ -150,8 +150,8 @@ public class DialogHud extends Show {
 
 			registerComponent(panel);
 
-			registerComponent(new Button((int) (width * .25), (int) (height * .65), 60, 20, "Close")
-					.setClickListener(btn -> {
+			registerComponent(
+					new Button((int) (width * .25), (int) (height * .65), 60, 20, "Close").setClickListener(btn -> {
 						getStage().close();
 					}));
 
