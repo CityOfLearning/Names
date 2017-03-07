@@ -107,6 +107,11 @@ public class DialogHud extends Show {
 			float zoom = 1;
 			double entheight = .25;
 			double entwidth = .3;
+			if (entity instanceof DisplayEntity) {
+				zoom = 2.75f;
+				entwidth = .075;
+				entheight = .1;
+			}
 			if (entity instanceof DisplayEntityHead) {
 				zoom = 5f;
 				entheight = .1;
