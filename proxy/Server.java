@@ -3,6 +3,7 @@ package com.dyn.render.proxy;
 import java.util.Collections;
 import java.util.Map;
 
+import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity;
 import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.proximity.ProximityBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.timer.TimerBlockTileEntity;
@@ -60,6 +61,12 @@ public class Server implements Proxy {
 	public void toggleRenderProgramInterface(boolean state) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void openEditDecisionBlock(DecisionBlockTileEntity decisionBlock) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

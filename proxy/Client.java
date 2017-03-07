@@ -8,11 +8,14 @@ import org.lwjgl.input.Keyboard;
 import com.dyn.DYNServerMod;
 import com.dyn.betterachievements.gui.GuiBetterAchievements;
 import com.dyn.betterachievements.handler.GuiOpenHandler;
+import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity;
 import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.proximity.ProximityBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.timer.TimerBlockTileEntity;
 import com.dyn.render.RenderMod;
+import com.dyn.render.gui.NewMainMenu;
 import com.dyn.render.gui.achievement.Search;
+import com.dyn.render.gui.decision.EditDecisionBlock;
 import com.dyn.render.gui.dialog.EditDialogBlock;
 import com.dyn.render.gui.programmer.ProgrammingInterface;
 import com.dyn.render.gui.redstone.SetProximityBlock;
@@ -20,6 +23,7 @@ import com.dyn.render.gui.redstone.SetTimerBlock;
 import com.dyn.render.gui.skin.SkinSelect;
 import com.dyn.render.hud.DynOverlay;
 import com.dyn.render.hud.builder.BuildUI;
+import com.dyn.render.hud.decision.DecisionHud;
 import com.dyn.render.hud.dialog.DialogHud;
 import com.dyn.render.hud.frozen.Freeze;
 import com.dyn.render.hud.path.EntityPathRenderer;
@@ -119,6 +123,13 @@ public class Client implements Proxy {
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event) {
 		// stop unintended command block manipulations
+		
+		if ((event.gui instanceof GuiMainMenu))
+	    {
+			event.setCanceled(true);
+			Minecraft.getMinecraft().displayGuiScreen(new NewMainMenu());
+	    }
+		
 		if ((event.gui instanceof GuiCommandBlock) && !(DYNServerMod.accessLevel == PlayerAccessLevel.ADMIN)) {
 			event.setCanceled(true);
 			return;
@@ -323,4 +334,8 @@ public class Client implements Proxy {
 		showProgrammer = state;
 	}
 
+	@Override
+	public void openEditDecisionBlock(DecisionBlockTileEntity decisionBlock) {
+		RabbitGui.proxy.display(new EditDecisionBlock(decisionBlock));		
+	}
 }
