@@ -123,13 +123,12 @@ public class Client implements Proxy {
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event) {
 		// stop unintended command block manipulations
-		
-		if ((event.gui instanceof GuiMainMenu))
-	    {
+
+		if ((event.gui instanceof GuiMainMenu)) {
 			event.setCanceled(true);
 			Minecraft.getMinecraft().displayGuiScreen(new NewMainMenu());
-	    }
-		
+		}
+
 		if ((event.gui instanceof GuiCommandBlock) && !(DYNServerMod.accessLevel == PlayerAccessLevel.ADMIN)) {
 			event.setCanceled(true);
 			return;
@@ -276,6 +275,16 @@ public class Client implements Proxy {
 	}
 
 	@Override
+	public void openDecisionGui(EntityLivingBase entity, DecisionBlockTileEntity decisionBlockTileEntity) {
+		RabbitGui.proxy.display(new DecisionHud(entity, decisionBlockTileEntity));
+	}
+
+	@Override
+	public void openEditDecisionBlock(DecisionBlockTileEntity decisionBlock) {
+		RabbitGui.proxy.display(new EditDecisionBlock(decisionBlock));
+	}
+
+	@Override
 	public void openEditDialogInterface(DialogBlockTileEntity block) {
 		RabbitGui.proxy.display(new EditDialogBlock(block));
 	}
@@ -332,10 +341,5 @@ public class Client implements Proxy {
 	@Override
 	public void toggleRenderProgramInterface(boolean state) {
 		showProgrammer = state;
-	}
-
-	@Override
-	public void openEditDecisionBlock(DecisionBlockTileEntity decisionBlock) {
-		RabbitGui.proxy.display(new EditDecisionBlock(decisionBlock));		
 	}
 }

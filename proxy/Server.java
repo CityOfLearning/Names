@@ -34,6 +34,18 @@ public class Server implements Proxy {
 	}
 
 	@Override
+	public void openDecisionGui(EntityLivingBase entity, DecisionBlockTileEntity decisionBlockTileEntity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void openEditDecisionBlock(DecisionBlockTileEntity decisionBlock) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void openEditDialogInterface(DialogBlockTileEntity block) {
 		// TODO Auto-generated method stub
 
@@ -61,12 +73,6 @@ public class Server implements Proxy {
 	public void toggleRenderProgramInterface(boolean state) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void openEditDecisionBlock(DecisionBlockTileEntity decisionBlock) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

@@ -19,15 +19,17 @@ public interface Proxy {
 
 	public boolean isDialogInterfaceOpen();
 
+	public void openDecisionGui(EntityLivingBase entity, DecisionBlockTileEntity decisionBlockTileEntity);
+
+	public void openEditDecisionBlock(DecisionBlockTileEntity decisionBlock);
+
 	public void openEditDialogInterface(DialogBlockTileEntity block);
-	
+
 	public void openSetProximityInterface(ProximityBlockTileEntity block);
 
 	public void openSetTimerInterface(TimerBlockTileEntity block);
 
 	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration, boolean interupt);
-	
-	public void toggleRenderProgramInterface(boolean state);
 
-	public void openEditDecisionBlock(DecisionBlockTileEntity decisionBlock);
+	public void toggleRenderProgramInterface(boolean state);
 }
