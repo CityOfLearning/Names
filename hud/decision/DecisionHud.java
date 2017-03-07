@@ -2,12 +2,9 @@ package com.dyn.render.hud.decision;
 
 import java.awt.Color;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 
-import com.dyn.fixins.blocks.decision.DecisionBlock;
 import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity;
 import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity.Choice;
-import com.dyn.fixins.blocks.redstone.proximity.ProximityBlock;
 import com.dyn.fixins.entity.ghost.GhostEntity;
 import com.dyn.robot.entity.EntityRobot;
 import com.dyn.server.network.NetworkManager;
@@ -24,7 +21,6 @@ import com.rabbit.gui.component.display.entity.DisplayEntityHead;
 import com.rabbit.gui.component.display.entity.EntityComponent;
 import com.rabbit.gui.show.Show;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.passive.EntityChicken;
@@ -121,18 +117,20 @@ public class DecisionHud extends Show {
 		int index = 0;
 
 		for (Entry<String, Choice> choice : block.getChoices().entrySet()) {
-			registerComponent(new Button((int) (width * .225 + (width * .3 * (index % 2))),
-					(int) (height * .61 + (height * .1 * (index / 2))), (int) (width * .25), 20, choice.getKey())
+			registerComponent(new Button((int) ((width * .225) + (width * .3 * (index % 2))),
+					(int) ((height * .61) + (height * .1 * (index / 2))), (int) (width * .25), 20, choice.getKey())
 							.setClickListener(btn -> {
 								if (choice.getValue().equals(Choice.REDSTONE)) {
 									System.out.println("Redstone Activation");
-									NetworkManager.sendToServer(new MessageBlockRedstoneSignalUpdate(block.getPos(), true));
+									NetworkManager
+											.sendToServer(new MessageBlockRedstoneSignalUpdate(block.getPos(), true));
 									getStage().close();
 								} else if (!(choice.getValue().equals(Choice.NONE))) {
 									NetworkManager.sendToServer(new ServerCommandMessage(choice.getValue().getValue()));
 									getStage().close();
 								} else {
-									NetworkManager.sendToServer(new MessageBlockRedstoneSignalUpdate(block.getPos(), false));
+									NetworkManager
+											.sendToServer(new MessageBlockRedstoneSignalUpdate(block.getPos(), false));
 									getStage().close();
 								}
 							}));

@@ -2,24 +2,18 @@ package com.dyn.render.gui.decision;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity;
 import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity.Choice;
-import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.server.network.NetworkManager;
 import com.dyn.server.network.messages.MessageDecisionUpdate;
-import com.dyn.server.network.messages.MessageDialogUpdate;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.rabbit.gui.component.control.Button;
 import com.rabbit.gui.component.control.CheckBox;
 import com.rabbit.gui.component.control.DropDown;
@@ -82,6 +76,32 @@ public class EditDecisionBlock extends Show {
 
 		root = AssetsBrowser.getRoot("dyn:textures/skins/");
 		assets = new AssetsBrowser(root, new String[] { "png" });
+	}
+
+	private Map<String, Choice> buildChoiceMap() {
+		Map<String, Choice> retVal = Maps.newHashMap();
+		List<Choice> choices = new ArrayList<>(block.getChoices().values());
+		if (chBx1.isChecked()) {
+			int index = dMenu1.getSelectedElement() != null ? dMenu1.getSelectedElement().getItemIndex()
+					: choices.size() > 0 ? choices.get(0).getId() : Choice.NONE.getId();
+			retVal.put(chTitle1.getText(), new Choice(index, index >= 2 ? cmdtx1.getText() : "none"));
+		}
+		if (chBx2.isChecked()) {
+			int index = dMenu2.getSelectedElement() != null ? dMenu2.getSelectedElement().getItemIndex()
+					: choices.size() > 1 ? choices.get(1).getId() : Choice.NONE.getId();
+			retVal.put(chTitle2.getText(), new Choice(index, index >= 2 ? cmdtx2.getText() : "none"));
+		}
+		if (chBx3.isChecked()) {
+			int index = dMenu3.getSelectedElement() != null ? dMenu3.getSelectedElement().getItemIndex()
+					: choices.size() > 2 ? choices.get(2).getId() : Choice.NONE.getId();
+			retVal.put(chTitle3.getText(), new Choice(index, index >= 2 ? cmdtx3.getText() : "none"));
+		}
+		if (chBx4.isChecked()) {
+			int index = dMenu4.getSelectedElement() != null ? dMenu4.getSelectedElement().getItemIndex()
+					: choices.size() > 3 ? choices.get(3).getId() : Choice.NONE.getId();
+			retVal.put(chTitle4.getText(), new Choice(index, index >= 2 ? cmdtx4.getText() : "none"));
+		}
+		return retVal;
 	}
 
 	@Override
@@ -227,8 +247,8 @@ public class EditDecisionBlock extends Show {
 							text = previousText;
 						}));
 
-		List<String> choiceTexts = new ArrayList<String>(block.getChoices().keySet());
-		List<Choice> choices = new ArrayList<Choice>(block.getChoices().values());
+		List<String> choiceTexts = new ArrayList<>(block.getChoices().keySet());
+		List<Choice> choices = new ArrayList<>(block.getChoices().values());
 
 		registerComponent(
 				chBx1 = new CheckBox((int) (width * .47), (int) (height * .275), 15, 15, "", choices.size() > 0));
@@ -242,9 +262,8 @@ public class EditDecisionBlock extends Show {
 		registerComponent(
 				chBx4 = new CheckBox((int) (width * .47), (int) (height * .725), 15, 15, "", choices.size() > 3));
 
-		registerComponent(
-				dMenu1 = new DropDown<String>((int) (width * .52), (int) (height * .275), (int) (width * .15), 15, "Options")
-						.addAll("NONE", "REDSTONE", "COMMAND")
+		registerComponent(dMenu1 = new DropDown<String>((int) (width * .52), (int) (height * .275), (int) (width * .15),
+				15, "Options").addAll("NONE", "REDSTONE", "COMMAND")
 						.setDefaultItem(choices.size() > 0 ? choices.get(0).getType() : Choice.NONE.getType())
 						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
 							if (selected == "COMMAND") {
@@ -254,9 +273,8 @@ public class EditDecisionBlock extends Show {
 							}
 						}));
 
-		registerComponent(
-				dMenu2 = new DropDown<String>((int) (width * .52), (int) (height * .425), (int) (width * .15), 15, "Options")
-						.addAll("NONE", "REDSTONE", "COMMAND")
+		registerComponent(dMenu2 = new DropDown<String>((int) (width * .52), (int) (height * .425), (int) (width * .15),
+				15, "Options").addAll("NONE", "REDSTONE", "COMMAND")
 						.setDefaultItem(choices.size() > 1 ? choices.get(1).getType() : Choice.NONE.getType())
 						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
 							if (selected == "COMMAND") {
@@ -266,9 +284,8 @@ public class EditDecisionBlock extends Show {
 							}
 						}));
 
-		registerComponent(
-				dMenu3 = new DropDown<String>((int) (width * .52), (int) (height * .575), (int) (width * .15), 15, "Options")
-						.addAll("NONE", "REDSTONE", "COMMAND")
+		registerComponent(dMenu3 = new DropDown<String>((int) (width * .52), (int) (height * .575), (int) (width * .15),
+				15, "Options").addAll("NONE", "REDSTONE", "COMMAND")
 						.setDefaultItem(choices.size() > 2 ? choices.get(2).getType() : Choice.NONE.getType())
 						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
 							if (selected == "COMMAND") {
@@ -278,9 +295,8 @@ public class EditDecisionBlock extends Show {
 							}
 						}));
 
-		registerComponent(
-				dMenu4 = new DropDown<String>((int) (width * .52), (int) (height * .725), (int) (width * .15), 15, "Options")
-						.addAll("NONE", "REDSTONE", "COMMAND")
+		registerComponent(dMenu4 = new DropDown<String>((int) (width * .52), (int) (height * .725), (int) (width * .15),
+				15, "Options").addAll("NONE", "REDSTONE", "COMMAND")
 						.setDefaultItem(choices.size() > 3 ? choices.get(3).getType() : Choice.NONE.getType())
 						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
 							if (selected == "COMMAND") {
@@ -331,31 +347,5 @@ public class EditDecisionBlock extends Show {
 		// The background
 		registerComponent(new Picture((int) (width * .1125), (int) (height * .05), (int) (width * (6.0 / 8.0)),
 				(int) (height * .9), new ResourceLocation("dyn", "textures/gui/background.png")));
-	}
-
-	private Map<String, Choice> buildChoiceMap() {
-		Map<String, Choice> retVal = Maps.newHashMap();
-		List<Choice> choices = new ArrayList<Choice>(block.getChoices().values());
-		if (chBx1.isChecked()) {
-			int index = dMenu1.getSelectedElement() != null ? dMenu1.getSelectedElement().getItemIndex()
-					: choices.size() > 0 ? choices.get(0).getId() : Choice.NONE.getId();
-			retVal.put(chTitle1.getText(), new Choice(index, index >= 2 ? cmdtx1.getText() : "none"));
-		}
-		if (chBx2.isChecked()) {
-			int index = dMenu2.getSelectedElement() != null ? dMenu2.getSelectedElement().getItemIndex()
-					: choices.size() > 1 ? choices.get(1).getId() : Choice.NONE.getId();
-			retVal.put(chTitle2.getText(), new Choice(index, index >= 2 ? cmdtx2.getText() : "none"));
-		}
-		if (chBx3.isChecked()) {
-			int index = dMenu3.getSelectedElement() != null ? dMenu3.getSelectedElement().getItemIndex()
-					: choices.size() > 2 ? choices.get(2).getId() : Choice.NONE.getId();
-			retVal.put(chTitle3.getText(), new Choice(index, index >= 2 ? cmdtx3.getText() : "none"));
-		}
-		if (chBx4.isChecked()) {
-			int index = dMenu4.getSelectedElement() != null ? dMenu4.getSelectedElement().getItemIndex()
-					: choices.size() > 3 ? choices.get(3).getId() : Choice.NONE.getId();
-			retVal.put(chTitle4.getText(), new Choice(index, index >= 2 ? cmdtx4.getText() : "none"));
-		}
-		return retVal;
 	}
 }

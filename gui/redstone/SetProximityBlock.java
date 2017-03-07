@@ -21,7 +21,7 @@ public class SetProximityBlock extends Show {
 	ProximityBlockTileEntity block;
 
 	private int x1, y1, z1, x2, y2, z2;
-	
+
 	private EnumMobType validMob;
 
 	public SetProximityBlock(ProximityBlockTileEntity block) {
@@ -39,12 +39,12 @@ public class SetProximityBlock extends Show {
 	@Override
 	public void setup() {
 
-		registerComponent(new TextLabel((int) (width * .28), (int) (height * .3), 120, 20, Color.black,
-				"Set Proximity Area:")
+		registerComponent(
+				new TextLabel((int) (width * .28), (int) (height * .3), 120, 20, Color.black, "Set Proximity Area:")
 						.setMultilined(false));
 
 		registerComponent(new TextLabel((int) (width * .29), (int) (height * .375), 30, 20, Color.black, "W:"));
-		
+
 		registerComponent(
 				new TextBox((int) (width * .32), (int) (height * .35), 45, 20).setText("" + block.getCorner1().getX())
 						.setTextChangedListener((TextBox textbox, String previousText) -> {
@@ -58,7 +58,7 @@ public class SetProximityBlock extends Show {
 						}));
 
 		registerComponent(new TextLabel((int) (width * .435), (int) (height * .375), 30, 20, Color.black, "Dn:"));
-		
+
 		registerComponent(
 				new TextBox((int) (width * .475), (int) (height * .35), 45, 20).setText("" + block.getCorner1().getY())
 						.setTextChangedListener((TextBox textbox, String previousText) -> {
@@ -72,7 +72,7 @@ public class SetProximityBlock extends Show {
 						}));
 
 		registerComponent(new TextLabel((int) (width * .59), (int) (height * .375), 30, 20, Color.black, "N:"));
-		
+
 		registerComponent(
 				new TextBox((int) (width * .62), (int) (height * .35), 45, 20).setText("" + block.getCorner1().getZ())
 						.setTextChangedListener((TextBox textbox, String previousText) -> {
@@ -84,7 +84,7 @@ public class SetProximityBlock extends Show {
 								}
 							}
 						}));
-		
+
 		registerComponent(new TextLabel((int) (width * .29), (int) (height * .475), 30, 20, Color.black, "E:"));
 
 		registerComponent(
@@ -98,7 +98,7 @@ public class SetProximityBlock extends Show {
 								}
 							}
 						}));
-		
+
 		registerComponent(new TextLabel((int) (width * .435), (int) (height * .475), 30, 20, Color.black, "Up:"));
 
 		registerComponent(
@@ -114,7 +114,7 @@ public class SetProximityBlock extends Show {
 						}));
 
 		registerComponent(new TextLabel((int) (width * .59), (int) (height * .475), 30, 20, Color.black, "S:"));
-		
+
 		registerComponent(
 				new TextBox((int) (width * .62), (int) (height * .45), 45, 20).setText("" + block.getCorner2().getZ())
 						.setTextChangedListener((TextBox textbox, String previousText) -> {
@@ -127,14 +127,16 @@ public class SetProximityBlock extends Show {
 							}
 						}));
 
-		registerComponent(new TextLabel((int) (width * .225), (int) (height * .55), 120, 60, Color.black,
-				"Entitiy Trigger Type")
+		registerComponent(
+				new TextLabel((int) (width * .225), (int) (height * .55), 120, 60, Color.black, "Entitiy Trigger Type")
 						.setMultilined(false));
-		
-		registerComponent(new DropDown<EnumMobType>((int) (width * .25), (int) (height * .6), 80, 20, "Entity Types").addAll(EnumMobType.values()).setItemSelectedListener((DropDown<EnumMobType> dropdown, String selected) -> {
-			validMob = dropdown.getElement(selected).getValue();
-		}));
-		
+
+		registerComponent(new DropDown<EnumMobType>((int) (width * .25), (int) (height * .6), 80, 20, "Entity Types")
+				.addAll(EnumMobType.values())
+				.setItemSelectedListener((DropDown<EnumMobType> dropdown, String selected) -> {
+					validMob = dropdown.getElement(selected).getValue();
+				}));
+
 		registerComponent(new Button((int) (width * .45), (int) (height * .6), 120, 20, "Update Proximity Block")
 				.setClickListener(btn -> {
 					NetworkManager.sendToServer(new MessageProximityBlockUpdate(block.getPos(),

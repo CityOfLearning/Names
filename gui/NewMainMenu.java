@@ -394,7 +394,7 @@ public class NewMainMenu extends GuiScreen {
 		GlStateManager.translate((width / 2) + 90, 70.0F, 0.0F);
 		GlStateManager.rotate(-20.0F, 0.0F, 0.0F, 1.0F);
 		float f = 1.8F - MathHelper
-				.abs(MathHelper.sin((Minecraft.getSystemTime() % 1000L / 1000.0F) * (float) Math.PI * 2.0F) * 0.1F);
+				.abs(MathHelper.sin(((Minecraft.getSystemTime() % 1000L) / 1000.0F) * (float) Math.PI * 2.0F) * 0.1F);
 		f = (f * 100.0F) / (fontRendererObj.getStringWidth(splashText) + 32);
 		GlStateManager.scale(f, f, f);
 		drawCenteredString(fontRendererObj, splashText, 0, -8, -256);
@@ -437,7 +437,7 @@ public class NewMainMenu extends GuiScreen {
 
 		buttonList.add(singleplayermenu = new GuiButton(1, (width / 2) - 100, j,
 				I18n.format("menu.singleplayer", new Object[0])));
-		
+
 		if (!DYNServerMod.developmentEnvironment) {
 			singleplayermenu.enabled = false;
 		}
