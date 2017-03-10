@@ -13,6 +13,7 @@ import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.proximity.ProximityBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.timer.TimerBlockTileEntity;
 import com.dyn.render.RenderMod;
+import com.dyn.render.gui.NewGuiDisconnected;
 import com.dyn.render.gui.NewMainMenu;
 import com.dyn.render.gui.achievement.Search;
 import com.dyn.render.gui.decision.EditDecisionBlock;
@@ -43,6 +44,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiCommandBlock;
+import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.achievement.GuiAchievements;
@@ -127,6 +129,11 @@ public class Client implements Proxy {
 		if ((event.gui instanceof GuiMainMenu)) {
 			event.setCanceled(true);
 			Minecraft.getMinecraft().displayGuiScreen(new NewMainMenu());
+		}
+
+		if ((event.gui instanceof GuiDisconnected)) {
+			event.setCanceled(true);
+			Minecraft.getMinecraft().displayGuiScreen(new NewGuiDisconnected());
 		}
 
 		if ((event.gui instanceof GuiCommandBlock) && !(DYNServerMod.accessLevel == PlayerAccessLevel.ADMIN)) {
