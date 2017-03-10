@@ -63,36 +63,29 @@ public class DecisionHud extends Show {
 	public void setup() {
 		super.setup();
 
-		float zoom = 1;
+		float zoom = 1 * Math.min((3.5f / entity.height), 4);
 		double entheight = .25;
 		double entwidth = .3;
 		if (entity instanceof DisplayEntity) {
-			zoom = 2.75f;
+			zoom = 3.125f;
 			entwidth = .075;
 			entheight = .1;
-		}
-		if (entity instanceof DisplayEntityHead) {
-			zoom = 5f;
-			entheight = .1;
-			entwidth = .1;
-		} else {
-			zoom = 1 * Math.min((3.5f / entity.height), 4);
-		}
-		if (entity instanceof GhostEntity) {
+			if (entity instanceof DisplayEntityHead) {
+				zoom = 6f;
+				entheight = .1;
+				entwidth = .1;
+			}
+		} else if (entity instanceof GhostEntity) {
 			((GhostEntity) entity).setAlpha(1);
 			zoom = 3.5f;
 			entheight = .1;
-		}
-		if (entity instanceof EntitySpider) {
+		} else if (entity instanceof EntitySpider) {
 			entheight = .35;
 			entwidth = .05;
-		}
-		if (entity instanceof EntityChicken) {
+		} else if (entity instanceof EntityChicken) {
 			entheight = .5;
 			entwidth = .1;
-		}
-
-		if (entity instanceof EntityRobot) {
+		} else if (entity instanceof EntityRobot) {
 			entwidth = .175;
 		}
 

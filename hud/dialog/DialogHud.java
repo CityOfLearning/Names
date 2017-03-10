@@ -104,7 +104,7 @@ public class DialogHud extends Show {
 		super.setup();
 
 		if (doesInterupt) {
-			float zoom = 1;
+			float zoom = 1 * Math.min((3.5f / entity.height), 4);
 			double entheight = .25;
 			double entwidth = .3;
 			if (entity instanceof DisplayEntity) {
@@ -126,12 +126,8 @@ public class DialogHud extends Show {
 			} else if (entity instanceof EntityChicken) {
 				entheight = .5;
 				entwidth = .1;
-			}
-
-			else if (entity instanceof EntityRobot) {
+			} else if (entity instanceof EntityRobot) {
 				entwidth = .175;
-			} else {
-				zoom = 1 * Math.min((3.5f / entity.height), 4);
 			}
 
 			ScissorPanel panel = new ScissorPanel((int) (width * .185), (int) (height * .2), (int) (width * .25),
