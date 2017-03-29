@@ -26,6 +26,7 @@ import com.rabbit.gui.show.Show;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import noppes.npcs.client.AssetsBrowser;
@@ -62,6 +63,11 @@ public class EditDecisionBlock extends Show {
 	private DropDown dMenu2;
 	private DropDown dMenu3;
 	private DropDown dMenu4;
+	private CheckBox qzBox;
+	private CheckBox corBx1;
+	private CheckBox corBx2;
+	private CheckBox corBx3;
+	private CheckBox corBx4;
 
 	public EditDecisionBlock(DecisionBlockTileEntity block) {
 		title = "Edit Decision Block";
@@ -84,22 +90,26 @@ public class EditDecisionBlock extends Show {
 		if (chBx1.isChecked()) {
 			int index = dMenu1.getSelectedElement() != null ? dMenu1.getSelectedElement().getItemIndex()
 					: choices.size() > 0 ? choices.get(0).getId() : Choice.NONE.getId();
-			retVal.put(chTitle1.getText(), new Choice(index, index >= 2 ? cmdtx1.getText() : "none"));
+			retVal.put(chTitle1.getText(),
+					new Choice(index, index >= 2 ? cmdtx1.getText() : "none", corBx1.isChecked()));
 		}
 		if (chBx2.isChecked()) {
 			int index = dMenu2.getSelectedElement() != null ? dMenu2.getSelectedElement().getItemIndex()
 					: choices.size() > 1 ? choices.get(1).getId() : Choice.NONE.getId();
-			retVal.put(chTitle2.getText(), new Choice(index, index >= 2 ? cmdtx2.getText() : "none"));
+			retVal.put(chTitle2.getText(),
+					new Choice(index, index >= 2 ? cmdtx2.getText() : "none", corBx2.isChecked()));
 		}
 		if (chBx3.isChecked()) {
 			int index = dMenu3.getSelectedElement() != null ? dMenu3.getSelectedElement().getItemIndex()
 					: choices.size() > 2 ? choices.get(2).getId() : Choice.NONE.getId();
-			retVal.put(chTitle3.getText(), new Choice(index, index >= 2 ? cmdtx3.getText() : "none"));
+			retVal.put(chTitle3.getText(),
+					new Choice(index, index >= 2 ? cmdtx3.getText() : "none", corBx3.isChecked()));
 		}
 		if (chBx4.isChecked()) {
 			int index = dMenu4.getSelectedElement() != null ? dMenu4.getSelectedElement().getItemIndex()
 					: choices.size() > 3 ? choices.get(3).getId() : Choice.NONE.getId();
-			retVal.put(chTitle4.getText(), new Choice(index, index >= 2 ? cmdtx4.getText() : "none"));
+			retVal.put(chTitle4.getText(),
+					new Choice(index, index >= 2 ? cmdtx4.getText() : "none", corBx4.isChecked()));
 		}
 		return retVal;
 	}
@@ -251,18 +261,69 @@ public class EditDecisionBlock extends Show {
 		List<Choice> choices = new ArrayList<>(block.getChoices().values());
 
 		registerComponent(
-				chBx1 = new CheckBox((int) (width * .47), (int) (height * .275), 15, 15, "", choices.size() > 0));
+				chBx1 = new CheckBox((int) (width * .47), (int) (height * .25), 15, 15, "", choices.size() > 0));
 
 		registerComponent(
-				chBx2 = new CheckBox((int) (width * .47), (int) (height * .425), 15, 15, "", choices.size() > 1));
+				chBx2 = new CheckBox((int) (width * .47), (int) (height * .4), 15, 15, "", choices.size() > 1));
 
 		registerComponent(
-				chBx3 = new CheckBox((int) (width * .47), (int) (height * .575), 15, 15, "", choices.size() > 2));
+				chBx3 = new CheckBox((int) (width * .47), (int) (height * .55), 15, 15, "", choices.size() > 2));
 
 		registerComponent(
-				chBx4 = new CheckBox((int) (width * .47), (int) (height * .725), 15, 15, "", choices.size() > 3));
+				chBx4 = new CheckBox((int) (width * .47), (int) (height * .7), 15, 15, "", choices.size() > 3));
 
-		registerComponent(dMenu1 = new DropDown<String>((int) (width * .52), (int) (height * .275), (int) (width * .15),
+		registerComponent(corBx1 = new CheckBox((int) (width * .47), (int) (height * .325), 15, 15, "",
+				choices.size() > 0 ? choices.get(0).isCorrect() : false).setStatusChangedListener(box -> {
+					if (box.isChecked()) {
+						corBx2.setIsChecked(false);
+						corBx3.setIsChecked(false);
+						corBx4.setIsChecked(false);
+					}
+				}).setIsVisible(block.isQuiz()));
+
+		registerComponent(corBx2 = new CheckBox((int) (width * .47), (int) (height * .475), 15, 15, "",
+				choices.size() > 1 ? choices.get(1).isCorrect() : false).setStatusChangedListener(box -> {
+					if (box.isChecked()) {
+						corBx1.setIsChecked(false);
+						corBx3.setIsChecked(false);
+						corBx4.setIsChecked(false);
+					}
+				}).setIsVisible(block.isQuiz()));
+
+		registerComponent(corBx3 = new CheckBox((int) (width * .47), (int) (height * .625), 15, 15, "",
+				choices.size() > 2 ? choices.get(2).isCorrect() : false).setStatusChangedListener(box -> {
+					if (box.isChecked()) {
+						corBx2.setIsChecked(false);
+						corBx1.setIsChecked(false);
+						corBx4.setIsChecked(false);
+					}
+				}).setIsVisible(block.isQuiz()));
+
+		registerComponent(corBx4 = new CheckBox((int) (width * .47), (int) (height * .775), 15, 15, "",
+				choices.size() > 3 ? choices.get(3).isCorrect() : false).setStatusChangedListener(box -> {
+					if (box.isChecked()) {
+						corBx2.setIsChecked(false);
+						corBx3.setIsChecked(false);
+						corBx1.setIsChecked(false);
+					}
+				}).setIsVisible(block.isQuiz()));
+
+		registerComponent(qzBox = new CheckBox((int) (width * .47), (int) (height * .85), 15, 15,
+				EnumChatFormatting.BLACK + "Is a Quiz Block?", block.isQuiz()).setStatusChangedListener(box -> {
+					if (box.isChecked()) {
+						corBx1.setIsVisible(true);
+						corBx2.setIsVisible(true);
+						corBx3.setIsVisible(true);
+						corBx4.setIsVisible(true);
+					} else {
+						corBx1.setIsVisible(false);
+						corBx2.setIsVisible(false);
+						corBx3.setIsVisible(false);
+						corBx4.setIsVisible(false);
+					}
+				}));
+
+		registerComponent(dMenu1 = new DropDown<String>((int) (width * .52), (int) (height * .25), (int) (width * .15),
 				15, "Options").addAll("NONE", "REDSTONE", "COMMAND")
 						.setDefaultItem(choices.size() > 0 ? choices.get(0).getType() : Choice.NONE.getType())
 						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
@@ -273,7 +334,7 @@ public class EditDecisionBlock extends Show {
 							}
 						}));
 
-		registerComponent(dMenu2 = new DropDown<String>((int) (width * .52), (int) (height * .425), (int) (width * .15),
+		registerComponent(dMenu2 = new DropDown<String>((int) (width * .52), (int) (height * .4), (int) (width * .15),
 				15, "Options").addAll("NONE", "REDSTONE", "COMMAND")
 						.setDefaultItem(choices.size() > 1 ? choices.get(1).getType() : Choice.NONE.getType())
 						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
@@ -284,7 +345,7 @@ public class EditDecisionBlock extends Show {
 							}
 						}));
 
-		registerComponent(dMenu3 = new DropDown<String>((int) (width * .52), (int) (height * .575), (int) (width * .15),
+		registerComponent(dMenu3 = new DropDown<String>((int) (width * .52), (int) (height * .55), (int) (width * .15),
 				15, "Options").addAll("NONE", "REDSTONE", "COMMAND")
 						.setDefaultItem(choices.size() > 2 ? choices.get(2).getType() : Choice.NONE.getType())
 						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
@@ -295,7 +356,7 @@ public class EditDecisionBlock extends Show {
 							}
 						}));
 
-		registerComponent(dMenu4 = new DropDown<String>((int) (width * .52), (int) (height * .725), (int) (width * .15),
+		registerComponent(dMenu4 = new DropDown<String>((int) (width * .52), (int) (height * .7), (int) (width * .15),
 				15, "Options").addAll("NONE", "REDSTONE", "COMMAND")
 						.setDefaultItem(choices.size() > 3 ? choices.get(3).getType() : Choice.NONE.getType())
 						.setItemSelectedListener((DropDown<String> dropdown, String selected) -> {
@@ -306,40 +367,42 @@ public class EditDecisionBlock extends Show {
 							}
 						}));
 
-		registerComponent(chTitle1 = new TextBox((int) (width * .69), (int) (height * .275), (int) (width * .15), 15,
+		registerComponent(chTitle1 = new TextBox((int) (width * .69), (int) (height * .25), (int) (width * .15), 15,
 				choiceTexts.size() > 0 ? choiceTexts.get(0) : "Choice Title"));
 
-		registerComponent(chTitle2 = new TextBox((int) (width * .69), (int) (height * .425), (int) (width * .15), 15,
+		registerComponent(chTitle2 = new TextBox((int) (width * .69), (int) (height * .4), (int) (width * .15), 15,
 				choiceTexts.size() > 1 ? choiceTexts.get(1) : "Choice Title"));
 
-		registerComponent(chTitle3 = new TextBox((int) (width * .69), (int) (height * .575), (int) (width * .15), 15,
+		registerComponent(chTitle3 = new TextBox((int) (width * .69), (int) (height * .55), (int) (width * .15), 15,
 				choiceTexts.size() > 2 ? choiceTexts.get(2) : "Choice Title"));
 
-		registerComponent(chTitle4 = new TextBox((int) (width * .69), (int) (height * .725), (int) (width * .15), 15,
+		registerComponent(chTitle4 = new TextBox((int) (width * .69), (int) (height * .7), (int) (width * .15), 15,
 				choiceTexts.size() > 3 ? choiceTexts.get(3) : "Choice Title"));
 
-		registerComponent(cmdtx1 = new TextBox((int) (width * .52), (int) (height * .35), (int) (width * .3), 15,
+		registerComponent(cmdtx1 = new TextBox((int) (width * .52), (int) (height * .325), (int) (width * .3), 15,
 				choices.size() > 0 ? choices.get(0).getValue() : "")
 						.setIsVisible(choices.size() > 0 ? choices.get(0).getType().equals("COMMAND") : false));
 
-		registerComponent(cmdtx2 = new TextBox((int) (width * .52), (int) (height * .5), (int) (width * .3), 15,
+		registerComponent(cmdtx2 = new TextBox((int) (width * .52), (int) (height * .475), (int) (width * .3), 15,
 				choices.size() > 1 ? choices.get(1).getValue() : "")
 						.setIsVisible(choices.size() > 1 ? choices.get(1).getType().equals("COMMAND") : false));
 
-		registerComponent(cmdtx3 = new TextBox((int) (width * .52), (int) (height * .65), (int) (width * .3), 15,
+		registerComponent(cmdtx3 = new TextBox((int) (width * .52), (int) (height * .625), (int) (width * .3), 15,
 				choices.size() > 2 ? choices.get(2).getValue() : "")
 						.setIsVisible(choices.size() > 2 ? choices.get(2).getType().equals("COMMAND") : false));
 
-		registerComponent(cmdtx4 = new TextBox((int) (width * .52), (int) (height * .8), (int) (width * .3), 15,
+		registerComponent(cmdtx4 = new TextBox((int) (width * .52), (int) (height * .775), (int) (width * .3), 15,
 				choices.size() > 3 ? choices.get(3).getValue() : "")
 						.setIsVisible(choices.size() > 3 ? choices.get(3).getType().equals("COMMAND") : false));
 
 		registerComponent(new Button((int) (width * .1625), (int) (height * .825), 120, 20, "Update Decision Block")
 				.setClickListener(btn -> {
 					NetworkManager.sendToServer(new MessageDecisionUpdate(entity, entitySkin, block.getPos(), text,
-							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2), buildChoiceMap()));
+							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2), buildChoiceMap(),
+							(qzBox.isChecked() && (corBx1.isChecked() || corBx2.isChecked() || corBx3.isChecked()
+									|| corBx4.isChecked()))));
 					final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-					executor.schedule(() -> block.clearList(), 2, TimeUnit.SECONDS);
+					executor.schedule(() -> block.setActive(true), 2, TimeUnit.SECONDS);
 
 					getStage().close();
 				}));

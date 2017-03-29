@@ -31,10 +31,19 @@ public class DecisionHud extends Show {
 	private EntityLivingBase entity;
 	private EntityComponent entityElement;
 	private DecisionBlockTileEntity block;
+	private boolean reactivate;
 
 	public DecisionHud(EntityLivingBase entity, DecisionBlockTileEntity block) {
 		this.entity = entity;
 		this.block = block;
+	}
+
+	@Override
+	public void onClose() {
+		super.onClose();
+		if (block.isQuiz() && reactivate) {
+			block.setActive(true);
+		}
 	}
 
 	public void setEntity(EntityLivingBase entity) {
@@ -63,6 +72,8 @@ public class DecisionHud extends Show {
 	public void setup() {
 		super.setup();
 
+		reactivate = false;
+
 		float zoom = 1 * Math.min((3.5f / entity.height), 4);
 		double entheight = .25;
 		double entwidth = .3;
@@ -90,7 +101,7 @@ public class DecisionHud extends Show {
 		}
 
 		ScissorPanel panel = new ScissorPanel((int) (width * .185), (int) (height * .2), (int) (width * .25),
-				(int) (width * .225), true);
+				(int) (width * .2), true);
 
 		panel.registerComponent(entityElement = new EntityComponent((int) (panel.getWidth() * entwidth),
 				(int) (panel.getHeight() * entheight), 0, 0, entity, 0, zoom, false));
@@ -113,8 +124,10 @@ public class DecisionHud extends Show {
 			registerComponent(new Button((int) ((width * .225) + (width * .3 * (index % 2))),
 					(int) ((height * .61) + (height * .1 * (index / 2))), (int) (width * .25), 20, choice.getKey())
 							.setClickListener(btn -> {
+								if (block.isQuiz() && !choice.getValue().isCorrect()) {
+									reactivate = true;
+								}
 								if (choice.getValue().equals(Choice.REDSTONE)) {
-									System.out.println("Redstone Activation");
 									NetworkManager
 											.sendToServer(new MessageBlockRedstoneSignalUpdate(block.getPos(), true));
 									getStage().close();
