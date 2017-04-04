@@ -177,7 +177,7 @@ public class DialogHud extends Show {
 			entityElement.setRotation((float) ((Math.PI / 4) * 40.0F));
 
 			registerComponent(textArea = new TextLabel(width / 3, (int) (height * .7), (int) (width * .6),
-					(int) (height * .2), text).setMultilined(true));
+					(int) (height * .25), text).setMultilined(true));
 
 			registerComponent(bg = new Shape(0, (int) (height * .66), width, (int) (height * .33), ShapeType.RECT,
 					new Color(40, 40, 55, 150)));
