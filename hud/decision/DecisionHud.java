@@ -2,6 +2,7 @@ package com.dyn.render.hud.decision;
 
 import java.awt.Color;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity;
 import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity.Choice;
@@ -21,6 +22,7 @@ import com.rabbit.gui.component.display.entity.DisplayEntityHead;
 import com.rabbit.gui.component.display.entity.EntityComponent;
 import com.rabbit.gui.show.Show;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.passive.EntityChicken;
@@ -31,7 +33,7 @@ public class DecisionHud extends Show {
 	private EntityLivingBase entity;
 	private EntityComponent entityElement;
 	private DecisionBlockTileEntity block;
-	private boolean reactivate;
+	private boolean reactivate = true;
 
 	public DecisionHud(EntityLivingBase entity, DecisionBlockTileEntity block) {
 		this.entity = entity;
@@ -72,7 +74,7 @@ public class DecisionHud extends Show {
 	public void setup() {
 		super.setup();
 
-		reactivate = false;
+		reactivate = true;
 
 		float zoom = 1 * Math.min((3.5f / entity.height), 4);
 		double entheight = .25;
@@ -101,7 +103,7 @@ public class DecisionHud extends Show {
 		}
 
 		ScissorPanel panel = new ScissorPanel((int) (width * .185), (int) (height * .2), (int) (width * .25),
-				(int) (width * .2), true);
+				(int) (height * .3875), true);
 
 		panel.registerComponent(entityElement = new EntityComponent((int) (panel.getWidth() * entwidth),
 				(int) (panel.getHeight() * entheight), 0, 0, entity, 0, zoom, false));
@@ -124,15 +126,35 @@ public class DecisionHud extends Show {
 			registerComponent(new Button((int) ((width * .225) + (width * .3 * (index % 2))),
 					(int) ((height * .61) + (height * .1 * (index / 2))), (int) (width * .25), 20, choice.getKey())
 							.setClickListener(btn -> {
-								if (block.isQuiz() && !choice.getValue().isCorrect()) {
-									reactivate = true;
+								if (block.isQuiz() && choice.getValue().isCorrect()) {
+									reactivate = false;
 								}
 								if (choice.getValue().equals(Choice.REDSTONE)) {
 									NetworkManager
 											.sendToServer(new MessageBlockRedstoneSignalUpdate(block.getPos(), true));
 									getStage().close();
 								} else if (!(choice.getValue().equals(Choice.NONE))) {
-									NetworkManager.sendToServer(new ServerCommandMessage(choice.getValue().getValue()));
+									String command = choice.getValue().getValue();
+									// TODO: Right Now it can only do simple
+									// player commands, doing all or entity
+									// commands requires world and position data
+									// in an ICommandSender class so we would
+									// need like a fake player with op status
+									if (command.contains(Pattern.quote("@"))) {
+										String cmdSubStr = command.substring(command.indexOf("@"),
+												command.indexOf(" ", command.indexOf("@")));
+										switch (cmdSubStr) {
+										case "P":
+											command = command.replace("@P",
+													Minecraft.getMinecraft().thePlayer.getName());
+											break;
+										case "p":
+											command = command.replace("@p",
+													Minecraft.getMinecraft().thePlayer.getName());
+											break;
+										}
+									}
+									NetworkManager.sendToServer(new ServerCommandMessage(command));
 									getStage().close();
 								} else {
 									NetworkManager
