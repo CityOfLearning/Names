@@ -40,15 +40,26 @@ public class PlayerRenderer extends RenderPlayerBase {
 		} else {
 			Runnable task = () -> {
 				// this blocks and so we gotta thread it
-				String texture = DBManager.getPlayerSkin(player.getDisplayNameString()).trim();
+				String texture = DBManager.getPlayerSkin(player.getName()).trim();
 				if ((texture != null) && !texture.isEmpty()) {
 					SkinManager.setSkinTexture(player, texture);
 				}
 			};
-			// set it to the current texture the thread will run and overwrite
-			// this if it isn't empty
-			// SkinManager.setSkinTexture(player,
-			// SkinManager.setSkinTexture(player, "");
+			// Minecraft.getMinecraft().getSkinManager().loadProfileTextures(Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getGameProfile(),
+			// new SkinAvailableCallback()
+			// {
+			// public void skinAvailable(Type p_180521_1_, ResourceLocation
+			// location, MinecraftProfileTexture profileTexture)
+			// {
+			// switch (p_180521_1_)
+			// {
+			// case SKIN:
+			// SkinManager.setSkinTexture(player, location);
+			// break;
+			// case CAPE:
+			// }
+			// }
+			// }, true);
 			SkinManager.setSkinTexture(player,
 					Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getLocationSkin());
 
