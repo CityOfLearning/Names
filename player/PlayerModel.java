@@ -1,6 +1,7 @@
 package com.dyn.render.player;
 
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class PlayerModel extends ModelPlayerBase {
 		if (paramEntity instanceof EntityPlayer) {
 			if (SkinManager.hasSkinTexture((EntityPlayer) paramEntity)
 					&& !SkinManager.getSkinTexture((EntityPlayer) paramEntity).isEmpty()) {
-				if (SkinManager.getSkinTexture((EntityPlayer) paramEntity) == textureName.get(paramEntity)) {
+				if (SkinManager.getSkinTexture((EntityPlayer) paramEntity).equals(textureName.get(paramEntity))) {
 					if ((textureSize.get(paramEntity) != null) && (textureSize.get(paramEntity) == 32)) {
 						bipedModel.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4, paramFloat5,
 								paramFloat6);
@@ -66,21 +67,29 @@ public class PlayerModel extends ModelPlayerBase {
 								textureName.put((EntityPlayer) paramEntity,
 										SkinManager.getSkinTexture((EntityPlayer) paramEntity));
 							}
-							IResource iresource = Minecraft.getMinecraft().getResourceManager()
-									.getResource(new ResourceLocation(textureName.get(paramEntity)));
-							inputstream = iresource.getInputStream();
-							BufferedImage bufferedimage = TextureUtil.readBufferedImage(inputstream);
-							if (textureSize.containsKey(paramEntity)) {
-								textureSize.replace((EntityPlayer) paramEntity, bufferedimage.getHeight());
-							} else {
-								textureSize.put((EntityPlayer) paramEntity, bufferedimage.getHeight());
-							}
-							if (textureSize.get(paramEntity) == 32) {
-								bipedModel.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4,
-										paramFloat5, paramFloat6);
-							} else {
+							try {
+								IResource iresource = Minecraft.getMinecraft().getResourceManager()
+										.getResource(new ResourceLocation(textureName.get(paramEntity)));
+								inputstream = iresource.getInputStream();
+								BufferedImage bufferedimage = TextureUtil.readBufferedImage(inputstream);
+
+								if (textureSize.containsKey(paramEntity)) {
+									textureSize.replace((EntityPlayer) paramEntity, bufferedimage.getHeight());
+								} else {
+									textureSize.put((EntityPlayer) paramEntity, bufferedimage.getHeight());
+								}
+								if (textureSize.get(paramEntity) == 32) {
+									bipedModel.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4,
+											paramFloat5, paramFloat6);
+								} else {
+									super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4,
+											paramFloat5, paramFloat6);
+								}
+							} catch (FileNotFoundException fnfe) {
 								super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4,
 										paramFloat5, paramFloat6);
+								// ImageIO.read(new
+								// File(Minecraft.getMinecraft().mcDataDir, );
 							}
 						} else {
 							super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4, paramFloat5,

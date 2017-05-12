@@ -45,25 +45,20 @@ public class PlayerRenderer extends RenderPlayerBase {
 					SkinManager.setSkinTexture(player, texture);
 				}
 			};
-			// Minecraft.getMinecraft().getSkinManager().loadProfileTextures(Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getGameProfile(),
-			// new SkinAvailableCallback()
-			// {
-			// public void skinAvailable(Type p_180521_1_, ResourceLocation
-			// location, MinecraftProfileTexture profileTexture)
-			// {
-			// switch (p_180521_1_)
-			// {
-			// case SKIN:
-			// SkinManager.setSkinTexture(player, location);
-			// break;
-			// case CAPE:
-			// }
-			// }
-			// }, true);
-			SkinManager.setSkinTexture(player,
-					Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getLocationSkin());
+			Minecraft.getMinecraft().getSkinManager().loadProfileTextures(
+					Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getGameProfile(),
+					(type, location, profileTexture) -> {
+						switch (type) {
+						case SKIN:
+							SkinManager.setSkinTexture(player, location);
+							new Thread(task).start();
+							break;
+						case CAPE:
+						}
+					}, true);
+			// SkinManager.setSkinTexture(player,
+			// Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getLocationSkin().getResourcePath());
 
-			new Thread(task).start();
 			return super.bindEntityTexture(player);
 		}
 	}
