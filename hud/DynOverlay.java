@@ -39,12 +39,14 @@ public class DynOverlay extends Hud {
 			} else if (DYNServerMod.accessLevel == PlayerAccessLevel.MENTOR) {
 				xPos += drawTab(xPos, yPos, "Mentor", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("mentor").getKeyCode()) + ")");
-			} else if (DYNServerMod.accessLevel == PlayerAccessLevel.STUDENT) {
+			} else if ((DYNServerMod.accessLevel == PlayerAccessLevel.STUDENT) && (keys.get("student") != null)) {
 				xPos += drawTab(xPos, yPos, "Student", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("student").getKeyCode()) + ")");
 			}
 			xPos += drawTab(xPos, yPos, "Select", "Skin",
 					"(" + Keyboard.getKeyName(keys.get("skin").getKeyCode()) + ")");
+			xPos += drawTab(xPos, yPos, "Report", "Bug",
+					"(" + Keyboard.getKeyName(keys.get("bugs").getKeyCode()) + ")");
 			drawTab(xPos, yPos, "Hide", "GUI", "(" + Keyboard.getKeyName(keys.get("hide").getKeyCode()) + ")");
 		} else {
 			xPos += drawHiddenTab(xPos, yPos, "Achiev", "ements",
@@ -61,6 +63,8 @@ public class DynOverlay extends Hud {
 			}
 			xPos += drawHiddenTab(xPos, yPos, "Select", "Skin",
 					"(" + Keyboard.getKeyName(keys.get("skin").getKeyCode()) + ")");
+			xPos += drawHiddenTab(xPos, yPos, "Report", "Bug",
+					"(" + Keyboard.getKeyName(keys.get("bugs").getKeyCode()) + ")");
 			drawHiddenTab(xPos, yPos, "Hide", "GUI", "(" + Keyboard.getKeyName(keys.get("hide").getKeyCode()) + ")");
 		}
 		GlStateManager.disableLighting();
