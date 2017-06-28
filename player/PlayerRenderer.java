@@ -8,7 +8,6 @@ import com.rabbit.gui.utils.SkinManager;
 
 import api.player.render.RenderPlayerAPI;
 import api.player.render.RenderPlayerBase;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -31,35 +30,13 @@ public class PlayerRenderer extends RenderPlayerBase {
 				if (SkinManager.bindSkinTexture(player)) {
 					return true;
 				} else {
-					return super.bindEntityTexture(player);
+					return renderPlayerAPI.localBindEntityTexture(player);
 				}
-
 			} else {
-				return super.bindEntityTexture(player);
+				return renderPlayerAPI.localBindEntityTexture(player);
 			}
 		} else {
-			Runnable task = () -> {
-				// this blocks and so we gotta thread it
-				String texture = DBManager.getPlayerSkin(player.getName()).trim();
-				if ((texture != null) && !texture.isEmpty()) {
-					SkinManager.setSkinTexture(player, texture);
-				}
-			};
-			Minecraft.getMinecraft().getSkinManager().loadProfileTextures(
-					Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getGameProfile(),
-					(type, location, profileTexture) -> {
-						switch (type) {
-						case SKIN:
-							SkinManager.setSkinTexture(player, location);
-							new Thread(task).start();
-							break;
-						case CAPE:
-						}
-					}, true);
-			// SkinManager.setSkinTexture(player,
-			// Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getName()).getLocationSkin().getResourcePath());
-
-			return super.bindEntityTexture(player);
+			return renderPlayerAPI.localBindEntityTexture(player);
 		}
 	}
 

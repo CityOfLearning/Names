@@ -8,6 +8,7 @@ import com.dyn.fixins.blocks.redstone.proximity.ProximityBlockTileEntity;
 import com.dyn.fixins.blocks.redstone.timer.TimerBlockTileEntity;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface Proxy {
 
@@ -28,6 +29,8 @@ public interface Proxy {
 	public void openSetProximityInterface(ProximityBlockTileEntity block);
 
 	public void openSetTimerInterface(TimerBlockTileEntity block);
+
+	public void setPlayerSkinTextureName(EntityPlayer player, String texture);
 
 	public void toggleDialogHud(EntityLivingBase entity, boolean state, String text, int duration, boolean interupt);
 

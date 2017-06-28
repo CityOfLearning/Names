@@ -19,7 +19,7 @@ import com.dyn.render.gui.achievement.Search;
 import com.dyn.render.gui.bugs.BugReport;
 import com.dyn.render.gui.decision.EditDecisionBlock;
 import com.dyn.render.gui.dialog.EditDialogBlock;
-import com.dyn.render.gui.plots.PlotManager;
+import com.dyn.render.gui.plots.PlotBuySell;
 import com.dyn.render.gui.programmer.ProgrammingInterface;
 import com.dyn.render.gui.redstone.SetProximityBlock;
 import com.dyn.render.gui.redstone.SetTimerBlock;
@@ -53,6 +53,7 @@ import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -86,7 +87,7 @@ public class Client implements Proxy {
 		keys.put("skin", skinKey);
 		keys.put("hide", hideGuiKey);
 		keys.put("build", buildKey);
-//		keys.put("plots", plotKey);
+		keys.put("plots", plotKey);
 		keys.put("bugs", bugKey);
 		return keys;
 	}
@@ -115,14 +116,14 @@ public class Client implements Proxy {
 		hideGuiKey = new KeyBinding("key.toggle.achievementgui", Keyboard.KEY_H, "key.categories.toggle");
 		achievementKey = new KeyBinding("key.toggle.hideui", Keyboard.KEY_N, "key.categories.toggle");
 		buildKey = new KeyBinding("key.toggle.buildui", Keyboard.KEY_COMMA, "key.categories.toggle");
-//		plotKey = new KeyBinding("key.toggle.plotui", Keyboard.KEY_PERIOD, "key.categories.toggle");
+		plotKey = new KeyBinding("key.toggle.plotui", Keyboard.KEY_PERIOD, "key.categories.toggle");
 		bugKey = new KeyBinding("key.toggle.bugui", Keyboard.KEY_B, "key.categories.toggle");
 
 		ClientRegistry.registerKeyBinding(achievementKey);
 		ClientRegistry.registerKeyBinding(hideGuiKey);
 		ClientRegistry.registerKeyBinding(skinKey);
 		ClientRegistry.registerKeyBinding(buildKey);
-//		ClientRegistry.registerKeyBinding(plotKey);
+		ClientRegistry.registerKeyBinding(plotKey);
 		ClientRegistry.registerKeyBinding(bugKey);
 	}
 
@@ -186,9 +187,9 @@ public class Client implements Proxy {
 			BuildUI.isOpen = !BuildUI.isOpen;
 		}
 
-//		if (plotKey.isPressed()) {
-//			RabbitGui.proxy.display(new PlotManager());
-//		}
+		if (plotKey.isPressed()) {
+			RabbitGui.proxy.display(new PlotBuySell());
+		}
 
 		if (bugKey.isPressed()) {
 			RabbitGui.proxy.display(new BugReport());
@@ -332,6 +333,12 @@ public class Client implements Proxy {
 				BuildUI.drawZone(RenderMod.zoneAreas.get(key), key, event.partialTicks);
 			}
 		}
+	}
+
+	@Override
+	public void setPlayerSkinTextureName(EntityPlayer player, String texture) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
