@@ -57,7 +57,7 @@ public class DynOverlay extends Hud {
 			} else if (DYNServerMod.accessLevel == PlayerAccessLevel.MENTOR) {
 				xPos += drawHiddenTab(xPos, yPos, "Mentor", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("mentor").getKeyCode()) + ")");
-			} else if (DYNServerMod.accessLevel == PlayerAccessLevel.STUDENT) {
+			} else if ((DYNServerMod.accessLevel == PlayerAccessLevel.STUDENT) && (keys.get("student") != null)) {
 				xPos += drawHiddenTab(xPos, yPos, "Student", "GUI",
 						"(" + Keyboard.getKeyName(keys.get("student").getKeyCode()) + ")");
 			}
