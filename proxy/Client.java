@@ -76,7 +76,7 @@ public class Client implements Proxy {
 	private KeyBinding hideGuiKey;
 	private KeyBinding achievementKey;
 	private KeyBinding buildKey;
-	private KeyBinding plotKey;
+//	private KeyBinding plotKey;
 	private KeyBinding bugKey;
 	private int dialogDuration = 0;
 
@@ -87,7 +87,7 @@ public class Client implements Proxy {
 		keys.put("skin", skinKey);
 		keys.put("hide", hideGuiKey);
 		keys.put("build", buildKey);
-		keys.put("plots", plotKey);
+//		keys.put("plots", plotKey);
 		keys.put("bugs", bugKey);
 		return keys;
 	}
@@ -116,14 +116,14 @@ public class Client implements Proxy {
 		hideGuiKey = new KeyBinding("key.toggle.achievementgui", Keyboard.KEY_H, "key.categories.toggle");
 		achievementKey = new KeyBinding("key.toggle.hideui", Keyboard.KEY_N, "key.categories.toggle");
 		buildKey = new KeyBinding("key.toggle.buildui", Keyboard.KEY_COMMA, "key.categories.toggle");
-		plotKey = new KeyBinding("key.toggle.plotui", Keyboard.KEY_PERIOD, "key.categories.toggle");
+//		plotKey = new KeyBinding("key.toggle.plotui", Keyboard.KEY_PERIOD, "key.categories.toggle");
 		bugKey = new KeyBinding("key.toggle.bugui", Keyboard.KEY_B, "key.categories.toggle");
 
 		ClientRegistry.registerKeyBinding(achievementKey);
 		ClientRegistry.registerKeyBinding(hideGuiKey);
 		ClientRegistry.registerKeyBinding(skinKey);
 		ClientRegistry.registerKeyBinding(buildKey);
-		ClientRegistry.registerKeyBinding(plotKey);
+//		ClientRegistry.registerKeyBinding(plotKey);
 		ClientRegistry.registerKeyBinding(bugKey);
 	}
 
@@ -187,9 +187,9 @@ public class Client implements Proxy {
 			BuildUI.isOpen = !BuildUI.isOpen;
 		}
 
-		if (plotKey.isPressed()) {
-			RabbitGui.proxy.display(new PlotBuySell());
-		}
+//		if (plotKey.isPressed()) {
+//			RabbitGui.proxy.display(new PlotBuySell());
+//		}
 
 		if (bugKey.isPressed()) {
 			RabbitGui.proxy.display(new BugReport());
