@@ -3,6 +3,7 @@ package com.dyn.render.gui.skin;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Vector;
 
 import com.dyn.server.database.DBManager;
@@ -10,6 +11,7 @@ import com.dyn.server.network.NetworkManager;
 import com.dyn.server.network.packets.server.SyncSkinsServerMessage;
 import com.rabbit.gui.background.DefaultBackground;
 import com.rabbit.gui.component.control.Button;
+import com.rabbit.gui.component.control.PictureButton;
 import com.rabbit.gui.component.display.Picture;
 import com.rabbit.gui.component.display.TextLabel;
 import com.rabbit.gui.component.display.entity.DisplayEntity;
@@ -85,11 +87,16 @@ public class SkinSelect extends Show {
 		}
 		Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
 
+		registerComponent(new PictureButton((int) (width * (7.0 / 8.0)) - 20, (int) (height * .05), 20, 20,
+				new ResourceLocation("dyn", "textures/gui/exit.png")).setDrawsButton(false).setClickListener(btn -> {
+					Minecraft.getMinecraft().setIngameFocus();
+				}));
+
 		registerComponent(new TextLabel(width / 4, (int) (height * .1), width / 2, 20,
 				"Select A Skin - Click and Drag to Rotate", TextAlignment.CENTER));
 
 		// components
-		ArrayList<ListEntry> skinAssets = new ArrayList<>();
+		List<ListEntry> skinAssets = new ArrayList<>();
 
 		skinAssets.add(new StringEntry("--Available Skins--"));
 		for (String s : list) {
@@ -97,7 +104,25 @@ public class SkinSelect extends Show {
 					int mouseY) -> entryClicked(entry, dlist, mouseX, mouseY)));
 		}
 
-		skinList = new ScrollableDisplayList((int) (width * .175), (int) (height * .2), width / 3, 140, 15, skinAssets);
+		// skinURL = new TextBox((int) (width * .175), (int) (height * .2),
+		// width / 3, 20, "Skin URL");
+		// skinURL.setTextChangedListener((textbox, text) -> {
+		// if (!text.isEmpty()) {
+		// try {
+		// text = EnumChatFormatting.getTextWithoutFormattingCodes(text);
+		// URLConnection url = new URL(text).openConnection();
+		// textbox.setText(EnumChatFormatting.GREEN + text);
+		// } catch (MalformedURLException e) {
+		// textbox.setText(EnumChatFormatting.RED + text);
+		// } catch (IOException e) {
+		// textbox.setText(EnumChatFormatting.RED + text);
+		// }
+		// }
+		// });
+		// registerComponent(skinURL);
+
+		skinList = new ScrollableDisplayList((int) (width * .175), (int) (height * .2), width / 3,
+				(int) (height * .575), 15, skinAssets);
 		skinList.setId("skins");
 		registerComponent(skinList);
 
@@ -112,7 +137,27 @@ public class SkinSelect extends Show {
 												assets.getAsset(selectedEntry.getTitle())));
 								DBManager.setPlayerSkin(Minecraft.getMinecraft().thePlayer.getDisplayNameString(),
 										assets.getAsset(selectedEntry.getTitle()));
-							}
+							} /*
+								 * else if (skinURL.getText() != null &&
+								 * !skinURL.getText().isEmpty() &&
+								 * skinURL.getText().contains(".png")) { try {
+								 * String urlTxt = EnumChatFormatting.
+								 * getTextWithoutFormattingCodes(skinURL.getText
+								 * ()); URLConnection url = new
+								 * URL(urlTxt).openConnection();
+								 * SkinManager.setSkinTexture(Minecraft.
+								 * getMinecraft().thePlayer, urlTxt);
+								 * NetworkManager.sendToServer(new
+								 * SyncSkinsServerMessage(
+								 * Minecraft.getMinecraft().thePlayer.getName(),
+								 * urlTxt)); DBManager.setPlayerSkin(Minecraft.
+								 * getMinecraft().thePlayer.getDisplayNameString
+								 * (), urlTxt); } catch (MalformedURLException
+								 * e) { skinURL.setText("Not a valid URL"); }
+								 * catch (IOException e) {
+								 * skinURL.setText("Could Not Connect to URL");
+								 * } }
+								 */
 						}));
 
 		registerComponent(
