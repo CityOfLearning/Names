@@ -166,8 +166,7 @@ public class SkinSelect extends Show {
 					SkinManager.removeSkinTexture(Minecraft.getMinecraft().thePlayer);
 					NetworkManager.sendToServer(
 							new SyncSkinsServerMessage(Minecraft.getMinecraft().thePlayer.getName(), "reset"));
-					DBManager.setPlayerSkin(Minecraft.getMinecraft().thePlayer.getDisplayNameString(),
-							playerSkin.toString());
+					DBManager.setPlayerSkin(Minecraft.getMinecraft().thePlayer.getDisplayNameString(), null);
 				}));
 
 		registerComponent(new EntityComponent((int) (width * .585), (int) (height * .2), 0, 0, entity, 0, 2.75f));
