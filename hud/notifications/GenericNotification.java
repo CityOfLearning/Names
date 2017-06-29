@@ -69,9 +69,10 @@ public class GenericNotification extends Gui implements INotification {
 			mc.fontRendererObj.drawString(notificationTitle, i + 30, j + 7, 15482167);
 			// mc.fontRendererObj.drawString(notificationText, i + 30, j + 19,
 			// -1);
-
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			mc.fontRendererObj.drawSplitString(notificationText, i + 30, j + 17, 144, -1);
 
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderHelper.enableGUIStandardItemLighting();
 			GlStateManager.disableLighting();
 			GlStateManager.enableRescaleNormal();

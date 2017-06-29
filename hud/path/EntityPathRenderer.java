@@ -63,15 +63,13 @@ public class EntityPathRenderer {
 				return;
 			}
 
-			GL11.glDepthMask(false);
-
 			// might have to disable this
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-			GL11.glDisable(GL11.GL_CULL_FACE);
+			GlStateManager.depthMask(false);
+			GlStateManager.disableDepth();
+			GlStateManager.disableCull();
 			GlStateManager.enableBlend();
 			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GlStateManager.disableTexture2D();
 
 			GL11.glLineWidth((float) (5.0F - Math.min(4.5, (path.getPathPointFromIndex(0).distanceTo(
@@ -108,11 +106,11 @@ public class EntityPathRenderer {
 
 			}
 			GlStateManager.popMatrix();
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glDisable(GL11.GL_BLEND);
+			GlStateManager.enableCull();
+			GlStateManager.enableDepth();
+			GlStateManager.disableBlend();
+			GlStateManager.depthMask(true);
 			GL11.glDisable(GL11.GL_LINE_STIPPLE);
-			GL11.glDepthMask(true);
 			GlStateManager.enableTexture2D();
 		}
 		GlStateManager.popMatrix();
