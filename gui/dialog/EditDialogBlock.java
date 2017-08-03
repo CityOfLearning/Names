@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.dyn.fixins.blocks.dialog.DialogBlockTileEntity;
 import com.dyn.server.network.NetworkManager;
-import com.dyn.server.network.messages.MessageDialogUpdate;
+import com.dyn.server.network.messages.MessageClientUpdateTileEntity;
 import com.rabbit.gui.component.control.Button;
 import com.rabbit.gui.component.control.CheckBox;
 import com.rabbit.gui.component.control.DropDown;
@@ -16,14 +16,18 @@ import com.rabbit.gui.component.control.MultiTextbox;
 import com.rabbit.gui.component.control.TextBox;
 import com.rabbit.gui.component.display.Picture;
 import com.rabbit.gui.component.display.TextLabel;
+import com.rabbit.gui.component.display.entity.DisplayEntity;
+import com.rabbit.gui.component.display.entity.DisplayEntityHead;
 import com.rabbit.gui.show.Show;
+import com.rabbit.gui.utils.AssetsBrowser;
 
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import noppes.npcs.client.AssetsBrowser;
 import noppes.npcs.entity.EntityNPCInterface;
 
 public class EditDialogBlock extends Show {
@@ -205,8 +209,25 @@ public class EditDialogBlock extends Show {
 
 		registerComponent(new Button((int) (width * .5), (int) (height * .8125), 120, 20, "Update Dialog Block")
 				.setClickListener(btn -> {
-					NetworkManager.sendToServer(new MessageDialogUpdate(entity, entitySkin, block.getPos(), text,
-							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2), interupt));
+					if (!entity.isEmpty()) {
+						if (entity.equals("DisplayHead")) {
+							block.setEntity(new DisplayEntityHead(block.getWorld()), 90);
+						} else if (entity.equals("DisplayEntity")) {
+							block.setEntity(new DisplayEntity(block.getWorld()), 90);
+						} else {
+							EntityLiving new_entity = (EntityLiving) EntityList.createEntityByName(entity,
+									block.getWorld());
+							block.setEntity(new_entity, EntityList.getEntityID(new_entity));
+						}
+					}
+					if ((block.getEntity() instanceof DisplayEntity) && !entitySkin.isEmpty()) {
+						((DisplayEntity) block.getEntity()).setTexture(new ResourceLocation(entitySkin));
+					}
+					block.setData(text, new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2));
+					block.setInterruptible(interupt);
+					NBTTagCompound tag = new NBTTagCompound();
+					block.writeToNBT(tag);
+					NetworkManager.sendToServer(new MessageClientUpdateTileEntity(block.getPos(), tag));
 					getStage().close();
 				}));
 

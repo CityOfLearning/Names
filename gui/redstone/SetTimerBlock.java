@@ -4,13 +4,14 @@ import java.awt.Color;
 
 import com.dyn.fixins.blocks.redstone.timer.TimerBlockTileEntity;
 import com.dyn.server.network.NetworkManager;
-import com.dyn.server.network.messages.MessageTimerBlockUpdate;
+import com.dyn.server.network.messages.MessageClientUpdateTileEntity;
 import com.rabbit.gui.component.control.Button;
 import com.rabbit.gui.component.control.TextBox;
 import com.rabbit.gui.component.display.Picture;
 import com.rabbit.gui.component.display.TextLabel;
 import com.rabbit.gui.show.Show;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 public class SetTimerBlock extends Show {
@@ -46,7 +47,10 @@ public class SetTimerBlock extends Show {
 
 		registerComponent(new Button((int) (width * .45), (int) (height * .5), 100, 20, "Update Timer Block")
 				.setClickListener(btn -> {
-					NetworkManager.sendToServer(new MessageTimerBlockUpdate(block.getPos(), time));
+					NBTTagCompound tag = new NBTTagCompound();
+					block.setTimerTime(time);
+					block.writeToNBT(tag);
+					NetworkManager.sendToServer(new MessageClientUpdateTileEntity(block.getPos(), tag));
 					getStage().close();
 				}));
 		// The background

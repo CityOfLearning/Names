@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import com.dyn.fixins.blocks.redstone.proximity.ProximityBlockTileEntity;
 import com.dyn.server.network.NetworkManager;
-import com.dyn.server.network.messages.MessageProximityBlockUpdate;
+import com.dyn.server.network.messages.MessageClientUpdateTileEntity;
 import com.forgeessentials.commons.EnumMobType;
 import com.rabbit.gui.component.control.Button;
 import com.rabbit.gui.component.control.DropDown;
@@ -13,6 +13,7 @@ import com.rabbit.gui.component.display.Picture;
 import com.rabbit.gui.component.display.TextLabel;
 import com.rabbit.gui.show.Show;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 
@@ -139,8 +140,11 @@ public class SetProximityBlock extends Show {
 
 		registerComponent(new Button((int) (width * .45), (int) (height * .6), 120, 20, "Update Proximity Block")
 				.setClickListener(btn -> {
-					NetworkManager.sendToServer(new MessageProximityBlockUpdate(block.getPos(),
-							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2), validMob.name()));
+					block.setCorners(new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2));
+					block.setValidMob(validMob);
+					NBTTagCompound tag = new NBTTagCompound();
+					block.writeToNBT(tag);
+					NetworkManager.sendToServer(new MessageClientUpdateTileEntity(block.getPos(), tag));
 					getStage().close();
 				}));
 
