@@ -6,13 +6,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity;
 import com.dyn.fixins.blocks.decision.DecisionBlockTileEntity.Choice;
 import com.dyn.server.network.NetworkManager;
-import com.dyn.server.network.messages.MessageDecisionUpdate;
+import com.dyn.server.network.messages.MessageClientUpdateTileEntity;
 import com.google.common.collect.Maps;
 import com.rabbit.gui.component.control.Button;
 import com.rabbit.gui.component.control.CheckBox;
@@ -21,15 +19,19 @@ import com.rabbit.gui.component.control.MultiTextbox;
 import com.rabbit.gui.component.control.TextBox;
 import com.rabbit.gui.component.display.Picture;
 import com.rabbit.gui.component.display.TextLabel;
+import com.rabbit.gui.component.display.entity.DisplayEntity;
+import com.rabbit.gui.component.display.entity.DisplayEntityHead;
 import com.rabbit.gui.show.Show;
+import com.rabbit.gui.utils.AssetsBrowser;
 
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import noppes.npcs.client.AssetsBrowser;
 import noppes.npcs.entity.EntityNPCInterface;
 
 public class EditDecisionBlock extends Show {
@@ -68,6 +70,7 @@ public class EditDecisionBlock extends Show {
 	private CheckBox corBx2;
 	private CheckBox corBx3;
 	private CheckBox corBx4;
+	private CheckBox rtBox;
 
 	public EditDecisionBlock(DecisionBlockTileEntity block) {
 		title = "Edit Decision Block";
@@ -309,13 +312,25 @@ public class EditDecisionBlock extends Show {
 				}).setIsVisible(block.isQuiz()));
 
 		registerComponent(qzBox = new CheckBox((int) (width * .47), (int) (height * .85), 15, 15,
-				EnumChatFormatting.BLACK + "Is a Quiz Block?", block.isQuiz()).setStatusChangedListener(box -> {
+				EnumChatFormatting.BLACK + "Quiz", block.isQuiz()).setStatusChangedListener(box -> {
 					if (box.isChecked()) {
 						corBx1.setIsVisible(true);
 						corBx2.setIsVisible(true);
 						corBx3.setIsVisible(true);
 						corBx4.setIsVisible(true);
+						rtBox.setIsChecked(false);
 					} else {
+						corBx1.setIsVisible(false);
+						corBx2.setIsVisible(false);
+						corBx3.setIsVisible(false);
+						corBx4.setIsVisible(false);
+					}
+				}));
+
+		registerComponent(rtBox = new CheckBox((int) (width * .62), (int) (height * .85), 15, 15,
+				EnumChatFormatting.BLACK + "Retriggerable", block.isRetriggerable()).setStatusChangedListener(box -> {
+					if (box.isChecked()) {
+						qzBox.setIsChecked(false);
 						corBx1.setIsVisible(false);
 						corBx2.setIsVisible(false);
 						corBx3.setIsVisible(false);
@@ -397,12 +412,33 @@ public class EditDecisionBlock extends Show {
 
 		registerComponent(new Button((int) (width * .1625), (int) (height * .825), 120, 20, "Update Decision Block")
 				.setClickListener(btn -> {
-					NetworkManager.sendToServer(new MessageDecisionUpdate(entity, entitySkin, block.getPos(), text,
-							new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2), buildChoiceMap(),
-							(qzBox.isChecked() && (corBx1.isChecked() || corBx2.isChecked() || corBx3.isChecked()
-									|| corBx4.isChecked()))));
-					final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-					executor.schedule(() -> block.setActive(true), 2, TimeUnit.SECONDS);
+					if (!entity.isEmpty()) {
+						if (entity.equals("DisplayHead")) {
+							block.setEntity(new DisplayEntityHead(block.getWorld()), 90);
+						} else if (entity.equals("DisplayEntity")) {
+							block.setEntity(new DisplayEntity(block.getWorld()), 90);
+						} else {
+							EntityLiving new_entity = (EntityLiving) EntityList.createEntityByName(entity,
+									block.getWorld());
+							block.setEntity(new_entity, EntityList.getEntityID(new_entity));
+						}
+					}
+					if ((block.getEntity() instanceof DisplayEntity) && !entitySkin.isEmpty()) {
+						((DisplayEntity) block.getEntity()).setTexture(new ResourceLocation(entitySkin));
+					}
+					block.setData(text, new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2));
+					block.setChoices(buildChoiceMap());
+					block.setIsQuiz((qzBox.isChecked()
+							&& (corBx1.isChecked() || corBx2.isChecked() || corBx3.isChecked() || corBx4.isChecked())));
+					block.setRetriggerable(rtBox.isChecked());
+					block.setActive(true);
+					NBTTagCompound tag = new NBTTagCompound();
+					block.writeToNBT(tag);
+					NetworkManager.sendToServer(new MessageClientUpdateTileEntity(block.getPos(), tag));
+					// final ScheduledThreadPoolExecutor executor = new
+					// ScheduledThreadPoolExecutor(1);
+					// executor.schedule(() -> block.setActive(true), 2,
+					// TimeUnit.SECONDS);
 
 					getStage().close();
 				}));

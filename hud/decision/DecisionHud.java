@@ -38,6 +38,7 @@ public class DecisionHud extends Show {
 	public DecisionHud(EntityLivingBase entity, DecisionBlockTileEntity block) {
 		this.entity = entity;
 		this.block = block;
+		block.setActive(false);
 	}
 
 	@Override
