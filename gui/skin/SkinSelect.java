@@ -23,11 +23,11 @@ import com.rabbit.gui.component.list.entries.SelectStringEntry;
 import com.rabbit.gui.component.list.entries.StringEntry;
 import com.rabbit.gui.render.TextAlignment;
 import com.rabbit.gui.show.Show;
+import com.rabbit.gui.utils.AssetsBrowser;
 import com.rabbit.gui.utils.SkinManager;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import noppes.npcs.client.AssetsBrowser;
 
 public class SkinSelect extends Show {
 

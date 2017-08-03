@@ -34,7 +34,8 @@ public class PlayerModel extends ModelPlayerBase {
 			float paramFloat5, float paramFloat6) {
 		if (paramEntity instanceof EntityPlayer) {
 			if (SkinManager.hasSkinTexture((EntityPlayer) paramEntity)) {
-				if (SkinManager.getSkinTextureHeight((EntityPlayer) paramEntity) == 32) {
+				if ((SkinManager.getSkinTextureHeight((EntityPlayer) paramEntity) == 32)
+						&& (modelPlayerArmor == null)) {
 					bipedModel.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4, paramFloat5,
 							paramFloat6);
 				} else {

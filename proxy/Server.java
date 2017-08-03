@@ -55,8 +55,9 @@ public class Server implements Proxy {
 	public void loginEvent(PlayerEvent.PlayerLoggedInEvent event) {
 		Runnable task = () -> {
 			// this blocks and so we gotta thread it
-			String texture = DBManager.getPlayerSkin(event.player.getName()).trim();
-			if ((texture != null) && !texture.isEmpty()) {
+			String texture = DBManager.getPlayerSkin(event.player.getName());
+			if ((texture != null) && !texture.trim().isEmpty()) {
+				texture = texture.trim();
 				textureName.put(event.player.getName(), texture);
 				NetworkManager.sendToAll(new SyncSkinsMessage(event.player.getName(), texture));
 			}
